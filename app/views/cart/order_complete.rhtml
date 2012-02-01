@@ -1,0 +1,12 @@
+<% @page_title = "Checkout" %>
+
+<h1>Order Complete</h1>
+
+<% if @order -%>
+	<p>Your order has been submitted for processing. You will receive email confirmation shortly.</p>
+<% if @show_barcodes_link -%>
+	<p><strong>Please Note:</strong> our product barcodes have changed since you last ordered through us. Please download the <a href="/barcodes/<%= @configurator[:modules][:barcodes_spreadsheet_filename][:value] -%>">revised version of the barcodes spreadsheet</a>.</p>
+<% end -%>
+<% else -%>
+	<pre><%=h @order.inspect %></pre>
+<% end -%>

@@ -1,0 +1,107 @@
+<%
+# This takes four objects - an Option, an array of OptionValue's, an array of selected
+# OptionValue(s), and the ID for the item the selection refers to. Depending on the type of the
+# Option, the appropriate HTML for selecting it will be output. Called as so:
+
+#<%= render(:partial => 'option_render', :locals => { :option_values => cur_option_values, :option => chosen_option, :selected_option_values => item.option_values, :item_id => i })
+
+# This is different to the _option_render's in /products and /admin
+-%>
+<% if option.class.to_s == 'RadioButtons' -%>
+	<%
+		option_values.each do |option_value|
+			if option_value
+				selected_text = ''
+				selected_option_values.each do |cur_selected|
+					if cur_selected[:option_value_id] == option_value.id
+						selected_text = ' checked="checked"'
+					end
+				end
+	-%>
+				<input type="radio" name="<%= 'option[' + item_id.to_s + '][' + option[:id].to_s + ']' -%>" value="<%= option_value[:id] -%>"<%= selected_text -%>><%= option_value[:value] -%></input><br />
+	<%
+			end
+		end
+	-%>
+<% elsif option.class.to_s == 'CheckBox' -%>
+	<%
+		selected_text = ''
+		selected_option_values.each do |cur_selected|
+			if cur_selected.id == option_values.first.id
+				selected_text = ' checked="checked"'
+			end
+		end
+	-%>
+	<input type="checkbox" name="<%= 'option[' + item_id.to_s + '][' + option[:id].to_s + ']' -%>" id="<%= 'option[' + item_id.to_s + '][' + option[:id].to_s + ']' -%>" onChange="cart_update_from_product_option(this);" value="<%= option_values.first[:id] -%>"<%= selected_text -%> />
+	<label for="<%= 'option[' + item_id.to_s + '][' + option[:id].to_s + ']' -%>"><%= option_values.first[:value] -%></label>
+<% elsif option.class.to_s == 'SingleChoiceOption' || option.class.to_s == 'MultiLineOption'
+	# MultiLineOption's are inherantly single-choice. I'm therefore not going to bother with some
+	# complex 'multi-line style' view here, but just using this existing logic
+-%>
+	<select name="<%= 'option[' + item_id.to_s + '][' + option[:id].to_s + ']' -%>" id="<%= 'option[' + item_id.to_s + '][' + option[:id].to_s + ']' -%>" onChange="cart_update_from_product_option(this);">
+	<%
+		option_values.each do |option_value|
+			if option_value
+				selected_text = ''
+				selected_option_values.each do |cur_selected|
+					if cur_selected[:option_value_id] == option_value[:id]
+						selected_text = ' selected="selected"'
+					end
+				end
+	-%>
+				<option value="<%= option_value[:id] -%>"<%= selected_text -%>><%= option_value[:value] -%></option>
+	<%
+			end
+		end
+	-%>
+	</select>
+<% elsif option.class.to_s == 'MultipleCheckbox' -%>
+	<%
+		option_values.each do |option_value|
+			if option_value
+				selected_text = ''
+				selected_option_values.each do |cur_selected|
+					if cur_selected[:option_value_id] == option_value.id
+						selected_text = ' checked="checked"'
+					end
+				end
+	-%>
+				<input type="checkbox" name="<%= 'option[' + item_id.to_s + '][' + option[:id].to_s + ']' -%>" value="<%= option_value[:id] -%>"<%= selected_text -%> />
+				<label for="<%= 'option[' + item_id.to_s + '][' + option[:id].to_s + ']' -%>"><%= option_value[:value] -%></label>
+	<%
+			end
+		end
+	-%>
+<% elsif option.class.to_s == 'MultiChoiceOption' -%>
+	<select multiple="multiple" name="<%= 'option[' + item_id.to_s + '][' + option[:id].to_s + ']' -%>" id="<%= 'option[' + item_id.to_s + '][' + option[:id].to_s + ']' -%>" onChange="cart_update_from_product_option(this);">
+	<%
+		option_values.each do |option_value|
+			if option_value
+				selected_text = ''
+				selected_option_values.each do |cur_selected|
+					if cur_selected[:option_value_id] == option_value.id
+						selected_text = ' selected="selected"'
+					end
+				end
+	-%>
+				<option value="<%= option_value[:id] -%>"<%= selected_text -%>><%= option_value[:value] -%></option>
+	<%
+			end
+		end
+	-%>
+	</select>
+<% elsif option.class.to_s == 'TextOption' -%>
+	<%
+		# TODO - Needs Testing
+	-%>
+	<%
+		# only 1 of these will exist
+		selected_option_values.each do |cur_selected|
+			if cur_selected
+-%>
+<%= cur_selected.option_value[:value] -%>
+<%
+			end
+		end
+	-%>
+<% end -%>

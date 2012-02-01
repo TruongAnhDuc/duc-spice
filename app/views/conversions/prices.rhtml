@@ -1,0 +1,48 @@
+<script type="text/javascript">
+
+prices_weights = new Array();
+products_visible = new Array();
+asset_symbols['price'] = '<%= @currency.symbol -%>';
+<% @products.each do |cur_product| -%>
+prices_weights[<%= cur_product.id -%>] = new Array();
+
+prices_weights[<%= cur_product.id -%>][0] = new Array();
+prices_weights[<%= cur_product.id -%>][0]['price'] = <%= @currency.convert(cur_product.base_price) -%>;
+prices_weights[<%= cur_product.id -%>][0]['weight'] = <%= cur_product.base_weight -%>;
+prices_weights[<%= cur_product.id -%>][0]['discount'] = <%= cur_product.discount -%>;
+prices_weights[<%= cur_product.id -%>][0]['discount_is_abs'] = <%= cur_product.discount_is_abs -%>;
+<%
+	if @option_values
+		@option_values.each_with_index do |cur_options, product_i|
+			if cur_options
+				cur_options.each_with_index do |cur_option_values, option_i|
+					if cur_option_values && !cur_option_values.empty?
+-%>
+prices_weights[<%= cur_product.id -%>][<%= option_i -%>] = new Array();
+<%
+						cur_option_values.each do |cur_option_value|
+							if cur_option_value
+-%>
+prices_weights[<%= cur_product.id -%>][<%= option_i -%>][<%= cur_option_value.id -%>] = new Array();
+<% if cur_option_value.extra_cost -%>
+prices_weights[<%= cur_product.id -%>][<%= option_i -%>][<%= cur_option_value.id -%>]['price'] = <%= @currency.convert(cur_option_value.extra_cost) -%>;
+<% end -%>
+<% if cur_option_value.extra_weight -%>
+prices_weights[<%= cur_product.id -%>][<%= option_i -%>][<%= cur_option_value.id -%>]['weight'] = <%= cur_option_value.extra_weight -%>;
+<% end
+							end
+						end
+					end
+				end
+			end
+		end
+	end
+
+-%>
+products_visible[<%= cur_product.id -%>] = <%= cur_product.id -%>;
+<% end -%>
+
+refresh_prices();
+update_cart_currency('<%= @currency.abbreviation -%>');
+
+</script>

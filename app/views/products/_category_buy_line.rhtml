@@ -1,0 +1,48 @@
+				<div class="product-details-form" id="product-details-form-<%= product[:id] -%>-<%= counter -%>">
+					<% form_remote_tag :update => 'cart-summary', :url => { :controller => :cart, :action => :add, :id => product }, :complete => "new Effect.Highlight('cart-contents', {startcolor:'##{@design_config[:colors][:cart_add_flash_start]}', endcolor:'##{@design_config[:colors][:cart_add_flash_end]}'});" do -%>
+<% if bits -%>
+					<p><%= bits['string'] -%></p>
+<%
+	bits['option_values'].each_pair do |option_id, cur_option_value|
+		if cur_option_value
+-%>
+					<input type="hidden" class="option_value" name="option[<%= option_id -%>]" value="<%= cur_option_value[:id] -%>" />
+<%
+		end
+	end
+end
+-%>
+<p><%
+						@option_values[product.id].each_with_index do |cur_option_values, option_i|
+							if cur_option_values && !cur_option_values.empty?
+								chosen_option = nil
+								@options.each do |cur_option|
+									if cur_option[:id] == option_i
+										chosen_option = cur_option
+									end
+								end
+								if chosen_option && chosen_option.class.to_s != 'MultiLineOption'
+-%>
+								<label for="<%= 'option[' + chosen_option[:id].to_s + ']' -%>"><%= chosen_option[:name] -%></label>
+								<%= render(:partial => 'option_render', :locals => { :option_values => cur_option_values, :option => chosen_option }) -%>
+<%
+								end
+							end
+						end
+-%></p>
+					<p class="price_weight">
+					<% if !product.discount.zero? -%>
+					<span id="price-<%= product[:id] -%>-<%= counter -%>" class="price" title="Normally <%= @currency.format(product.base_price) -%>">(Normally <%= @currency.format(product.base_price) -%>)</span><br />
+					<span id="discount-<%= product[:id] -%>-<%= counter -%>" class="discount" title="<%= @currency.format(product.price) -%>"><%= @currency.format(product.price) -%></span> |
+					<% else -%>
+					<span id="price-<%= product[:id] -%>-<%= counter -%>" class="price" title="<%= @currency.format(product.price) -%>"><%= @currency.format(product.price) -%></span> |
+					<% end -%>
+<% if @design_config[:options][:display_product_weights] == 'yes' -%>
+					<span id="weight-<%= product[:id] -%>-<%= counter -%>" class="weight" title="<%= format('%.2f', product.weight) -%>kg">(<%= format('%.3f', product.weight) -%>kg)</span> |
+<% end -%>
+					<label>Quantity</label>
+					<%= select_tag 'quantity', options_for_select((1..10).collect { |i| i.to_s }) -%>
+					<%= submit_tag 'Add to Cart', :name => 'add', :class => 'button' -%>
+					</p>
+					<% end -%>
+				</div>

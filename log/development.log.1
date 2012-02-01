@@ -1,0 +1,28 @@
+  [4;36;1mSQL (0.000116)[0m   [0;1mSET SQL_AUTO_IS_NULL=0[0m
+  [4;35;1mOrder Load (0.002398)[0m   [0mSELECT * FROM orders WHERE (status = 'in_progress' AND created_at < (CURDATE() - INTERVAL 14 DAY)) [0m
+  [4;36;1mSQL (0.000062)[0m   [0;1mBEGIN[0m
+  [4;35;1mOrder Columns (0.001784)[0m   [0mSHOW FIELDS FROM orders[0m
+  [4;36;1mOrder Destroy (0.000182)[0m   [0;1m DELETE FROM orders
+ WHERE `id` = 1409
+[0m
+  [4;35;1mSQL (0.000043)[0m   [0mCOMMIT[0m
+  [4;36;1mSQL (0.000055)[0m   [0;1mBEGIN[0m
+  [4;35;1mOrder Destroy (0.000132)[0m   [0m DELETE FROM orders
+ WHERE `id` = 1410
+[0m
+  [4;36;1mSQL (0.000043)[0m   [0;1mCOMMIT[0m
+  [4;35;1mSQL (0.000041)[0m   [0mBEGIN[0m
+  [4;36;1mOrder Destroy (0.000125)[0m   [0;1m DELETE FROM orders
+ WHERE `id` = 1411
+[0m
+  [4;35;1mSQL (0.000043)[0m   [0mCOMMIT[0m
+  [4;36;1mSQL (0.000041)[0m   [0;1mBEGIN[0m
+  [4;35;1mOrder Destroy (0.000127)[0m   [0m DELETE FROM orders
+ WHERE `id` = 1412
+[0m
+  [4;36;1mSQL (0.000041)[0m   [0;1mCOMMIT[0m
+  [4;35;1mSQL (0.000040)[0m   [0mBEGIN[0m
+  [4;36;1mOrder Destroy (0.000137)[0m   [0;1m DELETE FROM orders
+ WHERE `id` = 1413
+[0m
+  [4;35;1mSQL (0.000042)[0m   [0mCOMMIT[0m

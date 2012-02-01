@@ -1,0 +1,43 @@
+<% @page_title = "Rocket Cart Admin Area : Categories" -%>
+
+<h1>Categories</h1>
+
+<% form_tag :action => :new do %>
+<div class="fieldset">
+	<div class="legend">Create a new category</div>
+
+	<input class="text" type="text" name="category[name]" id="category_name" />
+	<label for="category_parent_id">to</label>
+	<select name="category[parent_id]" id="category_parent_id">
+		<option value="" selected="selected">(top-level)</option>
+		<%= options_for_select(Category.all.collect { |x| [x.path, x.id] })%>
+	</select>
+	<%= show_tooltip(:categories, :create_new) -%>
+	<%= submit_tag 'Create', :name => 'create', :class => 'button' %>
+</div>
+<% end %>
+
+<% form_tag :action => :list do -%>
+<table class="list">
+	<thead>
+	<tr class="actions">
+		<td colspan="4">
+			Selected categories:<br />
+			<%= submit_tag 'Delete', :name => 'delete', :class => 'button', :onclick => 'return confirm(\'Really delete the selected categories permanently?\')' %>
+			<%= submit_tag 'Move Up', :name => 'move_up', :class => 'button' %>
+			<%= submit_tag 'Move Down', :name => 'move_down', :class => 'button' %>
+		</td>
+	</tr>
+	<tr class="list-header">
+		<th>Select</th>
+		<th>Name / Path</th>
+		<th>Parent</th>
+		<th></th>
+	</tr>
+	</thead>
+	<tbody>
+		<% @row_toggle = 0 -%>
+		<%= render(:partial => 'category_row', :collection => [@root_cat]) -%>
+	</tbody>
+</table>
+<% end %>

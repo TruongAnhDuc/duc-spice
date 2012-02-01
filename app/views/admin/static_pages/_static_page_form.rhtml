@@ -1,0 +1,59 @@
+<div class="fieldset">
+	<div class="legend">Static Page</div>
+	<table class="form">
+	<tr>
+		<td class="label"><label for="page_name">Name:</label></td>
+		<td class="field"><%= text_field 'page', 'name', :class => 'text' %><%= show_tooltip(:static_page, :name) -%></td>
+	</tr>
+	<tr>
+		<td class="label"><label for="page_path">Path:</label></td>
+		<td class="field">
+			<% if @page[:form_name] && @page[:form_name] == 'home' -%>
+			<%= @page[:path] -%>
+			<% else -%>
+			<%= text_field 'page', 'path', :class => 'text' %><%= show_tooltip(:static_page, :path) -%><br />
+			(e.g. <tt>/about/new-page</tt>)
+			<% end -%>
+		</td>
+	</tr>
+	<tr>
+		<td class="label"><label for="page_body">Body:</label></td>
+		<td class="field"><%= text_area 'page', 'body', :rows => 30 %><%= show_tooltip(:static_page, :body) -%></td>
+	</tr>
+	<tr>
+		<td></td>
+		<td>
+			<input class="button" type="submit" name="save" value="Save changes" />
+			<% if @demo_admin -%>
+			<p>Note: changes will not be saved as this is a demonstration.</p>
+			<% end %>
+		</td>
+	</tr>
+	</table>
+</div>
+<div class="fieldset">
+	<div class="legend">Search Engine Optimisation Options</div>
+	<table class="form">
+	<tr>
+		<td class="label"><label for="page_title">Customised Page Title:</label></td>
+		<td class="field"><%= text_field 'page', 'title', :class => 'text' %><%= show_tooltip(:seo, :page_title) -%></td>
+	</tr>
+	<tr>
+		<td class="label"><label for="page_meta_keywords">Keywords (&lt;meta&gt;):</label></td>
+		<td class="field"><%= text_area 'page', 'meta_keywords', :rows => 3 %><%= show_tooltip(:seo, :meta_keywords) -%></td>
+	</tr>
+	<tr>
+		<td class="label"><label for="page_meta_description">Description (&lt;meta&gt;):</label></td>
+		<td class="field"><%= text_area 'page', 'meta_description', :rows => 3 %><%= show_tooltip(:seo, :meta_description) -%></td>
+	</tr>
+	<tr>
+		<td></td>
+		<td>
+			<input class="button" type="submit" name="save" value="Save changes" />
+			<% if @demo_admin -%>
+				<p>Note: changes will not be saved as this is a demonstration.</p>
+			<% end %>
+		</td>
+	</tr>
+	</table>
+</div>

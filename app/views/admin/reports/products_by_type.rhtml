@@ -1,0 +1,136 @@
+<% @page_title = "Rocket Cart Admin Area : Product Report" -%>
+
+<%= javascript_include_tag '/calendar/calendar' %>
+<%= javascript_include_tag '/calendar/lang/calendar-en' %>
+<%= javascript_include_tag '/calendar/calendar-setup' %>
+<%= stylesheet_link_tag '/calendar/calendar-win2k-1' %>
+
+<h1>Product Report</h1>
+
+<% form_tag do %>
+<div class="fieldset">
+	<div class="legend">Report Criteria</div>
+	<table class="form">
+	<tr>
+		<td>
+			<strong>Start Date:</strong>
+		</td>
+		<td>
+			<input class="text" style="width: 10em;" type="text" id="start_date" name="start_date" value="<%= if @start_date then @start_date.strftime('%d/%m/%Y') end %>" />
+			<button id="trigger_start_date">
+				<%= image_tag(
+					icon_path('calendar'),
+					{
+						:alt => "Calendar",
+						:title => "Calendar",
+						:size => "#{@design_config[:sizes][:admin_icons_width]}x#{@design_config[:sizes][:admin_icons_height]}",
+						:class => "icon"
+					}
+				) %>
+			</button>
+		</td>
+	</tr>
+	<tr>
+		<td>
+			<strong>End Date:</strong>
+		</td>
+		<td>
+			<input class="text" style="width: 10em;" type="text" id="end_date" name="end_date" value="<%= if @end_date then @end_date.strftime('%d/%m/%Y') end %>" />
+			<button id="trigger_end_date">
+				<%= image_tag(
+					icon_path('calendar'),
+					{
+						:alt => "Calendar",
+						:title => "Calendar",
+						:size => "#{@design_config[:sizes][:admin_icons_width]}x#{@design_config[:sizes][:admin_icons_height]}",
+						:class => "icon"
+					}
+				) %>
+			</button>
+		</td>
+	</tr>
+	<tr>
+		<td class="label"><label for="end_date">Categories:</label></td>
+		<td class="date field">
+			<%= select_tag 'categories[]', options_from_collection_for_select(Category.top_level, 'id', 'option_label'), :multiple => true, :size => 7 %>
+		</td>
+	</tr>
+	<tr>
+		<td></td>
+		<td>
+			<%= submit_tag 'View Below', :name => 'view', :class => 'button' %>
+			<%= submit_tag 'Download', :name => 'download', :class => 'button' %>
+			<%= show_tooltip(:report, :view_download) -%>
+		</td>
+	</tr>
+	</table>
+</div>
+<% end %>
+
+<% if @report_title -%>
+
+<h2><%= @report_title -%></h2>
+
+<%= render :partial => 'admin/paginator' %>
+
+<% if @data and !@data.empty? -%>
+
+<table class="list">
+	<thead>
+		<tr>
+			<th>ID</th>
+			<th>Code</th>
+			<th>Product</th>
+			<th>Units (RTL)</th>
+			<th>Price (RTL)</th>
+			<th>Total (RTL)</th>
+			<th>Units (WSL)</th>
+			<th>Price (WSL)</th>
+			<th>Total (WSL)</th>
+			<th>TOTAL</th>
+		</tr>
+	</thead>
+	<tbody>
+<% @data.each_pair do |i, cur_item| -%>
+		<tr class="<%= (i % 2 == 0) ? 'odd' : 'even' %>">
+			<td><%= cur_item["id"] -%></td>
+			<td><%= cur_item["code"] %></td>
+			<td><%= cur_item["product"] -%></td>
+			<td><%= cur_item["units_r"].to_i -%></td>
+			<td><%= format('$%.2f', cur_item["price_r"].to_f) -%></td>
+			<td><%= format('$%.2f', cur_item["total_r"].to_f) -%></td>
+			<td><%= cur_item["units_w"].to_i -%></td>
+			<td><%= format('$%.2f', cur_item["price_w"].to_f) -%></td>
+			<td><%= format('$%.2f', cur_item["total_w"].to_f) -%></td>
+			<td><%= format('$%.2f', cur_item["total"].to_f) -%></td>
+		</tr>
+<% end -%>
+	</tbody>
+</table>
+
+<%= render :partial => 'admin/paginator' %>
+
+<% end -%>
+
+<% end -%>
+
+<script type="text/javascript">
+Calendar.setup(
+{
+inputField : 'start_date',
+ifFormat : '%d/%m/%Y',
+button : 'trigger_start_date'
+}
+);
+Calendar.setup(
+{
+inputField : 'end_date',
+ifFormat : '%d/%m/%Y',
+button : 'trigger_end_date'
+}
+);
+</script>
+
+<ul class="tips">
+	<li>Hold down the <strong>[Control]</strong> key to select multiple categories.</li>
+</ul>

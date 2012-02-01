@@ -1,0 +1,24 @@
+<% @page_title = "Rocket Cart Admin Area : Barcodes Spreadsheet" -%>
+
+<h1>Barcodes Spreadsheet</h1>
+
+<% if flash[:notice] -%>
+	<div class="notice"><%= flash[:notice] %></div>
+<% end -%>
+<% if flash[:error] -%>
+	<div class="errorExplanation"><%= flash[:error] %></div>
+<% end -%>
+
+<% if @spreadsheet_exists -%>
+<p>The current barcodes spreadsheet is <%= number_to_human_size(@file_stats.size) -%> in size, and was last uploaded on <%= @file_stats.mtime.strftime("%a %b %d %H:%M:%S") -%>.</p>
+<p><a href="/barcodes/<%= @filename -%>">Download the current spreadsheet</a></p>
+<p>You can upload a new barcodes spreadsheet to replace it here.<p>
+<% else -%>
+<p>You can upload a barcodes spreadsheet here.<p>
+<% end -%>
+
+<% form_tag({}, :multipart => true) do -%>
+	<%= file_field("spreadsheet", "spreadsheet", :class => "button") %>
+
+	<%= submit_tag "Upload", :name => "upload", :class => "button" %>
+<% end -%>

@@ -1,0 +1,36 @@
+lots_of_chicken:
+  id: 1
+  product_id: 1
+  order_id: 1
+  quantity: 3
+  unit_price: 56000.0
+cow:
+  id: 2
+  product_id: 2
+  order_id: 1
+  quantity: 1
+  unit_price: 132000.0
+cow2:
+  id: 3
+  product_id: 3
+  order_id: 2
+  quantity: 1
+  unit_price: 115000.0
+cow3:
+  id: 4
+  product_id: 4
+  order_id: 2
+  quantity: 1
+  unit_price: 84000.0
+cow2w:
+  id: 5
+  product_id: 3
+  order_id: 3
+  quantity: 1
+  unit_price: 57500.0
+cow3w:
+  id: 6
+  product_id: 4
+  order_id: 3
+  quantity: 1
+  unit_price: 42000.0

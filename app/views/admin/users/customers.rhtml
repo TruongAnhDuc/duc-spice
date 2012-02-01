@@ -1,0 +1,95 @@
+<% @page_title = "Rocket Cart Admin Area : Customers" -%>
+
+<h1>Customers</h1>
+
+<% if flash[:notice] -%>
+	<div class="notice"><%= flash[:notice] %></div>
+<% end -%>
+
+<% form_tag do %>
+<fieldset>
+	<legend title="Search"><img src="<%= @ROCKETCARTDIR + icon_path('search') -%>" alt="Search" width="<%= @design_config[:sizes][:admin_icons_width] -%>" height="<%= @design_config[:sizes][:admin_icons_height] -%>" class="icon" /> Search</legend>
+
+	<table cellpadding="0">
+		<tr>
+			<td>
+				<strong>Customer Name or Email:</strong>
+			</td>
+			<td>
+				<input class="text" type="text" name="query" value="<%= @query || '' %>" /><%= show_tooltip(:customers, :query) -%>
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<strong>Wholesale applicants only?</strong>
+			</td>
+			<td>
+				<input type="checkbox" name="applicants_only" value="applicants_only"<%= if @applicants_only then " checked=\"checked\"" end -%> /><%= show_tooltip(:customers, :applicants_only) -%>
+			</td>
+		</tr>
+		<tr>
+			<td>&nbsp;</td>
+			<td style="text-align: right;">
+				<input class="button" type="submit" name="search" value="Search" />
+			</td>
+		</tr>
+	</table>
+</fieldset>
+<% end %>
+
+<p><%= link_to 'Create a new customer', { :action => :new_customer } %></p>
+
+<% if @customer_count.zero? -%>
+	<p>No customers found.</p>
+<% else -%>
+
+<%= render :partial => "admin/paginator" %>
+
+<% form_tag do %>
+<table class="list">
+	<thead>
+	<tr class="actions">
+		<td colspan="5">
+			Selected customers:<br />
+			<%= submit_tag 'Delete', :name => 'delete', :class => 'button', :onclick => 'return confirm(\'Really delete the selected customers?\')' %>
+		</td>
+	</tr>
+	<tr class="list-header">
+		<th>Select</th>
+		<th>Name <%= render :partial => "admin/sorting_arrows", :locals => { :column => "name" } %></th>
+		<th>Email <%= render :partial => "admin/sorting_arrows", :locals => { :column => "email" } %></th>
+		<th>Wholesaler? <%= render :partial => "admin/sorting_arrows", :locals => { :column => "application" } %></th>
+		<th></th>
+	</tr>
+	</thead>
+	<tbody>
+		<% @customers.each_with_index do |c, i| -%>
+			<tr class="<%= (i % 2 == 0) ? 'odd' : 'even' %>">
+				<td><input class="checkbox" type="checkbox" name="select[<%= c.id %>]" value="1" /></td>
+				<td><%= c %></td>
+				<td><a href="mailto:<%= c[:email] -%>"><%= c[:email] -%></a></td>
+				<td><%=
+	case c[:wholesale_application]
+	when "y"
+		"Yes"
+	when "p"
+		"Pending"
+	when "n"
+		"Denied"
+	else
+		"No"
+	end
+-%></td>
+				<td nowrap="nowrap" class="icons">
+					<%= action_icon("Edit", "edit", { :action => :edit_customer, :id => c }) -%>
+				</td>
+			</tr>
+		<% end -%>
+	</tbody>
+</table>
+<% end %>
+
+<%= render :partial => "admin/paginator" %>
+
+<% end -%>
+

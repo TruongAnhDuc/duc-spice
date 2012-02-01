@@ -1,0 +1,45 @@
+root:
+  id: 1
+  filename: products
+  path: "products"
+  sequence: 1
+livestock:
+  id: 2
+  parent_id: 1
+  name: Livestock
+  filename: livestock
+  path: products/livestock
+  description: Various animals you might find in a typical ninja-run farm.
+  sequence: 1
+pigs:
+  id: 3
+  parent_id: 2
+  name: Pigs
+  filename: pigs
+  path: products/livestock/pigs
+  description: Suriken-weilding pigs!
+  sequence: 1
+dogs:
+  id: 4
+  parent_id: 2
+  name: Dogs
+  filename: dogs
+  path: products/livestock/dogs
+  description: Suriken-weilding dogs!
+  sequence: 2
+cats:
+  id: 5
+  parent_id: 2
+  name: Cats
+  filename: cats
+  path: products/livestock/cats
+  description: Suriken-weilding cats!
+  sequence: 3
+utilities:
+  id: 6
+  parent_id: 1
+  name: Utilities
+  filename: utilities
+  path: products/utilities
+  description: Various mechanical and capital assets a ninja-run farm will need to retain control of rebelious animals.
+  sequence: 2

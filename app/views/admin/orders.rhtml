@@ -1,0 +1,116 @@
+<style type="text/css">@import url(/calendar/calendar-win2k-1.css);</style>
+<script type="text/javascript" src="/calendar/calendar.js"></script>
+<script type="text/javascript" src="/calendar/lang/calendar-en.js"></script>
+<script type="text/javascript" src="/calendar/calendar-setup.js"></script>
+
+<h1>Order History</h1>
+
+<% form_tag do %>
+<fieldset>
+	<legend title="Search"><img src="<%= icon_path('search') -%>" alt="Search" width="<%= @design_config[:sizes][:admin_icons_width] -%>" height="<%= @design_config[:sizes][:admin_icons_height] -%>" class="icon" /> Search</legend>
+
+	<table cellpadding="0">
+		<tr>
+			<td>
+				<strong>ID:</strong>
+			</td>
+			<td>
+				<input class="text" type="text" name="query" value="<%= @query || '' %>" />
+				<%= show_tooltip(:orders, :query_id) -%>
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<strong>Date:</strong>
+			</td>
+			<td>
+				<input class="text" type="text" id="history_date" name="history_date" value="<%= if @history_date then @history_date.strftime('%d/%m/%Y') end %>" />
+				<button id="trigger_history_date">
+					<img src="<%= icon_path('calendar') -%>" alt="Calendar" title="Calendar" width="<%= @design_config[:sizes][:admin_icons_width] -%>" height="<%= @design_config[:sizes][:admin_icons_height] -%>" class="icon" />
+				</button>
+				<%= show_tooltip(:orders, :query_date) -%>
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<strong>Show In-Progress:</strong>
+			</td>
+			<td>
+				<input class="checkbox" type="checkbox" id="show_in_progress" name="show_in_progress" value="1"<%= if @show_in_progress then ' checked="checked"' end %> />
+				<%= show_tooltip(:orders, :query_show_in_progress) -%>
+			</td>
+		</tr>
+		<tr>
+			<td>&nbsp;</td>
+			<td style="text-align: right;">
+				<input class="button" type="submit" name="search" value="Search" />
+			</td>
+		</tr>
+	</table>
+</fieldset>
+<% end %>
+
+<% if @orders.empty? -%>
+	<p>No orders found.</p>
+<% else -%>
+	<%= render :partial => 'paginator' %>
+
+	<% form_tag :action => :orders do %>
+	<%= hidden_field_tag 'page', @pages.current.number %>
+	<table class="list">
+		<thead>
+		<tr class="actions">
+			<td colspan="6">
+				Mark selected orders as:
+				<select name="status">
+					<option value="completed">Complete</option>
+					<option value="awaiting_shipping">Awaiting Shipping</option>
+					<option value="in_progress">In Progress</option>
+					<option value="failed">Failed</option>
+				</select>
+				<%= submit_tag 'Save', :name => 'save', :class => 'button' %>
+			</td>
+		</tr>
+		<tr class="list-header">
+			<th>Select</th>
+			<th>No.</th>
+			<th>Date</th>
+			<th>User</th>
+			<th>Total</th>
+			<th>Status</th>
+		</tr>
+		</thead>
+		<tbody>
+			<% @orders.each_with_index do |order, i| -%>
+				<tr class="<%= (i % 2 == 0) ? 'odd' : 'even' %>">
+					<td><input class="checkbox" type="checkbox" name="select[<%= order.id %>]" value="1" /></td>
+					<td><%= link_to order.id, :action => :order, :id => order%></td>
+					<td><%= order.created_at.strftime('%d/%m/%Y, %I:%M%p') %></td>
+					<td><%= order.user %></td>
+					<td><%= format('$%.2f', order.total) %></td>
+					<td><span class="<%= order.status.gsub '_', '-' %>"><%= order.status.humanize %></span></td>
+				</tr>
+			<% end -%>
+		</tbody>
+		<tfoot>
+		</tfoot>
+	</table>
+	<% end %>
+
+	<%= render :partial => 'paginator' %>
+<% end -%>
+
+<script type="text/javascript">
+Calendar.setup(
+{
+inputField : 'history_date',
+ifFormat : '%d/%m/%Y',
+button : 'trigger_history_date'
+}
+);
+</script>
+
+<ul class="tips">
+	<li>Use the <a href="/admin/pending_orders/">Orders Awaiting Shipping</a> page to mark orders as shipped. That way, your customers will receive the correct shipping notification email.</li>
+	<li>If you change an order status to 'Awaiting Shipping', the order will be returned to the Orders Awaiting Shipping area. When you mark off orders in this area, your customer will receive a shipping notification email. Be careful to mark the status of each order correctly to avoid duplicate and confusing emails being sent to your customers.</li>
+</ul>

@@ -1,0 +1,68 @@
+<h1>Featured Products</h1>
+
+<!-- Is a search box here really needed?  Do we envisage dozens/hundreds of featured products?
+<% form_tag do %>
+<fieldset>
+	<legend>Search</legend>
+	Product Code, Name, Description or ID:
+	<input class="text" type="text" name="query" value="<%= @query || '' %>" />
+	<input class="button" type="submit" name="search" value="Search" />
+</fieldset>
+<% end %>
+-->
+
+<p><%= link_to 'Create a new featured product', { :action => :featured_product } %></p>
+
+<% if @featured_product_count.zero? -%>
+	<p>No featured products found</p>
+<% else -%>
+
+<%= render :partial => 'paginator' %>
+
+<% form_tag :action => :featured_products do %>
+<table class="list">
+	<thead>
+	<tr class="actions">
+		<td colspan="5">
+			Selected featured products:<br />
+			<%= submit_tag 'Delete', :name => 'delete', :class => 'button', :onclick => 'return confirm(\'Really delete the selected featured products permanently?\')' %>
+		</td>
+	</tr>
+	<tr class="list-header">
+		<th>Select</th>
+		<th></th>
+		<th>Code</th>
+		<th>Name</th>
+		<th></th>
+	</tr>
+	</thead>
+	<tbody>
+		<% @featured_products.each_with_index do |p, i| -%>
+			<tr class="<%= (i % 2 == 0) ? 'odd' : 'even' %>">
+				<td><input class="checkbox" type="checkbox" name="select[<%= p.id %>]" value="1" /></td>
+				<td>
+<% if(!p.featured_until or (p.featured_until + 1.day) > Time.now) %>
+					<img src="<%= icon_path('star') %>" alt="Currently featured" title="Currently featured" width="<%= @design_config[:sizes][:admin_icons_width].to_s %>" height="<%= @design_config[:sizes][:admin_icons_height].to_s %>" class="icon" />
+<% end %>
+				</td>
+				<td><%= p.product_code %></td>
+				<td>
+					<%= link_to p.name, { :action => :featured_product, :id => p } %><br />
+					<span><%= p.featured_category.name %></span>
+				</td>
+				<td nowrap="nowrap" class="icons">
+					<%= if @design_config[:options][:show_extra_admin_icons] and @design_config[:options][:show_extra_admin_icons] == 'yes' then link_to '<img src="' + icon_path('view') + '" alt="View" title="View" width="' + @design_config[:sizes][:admin_icons_width].to_s + '" height="' + @design_config[:sizes][:admin_icons_height].to_s + '" class="icon" />', p.path end -%>
+					<%= link_to 'View', p.path %>
+					&nbsp;
+					<%= if @design_config[:options][:show_extra_admin_icons] and @design_config[:options][:show_extra_admin_icons] == 'yes' then link_to '<img src="' + icon_path('edit') + '" alt="Edit" title="Edit" width="' + @design_config[:sizes][:admin_icons_width].to_s + '" height="' + @design_config[:sizes][:admin_icons_height].to_s + '" class="icon" />', { :action => :featured_product, :id => p } end -%>
+					<%= link_to 'Edit', { :action => :featured_product, :id => p } %>
+				</td>
+			</tr>
+		<% end -%>
+	</tbody>
+</table>
+<% end %>
+
+<%= render :partial => 'paginator' %>
+
+<% end -%>

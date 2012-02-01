@@ -1,0 +1,48 @@
+<h1>Customer Report</h1>
+
+<% form_tag do %>
+<div class="fieldset">
+	<div class="legend">Report Criteria</div>
+	<p>This report does not currently have any search criteria available. Click to view or download a full list of customers.</p>
+	<p>
+		<%= submit_tag 'View Below', :name => 'view', :class => 'button' %>
+		<%= submit_tag 'Download', :name => 'download', :class => 'button' %>
+		<%= show_tooltip(:report, :view_download) -%>
+	</p>
+</div>
+<% end %>
+
+<% if @report_title -%>
+
+<h2><%= @report_title -%></h2>
+
+<%= render :partial => 'paginator' %>
+
+<table class="list">
+	<thead>
+		<tr>
+			<th>ID</th>
+			<th>Name</th>
+			<th>Email</th>
+			<th>Orders</th>
+			<th>Items</th>
+			<th>Total</th>
+		</tr>
+	</thead>
+	<tbody>
+<% @users.each_with_index do |cur_user, i| -%>
+		<tr class="<%= (i % 2 == 0) ? "odd" : "even" %>">
+			<td><%= cur_user.id -%></td>
+			<td nowrap="nowrap"><%= cur_user.first_name %> <%= cur_user.last_name -%></td>
+			<td><%= mail_to(cur_user.email) -%></td>
+			<td><%= c = cur_user.orders.count -%></td>
+			<td><%= cur_user.orders.inject(0) { |sum, o| sum + o.items.inject(0) { |i_total, i| i_total + i.quantity } } -%></td>
+			<td>$<% t = cur_user.orders.inject(0.0) { |sum, o| sum + o.total } -%><%= sprintf('%.2f', t) -%></td>
+		</tr>
+<% end -%>
+	</tbody>
+</table>
+
+<%= render :partial => 'paginator' %>
+
+<% end -%>

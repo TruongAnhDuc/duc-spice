@@ -1,0 +1,32 @@
+<%
+	if quirk_value[:value] && !quirk_value[:value].empty?
+-%>
+<p><strong><%= quirk[:name] -%>:</strong>
+<%
+		if quirk.class.to_s == "BooleanQuirk"
+-%>
+			<%= if quirk_value[:value] then "Yes" else "No" end -%>
+<%
+		elsif quirk.class.to_s == "IntegerQuirk"
+-%>
+			<%= quirk_value[:value].to_i -%>
+<%
+		elsif quirk.class.to_s == "UrlQuirk"
+-%>
+			<a href="<%= quirk_value[:value] -%>"><%= quirk_value[:value].gsub(/[fhtps]*:\/\//, "") -%></a>
+<%
+		elsif quirk.class.to_s == "ImageQuirk"
+-%>
+			<img src="<%= quirk_value[:value] -%>" alt="" />
+<%
+		else
+			# TextQuirk, HtmlQuirk
+-%>
+			<%= quirk_value[:value] -%>
+<%
+		end
+-%>
+</p>
+<%
+	end
+-%>

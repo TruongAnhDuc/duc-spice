@@ -1,0 +1,26 @@
+aboutus:
+  id: 1
+  name: About Us
+  path: /about-us
+  title: About Us - The Greatest Store!
+  body: We started 10 years ago, and have been growing ever since. Buy from us today!
+testpage:
+  id: 2
+  name: Test Page
+  path: /test-page
+  title: Test Page - Just a Test
+  body: test
+home:
+  id: 3
+  name: Homepage
+  path: /
+  title: A homepage title
+  body: Lots of stuff should go here...
+  form_name: home
+contactus:
+  id: 4
+  name: Contact Us
+  path: /contact-us
+  title: A contact-us page title
+  body: A form to put a query into!
+  form_name: contact

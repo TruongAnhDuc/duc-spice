@@ -1,0 +1,30 @@
+<h1>Edit Currency Details</h1>
+
+<% form_tag do %>
+	<div class="fieldset">
+		<table class="list">
+			<thead>
+				<th>Abbr</th>
+				<th>Name</th>
+				<th>Symbol</th>
+				<th></th>
+			</thead>
+			<tbody>
+				<tr>
+					<td><input class="text" type="text" name="currency[abbreviation]" value="<%= @currency.abbreviation %>" style="width: 3em" /><%= show_tooltip(:currency, :abbreviation) -%></td>
+					<td><input class="text" type="text" name="currency[name]" value="<%= @currency.name %>" /><%= show_tooltip(:currency, :name) -%></td>
+					<td>
+						<input class="text" type="text" name="currency[symbol_prefix]" value="<%= @symbol_prefix %>" style="width: 3em" />
+						<select name="currency[symbol]">
+						<% Currency.symbols.each do |sym, ent| -%>
+							<option value="<%= sym %>"<%= (sym == @symbol ? ' selected' : '') -%>><%= ent %></option>
+						<% end -%>
+						</select>
+						<%= show_tooltip(:currency, :symbol) -%>
+					</td>
+					<td><%= submit_tag 'Save', :name => 'save', :class => 'button' %></td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+<% end %>

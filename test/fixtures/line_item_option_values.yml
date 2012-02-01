@@ -1,0 +1,10 @@
+gun:
+  line_item_id: 3
+  option_value_id: 1
+  extra_cost: 1000
+  extra_weight: 5
+axe:
+  line_item_id: 4
+  option_value_id: 3
+  extra_cost: 70
+  extra_weight: 5

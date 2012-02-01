@@ -1,0 +1,60 @@
+<h1>Edit Category</h1>
+
+<% if flash[:notice] -%>
+	<div class="notice"><%= flash[:notice] %></div>
+	<%= error_messages_for 'category' %>
+<% end -%>
+
+<% if @category.nil? -%>
+	<p>Category not found.</p>
+	<p><%= link_to 'Back', :action => :categories %></p>
+<% else -%>
+	<% form_tag :action => :category do -%>
+		<%= hidden_field 'category', 'id' %>
+		<div class="fieldset">
+			<div class="legend">Edit Details</div>
+			<table class="form">
+			<tr>
+				<td class="label"><label for="category_name">Name:</label></td>
+				<td class="field"><%= text_field 'category', 'name', :class => 'text' %><%= show_tooltip(:category, :name) -%></td>
+			</tr>
+			<tr>
+				<td class="label"><label for="category_filename">Path:</label></td>
+				<td class="field"><%= h(@category.parent.path) + (@category.parent.path.length > 0 ? '/' : '') %><%= text_field 'category', 'filename', :size => 20 %><%= show_tooltip(:category, :path) -%></td>
+			</tr>
+			<tr>
+				<td class="label"><label for="category_description">Description:</label></td>
+				<td class="field"><%= text_area 'category', 'description', :rows => 20 %><%= show_tooltip(:category, :description) -%></td>
+			</tr>
+			</table>
+		</div>
+		<div class="fieldset">
+			<div class="legend">Search Engine Optimisation Options</div>
+			<table class="form">
+			<tr>
+				<td class="label"><label for="category_title">Page Title:</label></td>
+				<td class="field">
+					<%= text_field 'category', 'title', :class => 'text' %>
+					<%= show_tooltip(:seo, :page_title) -%>
+				</td>
+			</tr>
+			<tr>
+				<td class="label"><label for="category_meta_keywords">Keywords (&lt;meta&gt;):</label></td>
+				<td class="field">
+					<%= text_area 'category', 'meta_keywords', :rows => 3 %><br />
+					If left blank, the site-wide default will be used instead (this can be viewed in the <a href="/admin/settings/">Application Settings</a>)<%= show_tooltip(:seo, :meta_keywords) -%>
+				</td>
+			</tr>
+			<tr>
+				<td class="label"><label for="category_meta_description">Description (&lt;meta&gt;):</label></td>
+				<td class="field">
+					<%= text_area 'category', 'meta_description', :rows => 3 %><br />
+					If left blank, the site-wide default will be used instead (this can be viewed in the <a href="/admin/settings/">Application Settings</a>)<%= show_tooltip(:seo, :meta_description) -%>
+				</td>
+			</tr>
+			</table>
+		</div>
+	<%= submit_tag 'Save changes', :name => 'save', :class => 'button' %>
+	<% end -%>
+<%= render :partial => 'rich_editor', :locals => { :element_id => 'category_description' } -%>
+<% end -%>

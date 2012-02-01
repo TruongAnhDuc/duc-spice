@@ -1,0 +1,55 @@
+<% @page_title = @static_page.title || @keywords.nil? ? "Product Search" : "Product Search: " + @keywords.join(" ") %>
+<% @meta_keywords = @static_page.meta_keywords -%>
+<% @meta_description = @static_page.meta_description -%>
+
+<%= RedCloth.new(@static_page.body || "").to_html %>
+
+<% if @products -%>
+	<% if !@products.empty? -%>
+		<%= render :partial => "paginator" %>
+		<ol class="results" start="<%= @result_pages.current.first_item %>">
+			<% @products.each do |product| -%>
+				<li>
+					<span class="title"><%= link_to(product.name, product.path) -%></span>
+					<br>
+					<span class="description"><%= product.description %></span>
+					<br><br>
+				</li>
+			<% end -%>
+		</ol>
+		<%= render :partial => "paginator" %>
+	<% else -%>
+		<p>No products found.</p>
+	<% end -%>
+<% else -%>
+	<% form_tag :method => :get do -%>
+		<div class="fieldset">
+			<div class="legend">Search</div>
+			<table class="form">
+				<tr>
+					<td></td>
+					<td class="field">
+						<input class="radio" type="radio" name="mode" value="all" checked="checked" /> all
+						<input class="radio" type="radio" name="mode" value="any" /> any of the following:
+					</td>
+				</tr>
+				<tr>
+					<td class="label"><label for="query">Search for:</label></td>
+					<td class="field"><input class="text" type="text" name="query" /></td>
+				</tr>
+				<tr>
+					<td></td>
+					<td class="field">
+						<% Category.top_level.each do |c| -%>
+							<input class="checkbox" type="checkbox" name="cat[]" value="<%= c.id %>" /> <%= c.name %><br />
+						<% end -%>
+					</td>
+				</tr>
+				<tr>
+					<td></td>
+					<td class="field"><input class="button" type="submit" value="Search" /></td>
+				</tr>
+			</table>
+		</div>
+	<% end -%>
+<% end -%>

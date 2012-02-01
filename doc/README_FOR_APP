@@ -1,0 +1,75 @@
+== Rocket Cart Documentation
+v1.2.1, April 10 2007
+
+= Introduction
+
+Rocket Cart has been designed to be a flexible, friendly solution for medium-budget web commerce
+applications running on Avatar's Linux server. It is modular, extensible and approachable, with
+the idea being that it should be possible for someone to learn as much Ruby as they need simply by
+looking at the templates, and without touching any business code.
+
+It is important that any application-specific extensions be either integrated into the core modules
+of Rocket Cart, or developed as separate modules in separate source files (for example, by creating
+a new controller). In this way, it can be guaranteed that future bug fixes can be rolled out with a
+minimum of fuss, simply by copying the relevant files.
+
+= Folder Structure
+      www                        Base directory
+      +- app                     Application files
+      |  +- apis
+      |  +- controllers          Application controllers
+      |  +- helpers
+      |  +- models               Database object models
+      |  +- views                View templates
+      |     +- admin             Templates for admin area
+      |     +- cart              Templates for checkout
+      |     +- layouts           Layout templates for admin and public site
+      |     +- postman           Email templates
+      |     +- product_images
+      |     +- products          Templates for public site
+      |     +- static_pages
+      |     +- widgets           Small components for output of login boxes etc
+      +- config                  Configuration files
+      +- doc                     Documentation
+      +- lib                     Miscellaneous libraries
+      +- log                     Error logs
+      +- public                  Main site directory
+      |  +- images               Images
+      |  |  +- admin             Images for admin area
+      |  +- javascripts          Javascript files
+      |  +- payments             Rocket Cart payment modules
+      |  |  +- rocket-secure     Rocket Secure payment module
+      |  |  +- payment-express   DPS Hosted Payment Page module
+      |  +- reports              Temporary directory for report generation
+      |  +- stylesheets          CSS stylesheets
+      +- script                  Rails configuration scripts
+      +- stats
+      +- test
+      +- vendor
+
+As a rule, anything under the <tt>public</tt> directory is accessible from the main URL: for example,
+<tt>/home/rocketcartavatarconz/www/public/stylesheets/local.css</tt> is accessible as <tt>http://rocketcart.avatar.co.nz/stylesheets/local.css</tt>.
+Note that the URL must point to an actual file: directory references such as <tt>http://rocketcart.avatar.co.nz/stylesheets/</tt> won't work unless you modify the <tt>.htaccess</tt> file. This isn't really recommended, as you could screw up the way Rails handles URLs.
+
+= Installation
+
+Step-by-step instructions for installation are given at http://rocketcart.avatar.co.nz/new.html.
+
+= Customising Rocket Cart
+
+Most of the work in a Rocket Cart installation is in customising the templates. The main template you need to worry about is the Products layout template (<tt>app/views/layouts/products.rhtml</tt>), as this is used as the base layout for every page in the site. (If there is a template called <tt>app/views/layouts/home.rhtml</tt>, this will be used for the home page instead.) Other templates you might need to customise are:
+
+* Category page template (<tt>app/views/products/category.rhtml</tt>)
+* Home page body template (<tt>app/views/products/home.rhtml</tt>)
+* Product page template (<tt>app/views/products/product.rhtml</tt>)
+* Search page template (<tt>app/views/products/search.rhtml</tt>)
+* Cart summary template (<tt>app/views/cart/cart_summary.rhtml</tt>)
+* Email templates (in <tt>app/views/postman</tt>)
+
+Any custom CSS rules should go in <tt>public/stylesheets/local.css</tt>, or another file you include from the <tt>products.rhtml</tt> template. <b>Do not</b> modify <tt>admin.css</tt> or <tt>cart.css</tt>, as these are Rocket Cart distribution files.
+
+The code parts of the Rocket Cart templates should be OK left intact: that is, anything between <tt><%</tt> and <tt>%></tt>. If you do need to modify the behaviour of the templates, you'll need to know a bit about Ruby; http://www.rubyonrails.com is a good place to start.
+
+= Database Structure
+
+An up-to-date copy of the database structure was kept at all times in <tt>/home/rocketcartavatarconz/rocketcart.sql</tt>. Recently changes are kept in Rails migrations (see http://wiki.rubyonrails.org/rails/pages/UsingMigrations), allowing data to be updated or even regressed back to old versions as necessary. <tt>/db/schema.rb</tt> has the base schema, and <tt>/db/migrate/*.rb</tt> have the individual migrations. See <tt>/doc/system_uml.png</tt> for an up-to-date overview.

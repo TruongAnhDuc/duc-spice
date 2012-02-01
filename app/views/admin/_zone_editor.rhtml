@@ -1,0 +1,90 @@
+<%
+	# The endcolor must match .fieldset in the CSS but be careful of how many levels deep we are as they differ...
+%>
+			<% form_remote_tag :url => { :action => :edit_zone, :id => @zone.id }, :html => { :id => "zone_#{@zone.id}_editor" }, :update => "zone-editor-#{@zone.id}", :complete => "new Effect.Highlight('zone-save-text-#{@zone.id}', {startcolor:'#FF0000', endcolor:'#D3D3D3', duration: 3});" do -%>
+				<input type="hidden" name="id" value="<%= @zone.id %>" />
+				<table class="form" id="zone-gui-<%= @zone.id -%>">
+				<tr>
+					<td class="label" nowrap="nowrap"><label for="name">Option Name:</label></td>
+					<td class="field"><%= text_field_tag "name", @zone.name, :class => "text" %><%= show_tooltip(:shipping_zone, :name) -%></td>
+				</tr>
+				<tr>
+					<td class="label"><label>Countries:</label></td>
+					<td style="padding: 0px;">
+						<table>
+						<tr>
+							<td>
+								Option available for:<br />
+								<select id="include_<%= @zone.id -%>" name="include[]" size="7" style="width: 150px;" multiple="multiple">
+									<% @zone.countries.each do |country| -%>
+										<option value="<%= country.name.gsub(/[^A-Za-z0-9]/, "_").downcase %>"><%=h country.name %></option>
+									<% end -%>
+								</select>
+							</td>
+							<td style="vertical-align: middle">
+								<input class="button" type="image" src="<%= icon_path('left') -%>" onClick="return move_selected_options('exclude_<%= @zone.id -%>', 'include_<%= @zone.id -%>');" name="add" value="&lt;" />
+
+								<input class="button" type="image" src="<%= icon_path('right') -%>" onClick="return move_selected_options('include_<%= @zone.id -%>', 'exclude_<%= @zone.id -%>');" name="remove" value="&gt;" />
+
+								<%= show_tooltip(:shipping_zone, :countries) -%>
+							</td>
+							<td>
+								Option not available for:<br />
+								<select id="exclude_<%= @zone.id -%>" name="exclude[]" size="7" style="width: 150px;" multiple="multiple">
+									<% (Country.countries.values.sort - @zone.countries.collect { |x| x.name }).each do |country| -%>
+										<option value="<%= country.gsub(/[^A-Za-z0-9]/, "_").downcase %>"><%=h country %></option>
+									<% end -%>
+								</select>
+							</td>
+						</tr>
+						</table>
+					</td>
+				</tr>
+				<tr>
+					<td class="label"><label for="per_item">Per Item:</label></td>
+					<td class="field">$<%= text_field_tag 'per_item', sprintf('%.2f', @zone.per_item), :class => 'text', :style => 'width: 6em' %><%= show_tooltip(:shipping_zone, :per_item) -%></td>
+				</tr>
+<%
+#SNIP=weight_based_shipping
+# DO NOT REMOVE THE ABOVE COMMENT. It is used to remove the above feature
+-%>
+				<tr>
+					<td class="label"><label for="per_kg">Per kg:</label></td>
+					<td class="field">$<%= text_field_tag 'per_kg', sprintf('%.2f', @zone.per_kg), :class => 'text', :style => 'width: 6em' %><%= show_tooltip(:shipping_zone, :per_kg) -%></td>
+				</tr>
+<%
+# DO NOT REMOVE THE BELOW COMMENT. It is used to remove the above feature
+#/SNIP=weight_based_shipping
+-%>
+				<tr>
+					<td class="label"><label for="flat_rate">Flat Rate:</label></td>
+					<td class="field">$<%= text_field_tag 'flat_rate', sprintf('%.2f', @zone.flat_rate), :class => 'text', :style => 'width: 6em' %><%= show_tooltip(:shipping_zone, :flat_rate) -%></td>
+				</tr>
+				<tr>
+					<td class="label"><label for="formula">Formula:</label></td>
+					<td class="field">
+<% if @current_user.permissions >= :admin then -%>
+						$<%= text_field_tag 'formula', @zone.formula, :class => 'text', :style => 'width: 18em' %>
+<% else -%>
+						$(<%= @zone.formula -%>)
+						<input type="hidden" id="formula" name="formula" value="<%= @zone.formula -%>" />
+<% end -%>
+						<%= show_tooltip(:shipping_zone, :formula) -%><br />
+						(use 'I' for the number of items, 'W' for the total weight or 'V' for the total value of the order)
+					</td>
+				</tr>
+				<tr>
+					<td class="label"><label for="formula_description">Description:</label></td>
+					<td class="field"><%= text_field_tag 'formula_description', @zone.formula_description, :class => 'text', :style => 'width: 18em' %><%= show_tooltip(:shipping_zone, :formula_description) -%></td>
+				</tr>
+				<tr>
+					<td></td>
+					<td>
+						<input type="button" name="Save" value="Save" class="button" onClick="return send_zone_form('<%= @zone.id -%>');" /> &nbsp; <span class="option-save-text-cc" id="zone-save-text-<%= @zone.id %>">Option details successfully saved.</span>
+					</td>
+				</tr>
+				</table>
+			<% end -%>
+			<script language="javascript" language="text/javascript">
+				sort_select_options('include_<%= @zone.id -%>');
+			</script>

@@ -1,0 +1,101 @@
+--- 
+:products:
+  :query: 
+:product:
+  :product_code: "A unique code used for each product offer."
+  :product_name:
+  :product_description: "The main text displayed on the page, including anything you want to tell customers viewing this product.<hr>You can use the editor provided to format text, or paste in pre-formatted text from another editor (such as Microsoft Word)."
+  :product_short_description: "This description appears on category pages instead of a shortened version of the description. If you leave this blank, the description will be used instead. This short description will not be shortened.<hr>You can use the editor provided to format text, or paste in pre-formatted text from another editor (such as Microsoft Word)."
+  :product_base_price: "The price of the product, <strong>before</strong> discounts are applied."
+  :product_discount: "An amount (either a percentage of the total price or a dollar value) removed from the products price. If this is set, Rocket Cart will display your product with its original and discounted prices."
+  :product_base_weight: 
+  :product_available: "If you have stock of the product, this box should be checked."
+  :product_categories: "Select which categories or sub-categories to display your product in. You can select more than one category by holding down the Control key and clicking each required category in turn."
+  :product_expiry_date: "After the date specified here, the product will no longer be displayed to customers.<br />If you leave this date blank, the product will never expire."
+  :image_image:
+:seo:
+  :page_title: "The page title is viewed at the top of a browser window. It is a very important location for keyword phrases.<br /><br />Typically, a 'keyword phrase' is located in the page title. For example, if your page is about 'sheepskin slippers', your page title may be 'New Zealand Sheepskin Slippers' or another appropriate keyword phrase.<br /><br />Aim for a maximum of around 65 characters (about 12 words) including spaces."
+  :h1: "An 'H1' (or heading 1) is usually the main heading on a page. It is a useful location for placing a keyword phrase, where it makes sense to do so. For example if a page relates to 'sheepskin slippers', your page H1 may simply be 'New Zealand Sheepskin Slippers'."
+  :image_alt_tag: "This text may appear if a picture is slow to load and should describe the picture. It is also a useful location for a keyword phrase. For example, if your product picture is of 'sheepskin slippers', add 'New Zealand Sheepskin Slippers' into this field."
+  :meta_keywords: "Add words that are relevant to your page in this field. Start with geographic regions first (e.g. new zealand, nz, auckland, ellerslie) in lower case, with commas separating each word. Include pluralisations and misspellings and aim for about 250 characters (40-50 words) including spaces."
+  :meta_description: "The page description may be displayed on search engine results pages (SERPS) and is used by search engines and directories to help them index sites. It is another very important location for keyword phrases. Typically, one or two 'keyword phrases' relevant to the page are located in the page description.<br /><br />Aim to write two grammatically correct sentences, with up to 250 characters (40-50 words) including spaces."
+:categories:
+  :create_new:
+:category:
+  :name:
+  :path: "The name of the category as it should appear within the URL.<hr>URLs cannot have special characters such as quotes or slashes in them. E.g. If you want to create a category called 'Dotty's Pets', you would create the path as 'dottys-pets'."
+  :description: "The main text displayed on the page, including anything you want to tell customers viewing this page.<hr>You can use the editor provided to format text, or paste in pre-formatted text from another editor (such as Microsoft Word)."
+  :short_description: "This description appears on this category's parents page next to the name of this category.<hr>You can use the editor provided to format text, or paste in pre-formatted text from another editor (such as Microsoft Word)."
+:feature:
+  :product_id: "Select the product that will appear as 'featured'."
+  :description: "A description for the product which will appear instead of the products 'short description'. If you leave this blank the products 'short description' will be used instead.<hr>You can use the editor provided to format text, or paste in pre-formatted text from another editor (such as Microsoft Word)."
+  :category_id: "Select the categories in which to display your featured product. You can select more than one category by holding down the Control key and clicking each required category in turn."
+  :static_page_id: "Select the static pages in which to display your featured product. You can select more than one static page by holding down the Control key and clicking each required static page in turn."
+  :weighting: "Choose how often you want your featured product to appear, compared to other featured products in the same category. (If this is the only featured product, it will always appear). If you want a featured product to appear more often, click the button toward the end of the scale reading 'Show more often'. If you want it to appear less often, click at the other end of the scale, which reads 'Show less often'"
+  :until: "The featured product will not be shown after the date specified here.  If you leave the date blank, the featured product will always be shown."
+  :in_layout: "Decide whether or not to show this featured product any site-wide featured products area."
+:options:
+  :create_new:
+:product_types:
+  :create_new:
+:product_type:
+  :name:
+  :description:
+:option:
+  :create_new: "Add another value for this option. You can choose to make this value affect the weight or price of the product it is applied to. <hr>E.g. A size of 'XXL' might add $2 to a t-shirt you are selling, but not appreciably affect the weight. In this example, you would enter 'XXL', '2' and '0'."
+  :name: "Select a simple name for the option.<hr>Eg: 'Size'."
+  :comment: "You can use a comment to differentiate between similarly-named options. This does not appear anywhere on the Web site’s displayed pages.<hr>E.g. If you have two different 'Size' options, use this to describe the difference."
+  :preview: "This is how the option will appear on the Web site when it is added to a product."
+:orders:
+  :query_id:
+  :query_date:
+  :query_show_in_progress:
+  :freight_cost: "Enter the actual freight cost for this wholesale order here.  This will appear in the details below and on the customer's invoice."
+:order:
+  :response: "Payment gateways can report various information back to you after a customer attempts a payment. For example, an authorisation code that may be required by a bank if the credit card owner requests a chargeback."
+:report:
+  :view_download: "You can either view the results of this report immediately below, or download the report in XLS format (which should be readable with most office packages)."
+:static_page:
+  :name:
+  :path: "The end part of the URL (after your domain name) at which this static page should appear.<hr>For example, if you have the domain 'myshop.com', and want to create the page 'myshop.com/my-page', you enter '/my-page'."
+  :body: "The main text displayed on the page, including anything you want to tell customers viewing this page.<hr>You can use the editor provided to format text, or paste in pre-formatted text from another editor (such as Microsoft Word)."
+:shipping_zones:
+  :create_new: "Enter a name for your new shipping option."
+:shipping_zone:
+  :name:
+  :countries: "To move countries from one list to the other, select the countries you wish to move and click the appropriate arrow button. (you can select more than one country by holding down the Control key and clicking each desired country in turn)"
+  :per_item: "This is the shipping costs charged to customers for each item in their order. The per item rate adds together the 'per kg', 'flat rate' and 'formula' amounts.<hr>If a customer orders 8 items, they would be charged 8 times this amount."
+  :per_kg: "This is the shipping cost charged to customers for each kilogram sent. The per kg rate adds together the 'per item', 'flat rate' and 'formula' amounts.<hr>If a customer orders 1 item weighing 5kg, they would be charged 5 times this amount."
+  :flat_rate: "This is the total shipping cost charged to customers with the 'per item', 'per kg' and 'formula' amounts added together.<hr>No matter how many items are orders, the customer will be charged this 'flat rate' amount."
+  :formula: "This forumula works out the shipping cost in any way not covered by the above options. Note this adds together with the 'per item', 'per kg' and 'flat rate' amounts.<hr>This is a complicated option and you should ask your Web site administrator to create this formula, if required."
+  :formula_description: "A text description of what the formula does explaining to customers how this shipping system works. Does not need to explain the 'per item', 'per kg' or 'flat rate' charges."
+:currency:
+  :abbreviation: 
+  :name: 
+  :symbol: "How you want the currency to be referred to in your shop. Customers are often used to seeing a short abbreviation for the country, followed by a currency symbol.<hr />For example, for Australian dollars, you could use 'AU' and '$'."
+:modules:
+  :show_country: "Select whether or not to show customers the countries drop-down box during the ordering process. You should allow this, if you expect orders from multiple countries."
+  :others_bought_list_length: "Choose how many 'other users who bought this product also bought...' results to show on a products page."
+  :others_bought_time_limit: "For 'other users who purchased this product...', the products shown will be selected from orders placed up to this many months ago."
+  :others_bought_label: "This is used as the heading for the 'other users who bought this product...' section on a products page."
+  :separate_delivery_address: "Select whether or not customers can select the option of creating separate billing and delivery addresses for their order."
+  :hide_weight_options: "Decide to hide or show information about the weight of products (or options for products) throughout the Web site / shop."
+  :num_featured_products: "Select the maximum number of featured products that can be displayed on a single page."
+:emails:
+  :default: "The default 'administrative' email address for the Web site / shop."
+  :contact: "The email address to which contact form entries are sent."
+  :shipping: "The email address used as the 'from' address when customers receive their order and shipping confirmations. Notifications of new orders will be sent to this address, so it needs to be valid."
+  :password_reset: "The email address used as the 'from' address when a customer requests their password be reset."
+:application:
+  :team_name: "The name used to refer to your staff or company."
+  :name: "The name of your Web site or shop."
+  :items_per_page: "The number of products to show on a single page."
+  :password_hashing: "Choose SHA1 or MD5 for the password encryption system to be used for all new users.  MD5 is needed for integration with a Joomla CMS, but SHA1 offers improved security.<br /><strong>This setting should never be changed without expert advice</strong>."
+:search_engine_optimisation:
+  :default_meta_keywords: "Add words that are relevant to your Web site / shop in this field. Start with geographic regions first (e.g. new zealand, nz, auckland, ellerslie) in lower case, with commas separating each word. Include pluralisations and misspellings and aim for about 250 characters (40-50 words) including spaces."
+  :default_meta_description: "The page description may be displayed on search engine results pages (SERPS) and is used by search engines and directories to help them index sites. It is another very important location for keyword phrases. Typically, one or two 'keyword phrases' relevant to the page are located in the page description.<br /><br />Aim to write two grammatically correct sentences, with up to 250 characters (40-50 words) including spaces."
+:customers:
+  :query:
+  :applicants_only: 
+:admins:
+  :query:

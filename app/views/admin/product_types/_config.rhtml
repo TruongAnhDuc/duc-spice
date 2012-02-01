@@ -1,0 +1,87 @@
+<table class="product-type-gui">
+	<tr>
+		<td valign="bottom">
+			<b>Attributes:</b><br />
+			<table border="0" cellspacing="0" class="layout">
+				<tr>
+					<th>Name</th>
+					<th>Type</th>
+					<th>Required</th>
+					<th colspan="3">Actions</th>
+				</tr>
+				<% odd_row = 1 %>
+				<% product_type.quirks.each do |cur_quirk| -%>
+				<tr<%= odd_row == 1 ? ' class="product-type-odd-row"' : '' -%>>
+					<% odd_row = (odd_row + 1) % 2 %>
+					<td nowrap="nowrap"><input size="15" type="text" name="name-<%= cur_quirk.id -%>" value="<%= cur_quirk.name -%>" /></td>
+					<td nowrap="nowrap">
+						<%=
+							case cur_quirk.class.to_s
+								when "TextQuirk"
+									"Text"
+								when "HtmlQuirk"
+									"HTML"
+								when "IntegerQuirk"
+									"Integer"
+								when "BooleanQuirk"
+									"Yes / No"
+								when "UrlQuirk"
+									"Web Link"
+								when "ImageQuirk"
+									"Image"
+							end
+						-%>
+					</td>
+					<td nowrap="nowrap">
+						<select name="required-<%= cur_quirk.id -%>" id="required-<%= cur_quirk.id -%>">
+							<option value="yes"<%= if cur_quirk.required then " selected=\"selected\"" end -%>>Yes</option>
+							<option value="no"<%= unless cur_quirk.required then " selected=\"selected\"" end -%>>No</option>
+						</select>
+					</td>
+<% if(cur_quirk.first?) %>
+					<td><img src="<%= @ROCKETCARTDIR + icon_path('up-grey') -%>" alt="Up" title="Cannot move up" width="16" height="16" /></td>
+<% else %>
+					<td><a href="#" onClick="return product_type_action(<%= product_type.id -%>, <%= cur_quirk.id -%>, 'up');"><img src="<%= @ROCKETCARTDIR + icon_path('up') -%>" alt="Up" title="Move this attribute up" width="16" height="16" /></a></td>
+<% end %>
+<% if(cur_quirk.last?) %>
+					<td><img src="<%= @ROCKETCARTDIR + icon_path('down-grey') -%>" alt="Down" title="Cannot move down" width="16" height="16" /></td>
+<% else %>
+					<td><a href="#" onClick="return product_type_action(<%= product_type.id -%>, <%= cur_quirk.id -%>, 'down');"><img src="<%= @ROCKETCARTDIR + icon_path('down') -%>" alt="Down" title="Move this attribute down" width="16" height="16" /></a></td>
+<% end %>
+					<td><a href="#" onClick="return product_type_action(<%= product_type.id -%>, <%= cur_quirk.id -%>, 'delete_attribute');"><img src="<%= @ROCKETCARTDIR + icon_path('delete') -%>" alt="X" title="Delete this attribute" width="16" height="16" /></a></td>
+				</tr>
+				<% end -%>
+				<tr>
+					<td colspan="6"><br /><b>Add a new attribute:</b></td>
+				</tr>
+				<tr>
+					<th>Name</th>
+					<th>Type</th>
+					<th>Required</th>
+					<th colspan="3"></th>
+				</tr>
+				<tr>
+					<td><input class="text" type="text" name="new_name" /></td>
+					<td>
+						<select name="new_type" id="new_type">
+							<option value="text">Text</option>
+							<option value="html">HTML</option>
+							<option value="integer">Integer</option>
+							<option value="boolean">Yes / No</option>
+							<option value="url">Web Link</option>
+							<option value="image">Image</option>
+						</select>
+					</td>
+					<td>
+						<select name="new_required" id="new_required">
+							<option value="yes">Yes</option>
+							<option value="no">No</option>
+						</select>
+					</td>
+					<td colspan="3">&nbsp; &nbsp; <input class="button" type="submit" name="add" value="Add" onclick="$('do-<%= product_type.id -%>').value='add'" /><%= show_tooltip(:product_type, :create_new) -%></td>
+				</tr>
+			</table>
+			<input type="hidden" name="values[]" id="product-type-<%= product_type.id -%>-value" value="" />
+		</td>
+	</tr>
+</table>

@@ -1,0 +1,210 @@
+<%= javascript_include_tag '/calendar/calendar' %>
+<%= javascript_include_tag '/calendar/lang/calendar-en' %>
+<%= javascript_include_tag '/calendar/calendar-setup' %>
+<%= stylesheet_link_tag '/calendar/calendar-win2k-1' %>
+<%= hidden_field 'product', 'id' %>
+<%
+	# This hidden field is here because the "save" button itself is kludged to avoid form-within-a-form
+	# issues due to the AJAX options editing.  This hidden input allows us to pick up the :save param.
+	# Using hidden_field makes it create with name "save[]" which will cause a crash due to the
+	# actual save button being of name "save".
+%>
+<% if @quirks && !@quirks.empty? -%>
+<script type="text/javascript">
+	function show_product_types ()
+	{
+		// hide all 'product_type_quirks' class elements
+		// show selected 'product_type_quirks_X' id element
+
+		var quirk_editors = document.getElementsByClassName('product_type_quirks')
+		for (i = 0; i < quirk_editors.length; i++)
+		{
+			quirk_editors[i].hide();
+		}
+
+		if ($F('product_product_type_id') > 0)
+		{
+			$('product_type_editor').show();
+			$('product_type_quirks_' + $F('product_product_type_id')).show();
+		}
+		else
+		{
+			$('product_type_editor').hide();
+		}
+	}
+</script>
+<% end -%>
+<input type="hidden" name="save" value="" />
+<table class="form">
+<tr>
+	<td class="label"><label for="product_product_code">* Product Code:</label></td>
+	<td class="field"><%= text_field 'product', 'product_code', :class => 'text' %><%= show_tooltip(:product, :product_code) -%></td>
+</tr>
+<tr>
+	<td class="label"><label for="product_product_name">* Name:</label></td>
+	<td class="field"><%= text_field 'product', 'product_name', :class => 'text' %><%= show_tooltip(:product, :product_name) -%></td>
+</tr>
+<tr>
+	<td class="label"><label for="product_description">Description:</label></td>
+	<td class="field"><%= text_area 'product', 'description', :rows => 20 %><%= show_tooltip(:product, :product_description) -%></td>
+</tr>
+<tr>
+	<td class="label"><label for="product_short_description">Short Description:</label></td>
+	<td class="field"><%= text_area 'product', 'short_description', :rows => 15 %><%= show_tooltip(:product, :product_short_description) -%></td>
+</tr>
+<tr>
+	<td class="label"><label for="product_base_price">Price:</label></td>
+	<td class="field"><div style="width: 1em; float: left;">$</div><%= text_field 'product', 'base_price', :class => 'text nostretch' %><%= show_tooltip(:product, :product_base_price) -%></td>
+</tr>
+<tr>
+	<td class="label"><label for="product_wholesale_base_price">Wholesale Price:</label></td>
+	<td class="field"><div style="width: 1em; float: left;">$</div><%= text_field 'product', 'wholesale_base_price', :class => 'text nostretch' %><%= show_tooltip(:product, :product_wholesale_base_price) -%></td>
+</tr>
+<tr>
+	<td class="label"><label for="product_wholesale_only">Wholesale Only:</label></td>
+	<td class="field"><%= check_box 'product', 'wholesale_only', :class => 'checkbox' %><%= show_tooltip(:product, :product_wholesale_only) -%></td>
+</tr>
+<tr>
+	<td class="label"><label for="product_discount">Discount:</label></td>
+	<td class="field"><div style="width: 1em; float: left;" id="discount_absolute">&nbsp;</div><%= text_field 'product', 'discount', :class => 'text nostretch' -%> <span style="width: 1em;" id="discount_percent">%</span> : <label for="product_discount_is_abs">Discount is a </label><%= select 'product', 'discount_is_abs', [ ['Percentage', false], ['Dollar Value', true] ], {}, {:onchange => 'show_discount_abs_perc();'} -%><%= show_tooltip(:product, :product_discount) -%></td>
+</tr>
+<% if @configurator[:modules][:hide_weight_options] && @configurator[:modules][:hide_weight_options][:value] -%>
+<!--
+<% end -%>
+<tr>
+	<td class="label"><label for="product_base_weight">Weight:</label></td>
+	<td class="field"><div style="width: 1em; float: left;">&nbsp;</div><%= text_field 'product', 'base_weight', :class => 'text nostretch' %> kg<%= show_tooltip(:product, :product_base_weight) -%></td>
+</tr>
+<% if @configurator[:modules][:hide_weight_options] && @configurator[:modules][:hide_weight_options][:value] -%>
+-->
+<% end -%>
+<tr>
+	<td class="label"><label for="product_available">Available:</label></td>
+	<td class="field"><%= check_box 'product', 'available', :class => 'checkbox' %><%= show_tooltip(:product, :product_available) -%></td>
+</tr>
+<tr>
+	<td>
+		<strong>Expiry Date:</strong>
+	</td>
+	<td>
+		<input class="text" style="width: 10em;" type="text" id="product_expiry_date" name="product[expiry_date]" value="<%= if @product.expiry_date then @product.expiry_date.strftime('%d/%m/%Y') end %>" />
+		<button id="trigger_expiry_date">
+			<%= image_tag(
+				icon_path('calendar'),
+				{
+					:alt => "Calendar",
+					:title => "Calendar",
+					:size => "#{@design_config[:sizes][:admin_icons_width]}x#{@design_config[:sizes][:admin_icons_height]}",
+					:class => "icon"
+				}
+			) %>
+		</button>
+		<%= show_tooltip(:product, :product_expiry_date) -%>
+	</td>
+</tr>
+<tr>
+	<td class="label"><label for="product_categories">Categories:</label></td>
+	<td>
+		<select name="product[categories][]" id="product_categories" multiple="multiple">
+			<% @selected_categories = @product.categories.collect { |c| c.id } -%>
+			<% @selected_categories << @category_id.to_i unless !@category_id -%>
+			<%= options_from_collection_for_select(Category.all, 'id', 'option_label', @selected_categories) %>
+		</select>
+		<%= show_tooltip(:product, :product_categories) -%>
+	</td>
+</tr>
+<tr>
+	<td class="label"><label for="image_image">Image:</label></td>
+	<td class="field">
+		<% if @product.image -%>
+			<p><%= product_thumbnail(@product, 200, 200) %></p>
+		<% else -%>
+			<p>(No image uploaded)</p>
+		<% end -%>
+		<%= file_field('image', 'image', :class => 'button') %>
+		<%= show_tooltip(:product, :image_image) -%>
+	</td>
+</tr>
+<% if @product.image -%>
+<tr>
+	<td></td>
+	<td>
+			<%= submit_tag 'Delete Image', :name => 'delete_image', :class => 'button' %>
+	</td>
+</tr>
+<% end -%>
+<tr>
+	<td class="label"><label for="product_product_type_id">Product Type:</label></td>
+	<td>
+		<select name="product[product_type_id]" id="product_product_type_id" onchange="show_product_types();">
+			<% @selected_product_type = [@product[:product_type_id]] -%>
+			<%= options_from_collection_for_select(@product_types, 'first', 'last', @selected_product_type) %>
+		</select>
+		<%= show_tooltip(:product, :product_product_types) -%>
+	</td>
+</tr>
+</table>
+
+<% if @quirks && !@quirks.empty? -%>
+</div>
+<div class="fieldset" id="product_type_editor">
+	<div class="legend">Product Type Attributes</div>
+
+<% @quirks.each_pair do |product_type_id, the_quirks| -%>
+	<div class="product_type_quirks" id="product_type_quirks_<%= product_type_id -%>">
+		<table class="form">
+<% the_quirks.each_pair do |quirk_id, the_quirk| -%>
+<%= render :partial => "quirk", :locals => { :id => quirk_id, :name => the_quirk["name"], :type => the_quirk["type"], :required => the_quirk["required"], :value => the_quirk["value"] } %>
+<% end -%>
+		</table>
+	</div>
+<% end -%>
+<% end -%>
+
+</div>
+<div class="fieldset">
+<div class="legend">Search Engine Optimisation Options</div>
+<p><em>If these are left blank, the site-wide defaults will be used instead.</em></p>
+<table class="form">
+<tr>
+	<td class="label"><label for="product_page_title">Customised Page Title:</label></td>
+	<td class="field"><%= text_field 'product', 'page_title', :class => 'text' %><%= show_tooltip(:seo, :page_title) -%></td>
+</tr>
+<% if @current_user.permissions >= :admin then -%>
+<tr>
+	<td class="label"><label for="product_h1">Customised Page H1:</label></td>
+	<td class="field"><%= text_field 'product', 'h1', :class => 'text' %><%= show_tooltip(:seo, :h1) -%></td>
+</tr>
+<% end -%>
+<tr>
+	<td class="label"><label for="product_image_alt_tag">Image 'Alt' Tag:</label></td>
+	<td class="field"><%= text_field 'product', 'image_alt_tag', :class => 'text' %><%= show_tooltip(:seo, :image_alt_tag) -%></td>
+</tr>
+<tr>
+	<td class="label"><label for="product_meta_keywords">Keywords (&lt;meta&gt;):</label></td>
+	<td class="field"><%= text_area 'product', 'meta_keywords', :rows => 3 %><br />
+	If left blank, the site-wide default will be used instead (this can be viewed in the <%= link_to "Application Settings", :controller => "/admin/settings", :action => :edit -%>)<%= show_tooltip(:seo, :meta_keywords) -%></td>
+</tr>
+<tr>
+	<td class="label"><label for="product_meta_description">Description (&lt;meta&gt;):</label></td>
+	<td class="field"><%= text_area 'product', 'meta_description', :rows => 3 %><br />
+	If left blank, the site-wide default will be used instead (this can be viewed in the <%= link_to "Application Settings", :controller => "/admin/settings", :action => :edit -%>)<%= show_tooltip(:seo, :meta_keywords) -%>)<%= show_tooltip(:seo, :meta_description) -%></td>
+</tr>
+</table>
+<%= render :partial => 'rich_editor', :locals => { :element_id => 'product_description' } %>
+<%= render :partial => 'rich_editor', :locals => { :element_id => 'product_short_description' } %>
+
+<script type="text/javascript">
+	show_discount_abs_perc();
+
+	Calendar.setup(
+		{
+			inputField : 'product_expiry_date',
+			ifFormat : '%d/%m/%Y',
+			button : 'trigger_expiry_date'
+		}
+	);
+<% if @quirks && !@quirks.empty? -%>
+	show_product_types();
+<% end -%>
+</script>

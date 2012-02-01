@@ -1,0 +1,27 @@
+--- 
+:colors: 
+  :cart_add_flash_start: ffffff
+  :cart_add_flash_end: dcd8a1
+:sizes:
+  :category_page_thumbnail_width: 122
+  :category_page_thumbnail_height: 122
+  :featured_product_thumbnail_width: 122
+  :featured_product_thumbnail_height: 122
+  :product_page_thumbnail_width: 122
+  :product_page_thumbnail_height: 122
+  :overview_page_thumbnail_width: 122
+  :overview_page_thumbnail_height: 122
+  :cart_summary_thumbnail_width: 46
+  :cart_summary_thumbnail_height: 46
+  :admin_icons_width: 16
+  :admin_icons_height: 16
+:options:
+  :overview_page_prods_per_div: 5
+  :product_description_summary_length: 150
+  :display_product_weights: "yes"
+  :show_extra_admin_icons: "yes"
+  :icons_path: "crystal"
+  :icons_format: "png"
+  :tooltip_options: ", VAUTO, SHADOW, FGCOLOR, '#FFFFDF', BGCOLOR, '#666633', SHADOWCOLOR, '#999999', SHADOWOPACITY, 60"
+  :review_tooltip_options: ", VAUTO, SHADOW, FGCOLOR, '#F7F7F7', BGCOLOR, '#666666', SHADOWCOLOR, '#999999', SHADOWOPACITY, 60"
+  :subcat_description_separator: "<br />&nbsp;"

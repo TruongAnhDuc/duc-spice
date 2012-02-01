@@ -1,0 +1,90 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+chicken:
+  id: 1
+  product_code: EC2
+  product_name: "Exploding Chicken"
+  base_price: 56000.0
+  wholesale_base_price: 28000.0
+  base_weight: 2.0
+  description: "Cute, clucky, cuddly - and lethal. Must be female..."
+  discount: 0
+  discount_is_abs: 0
+  available: 1
+cow:
+  id: 2
+  product_code: COW4
+  product_name: "Homicidal Bovine"
+  base_price: 132000.0
+  wholesale_base_price: 66000.0
+  base_weight: 1500.0
+  description: "A raging tower of beef and spittle whose demented mind yearns only to eviscerate the bodies of its enemies. (wow, scarey!)"
+  discount: 50
+  discount_is_abs: 0
+  available: 0
+cow2:
+  id: 3
+  product_code: COW6
+  product_name: "Ranged Armed Bovine"
+  base_price: 120000.0
+  wholesale_base_price: 60000.0
+  base_weight: 1600.0
+  description: "Cows with guns..."
+  discount: 5000
+  discount_is_abs: 1
+  available: 1
+cow3:
+  id: 4
+  product_code: COW8
+  product_name: "Melee Armed Bovine"
+  base_price: 120000.0
+  wholesale_base_price: 60000.0
+  base_weight: 1600.0
+  short_description: "Short description"
+  description: "Cows with axes..."
+  discount: 30
+  discount_is_abs: 0
+  available: 1
+optioner:
+  id: 5
+  product_code: OPT
+  product_name: "Box with options"
+  base_price: 100.0
+  wholesale_base_price: 50.0
+  base_weight: 10.0
+  description: "A box with many options! Fully modularisable! Amazing!"
+  discount: 10
+  discount_is_abs: 0
+  available: 1
+persian:
+  id: 6
+  product_code: CAT1
+  product_name: "Persian Cat"
+  base_price: 50.0
+  wholesale_base_price: 25.0
+  base_weight: 5.0
+  description: "A pedigree persian cat!"
+  discount: 0
+  discount_is_abs: 0
+  available: 1
+moggy:
+  id: 7
+  product_code: CAT2
+  product_name: "Moggy"
+  base_price: 50.0
+  wholesale_base_price: 25.0
+  base_weight: 5.0
+  description: "A street cat!"
+  discount: 0
+  discount_is_abs: 0
+  available: 1
+moggy_not_available:
+  id: 8
+  product_code: CAT3
+  product_name: "Bad Moggy"
+  base_price: 50.0
+  wholesale_base_price: 25.0
+  base_weight: 5.0
+  description: "A street cat gone bad!"
+  discount: 0
+  discount_is_abs: 0
+  available: 0

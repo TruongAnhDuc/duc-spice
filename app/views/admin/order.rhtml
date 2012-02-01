@@ -1,0 +1,163 @@
+<h1>Order #<%= @order.id %></h1>
+
+<p>This order is marked as "<strong><%= @order.status.humanize %></strong>".</p>
+
+<table class="order">
+<thead>
+	<th colspan="6">Billing Details</th>
+</thead>
+<tbody>
+	<tr>
+		<td class="label">Name:</td>
+		<td colspan="5"><%= @order.billing_address.name %></td>
+	</tr>
+	<tr>
+		<td class="label">Email:</td>
+		<td colspan="5"><%= @order.shipping_email %></td>
+	</tr>
+	<tr>
+		<td class="label">Address:</td>
+		<td colspan="5"><%= @order.billing_address.address.gsub "\n", '<br />' %></td>
+	</tr>
+	<tr>
+		<td class="label">City:</td>
+		<td colspan="5"><%= @order.billing_address.city %></td>
+	</tr>
+	<tr>
+		<td class="label">Postcode:</td>
+		<td colspan="5"><%= @order.billing_address.postcode %></td>
+	</tr>
+	<tr>
+		<td class="label">Country:</td>
+		<td colspan="5"><%= @order.billing_address.country %></td>
+	</tr>
+<% if @order.shipping_zone -%>
+	<tr>
+		<td class="label">Shipping Zone:</td>
+		<td colspan="5"><%= @order.shipping_zone.name %></td>
+	</tr>
+<% end -%>
+</tbody>
+<% if @configurator[:modules][:separate_delivery_address] && @configurator[:modules][:separate_delivery_address][:value] -%>
+<% if @order.delivery_address -%>
+<thead>
+	<th colspan="6">Shipping Details</th>
+</thead>
+<tbody>
+	<tr>
+		<td class="label">Name:</td>
+		<td colspan="5"><%= @order.delivery_address.name %></td>
+	</tr>
+	<tr>
+		<td class="label">Address:</td>
+		<td colspan="5"><%= @order.delivery_address.address.gsub "\n", '<br />' %></td>
+	</tr>
+	<tr>
+		<td class="label">City:</td>
+		<td colspan="5"><%= @order.delivery_address.city %></td>
+	</tr>
+	<tr>
+		<td class="label">Postcode:</td>
+		<td colspan="5"><%= @order.delivery_address.postcode %></td>
+	</tr>
+	<tr>
+		<td class="label">Country:</td>
+		<td colspan="5"><%= @order.delivery_address.country %></td>
+	</tr>
+</tbody>
+<% else -%>
+<thead>
+	<th colspan="6">Shipping Details</th>
+</thead>
+<tbody>
+	<tr>
+		<td colspan="6">No separate shipping details set.</td>
+	</tr>
+</tbody>
+<% end -%>
+<% end -%>
+<thead>
+	<tr>
+		<th>Code</th>
+		<th colspan="2">Product</th>
+		<th>Price</th>
+		<th>Qty</th>
+		<th>Total</th>
+	</tr>
+</thead>
+<tbody>
+	<% @items.each_with_index do |item, i| -%>
+		<%
+			options_count = 0
+			@option_values[item.product.id].each do |cur_option|
+				if cur_option
+					options_count += 1
+				end
+			end
+
+			rowspan = options_count + 1
+
+			cur_product = item.product
+		-%>
+		<tr class="<%= i % 2 == 0 ? 'even' : 'odd' %>">
+			<td rowspan="<%= rowspan %>"><%= cur_product.product_code -%></td>
+			<td colspan="2"><%= cur_product.name -%></td>
+			<td class="price" rowspan="<%= rowspan %>"><%= format('$%.2f', item.total_unit_price) -%></td>
+			<td class="qty" rowspan="<%= rowspan %>"><%= item.quantity -%></td>
+			<td class="price" rowspan="<%= rowspan %>">$<%= @currency.format(item.total_unit_price * item.quantity, false) -%></td>
+		</tr>
+
+		<% @option_values[item.product.id].each_with_index do |cur_option_values, option_i| -%>
+			<% if cur_option_values && !cur_option_values.empty? -%>
+				<tr class="<%= i % 2 == 0 ? 'even' : 'odd' %>">
+					<td><%= @options[option_i].label %></td>
+					<td>
+						<%=
+							option_values_text = Array.new
+							item.option_values.each do |cur_option_value|
+								if cur_option_value[:option_id] == option_i
+									option_values_text << cur_option_value[:value]
+								end
+							end
+							option_values_text.join(', ')
+						-%>
+					</td>
+				</tr>
+			<% end -%>
+		<% end -%>
+	<% end -%>
+</tbody>
+<tfoot>
+	<tr>
+		<td colspan="4"><strong>Subtotal:</strong></td>
+		<td class="total qty"><%= @order.items.inject(0) { |sum, i| sum + i.quantity } %></td>
+		<td class="total price">$<%= @currency.format(@order.subtotal, false) %></td>
+	</tr>
+	<tr>
+		<% @order.shipping_zone ||= ShippingZone.default_zone -%>
+		<td><strong>Shipping:</strong></td>
+		<td colspan="3"><%= "#{@order.shipping_zone.name} (#{@order.shipping_zone.describe_price})" %></td>
+		<td></td>
+		<td class="total price">$<%= @currency.format(@order.shipping_cost, false) %></td>
+	</tr>
+	<tr>
+		<td colspan="4"><strong>Total:</strong></td>
+		<td></td>
+		<td class="total price">$<%= @currency.format(@order.total, false) %></td>
+	</tr>
+</tfoot>
+</table>
+
+<% if @order.response && @order.gateway_used -%>
+<div id="response">
+<%=
+	# make switch?
+	if @order.gateway_used == 'payment-express'
+		render(:partial => 'admin/order_response/payment_express', :locals => { :response => @order.response })
+	else
+		render(:partial => 'admin/order_response/default', :locals => { :response => @order.response })
+	end
+-%>
+<%= show_tooltip(:order, :response) -%>
+</div>
+<% end -%>

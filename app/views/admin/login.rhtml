@@ -1,0 +1,36 @@
+<% @page_title = 'Authorisation required' %>
+
+<h1>Login</h1>
+
+<% form_tag do %>
+	<div class="fieldset">
+		<div class="legend">Login</div>
+
+		<p>Welcome to Rocket Cart's back end. By back end, we really mean the shop's back room, where you can make decisions about which products you want to sell, view your orders and your shop set up and loads more!</p>
+
+		<h2>Get Started</h2>
+
+		<p>To get started enter your email address and the password we supplied you with below, then click 'Login'.</p>
+
+		<p>If you want to apply for your login details, have forgotten them, or they have expired, please <%= link_to "contact us", "http://www.rocketcart.co.nz/online-shopping-cart-software.html" -%>).</p>
+
+		<table class="form">
+			<tr>
+				<td class="label"><label for="email">Email Address:</label></td>
+				<td class="field"><input class="text" type="text" name="email" id="email" /></td>
+			</tr>
+			<tr>
+				<td class="label"><label for="password">Password:</label></td>
+				<td class="field"><input class="text" type="password" name="password" id="password" /></td>
+			</tr>
+			<tr>
+				<td></td>
+				<td><%= submit_tag 'Login', :name => 'login', :class => 'button' %></td>
+			</tr>
+		</table>
+	</div>
+<% end %>
+
+<script type="text/javascript">
+	$('email').focus();
+</script>

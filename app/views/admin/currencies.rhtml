@@ -1,0 +1,59 @@
+<h1>Currencies</h1>
+
+<% form_tag do -%>
+	<table class="list">
+		<thead>
+			<tr class="actions">
+				<td colspan="6">
+					Selected currencies:<br />
+					<%= submit_tag 'Delete', :name => 'delete', :class => 'button', :onclick => 'return confirm(\'Really delete the selected currencies permanently?\')' %><br />
+					<%= submit_tag 'Make Default', :name => 'default', :class => 'button' %> (please select only one)
+				</td>
+			</tr>
+			<tr class="list-header">
+				<th></th>
+				<th>Abbr</th>
+				<th>Name</th>
+				<th>Symbol</th>
+				<th>Rate</th>
+				<th></th>
+			</tr>
+		</thead>
+		<tbody>
+			<% @currencies.each_with_index do |currency, i| -%>
+				<tr class="<%= (i % 2 == 0) ? 'odd' : 'even' %>">
+					<td><input class="checkbox" type="checkbox" name="select[<%= currency.id %>]" value="1" /></td>
+					<td><%= currency.abbreviation %></td>
+					<td><%= currency.name %> <%= '<strong>(default)</strong>' if currency.is_default? %></td>
+					<td><%= currency.symbol %></td>
+					<td id="rate-<%= currency.id %>" class="icons">
+						<%= render :partial => 'exchange_rate', :locals => { :currency => currency } %>
+					</td>
+					<td class="icons">
+						<%= if @design_config[:options][:show_extra_admin_icons] and @design_config[:options][:show_extra_admin_icons] == 'yes' then link_to '<img src="' + icon_path('edit') + '" alt="Edit" title="Edit" width="' + @design_config[:sizes][:admin_icons_width].to_s + '" height="' + @design_config[:sizes][:admin_icons_height].to_s + '" class="icon" />', { :action => :currency, :id => currency.id } end %>&nbsp;<%= link_to 'Edit', { :action => :currency, :id => currency.id } %>
+					</td>
+				</tr>
+			<% end -%>
+			<tr class="<%= (@currencies.length % 2 == 0) ? 'odd' : 'even' %>">
+				<td>New:</td>
+				<td><input class="text" type="text" name="new_currency[abbreviation]" style="width: 3em" /><%= show_tooltip(:currency, :abbreviation) -%></td>
+				<td><input class="text" type="text" name="new_currency[name]" /><%= show_tooltip(:currency, :name) -%></td></td>
+				<td nowrap="nowrap">
+					<input class="text" type="text" name="new_currency[symbol_prefix]" style="width: 2em" />
+					<select name="new_currency[symbol]">
+					<% Currency.symbols.each do |sym, ent| -%>
+						<option value="<%= sym %>"<%= (sym == 'dollar' ? ' selected="selected"' : '') -%> title="<%= sym %>"><%= ent %></option>
+					<% end -%>
+					</select>
+					<%= show_tooltip(:currency, :symbol) -%>
+				</td>
+				<td><%= submit_tag 'Create', :name => 'new', :class => 'button' %></td>
+				<td></td>
+			</tr>
+		</tbody>
+	</table>
+<% end -%>
+
+<ul class="tips">
+	<li>If you wish to add a new currency, you will need the correct ISO currency codes. You can view ISO currency codes by visiting sites such as <a href="http://www.xe.com/iso4217.php">www.xe.com/iso4217.php</a>.</li>
+</ul>

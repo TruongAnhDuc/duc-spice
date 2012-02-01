@@ -1,0 +1,15 @@
+<p class="paginator">
+	<%= @pages.item_count %> result(s) found |
+
+	<%= link_to_unless(!@pages.current.previous, '&laquo;', {:params => params.merge('page' => @pages.first)}, { :rel => 'first', :title => 'First' }) + '&nbsp;' %>
+
+	<%= link_to_unless(!@pages.current.previous, '&lt;', {:params => params.merge('page' => @pages.current.previous)}, { :rel => 'prev', :title => 'Previous' }) + '&nbsp;' %>
+
+	<% @pages.current.window.pages.each do |page| -%>
+		<%= link_to_unless(@pages.current.number == page.number, page.number, {:params => params.merge('page' => page)}) %>&nbsp;
+	<% end -%>
+
+	<%= link_to_unless(!@pages.current.next, '&gt;', {:params => params.merge('page' => @pages.current.next)}, { :rel => 'next', :title => 'Next' }) %>
+
+	<%= link_to_unless(!@pages.current.next, '&raquo;', {:params => params.merge('page' => @pages.last)}, { :rel => 'last', :title => 'Last' }) %>
+</p>

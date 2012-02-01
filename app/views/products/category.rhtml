@@ -1,0 +1,122 @@
+<% @page_title = @category ? ((@category.title.nil? || @category.title.empty?) ? "#{@category.name}" : @category.title) : @configurator[:application][:name][:value] -%>
+<% @body_class = @category.nil? ? 'products' : @category.name.downcase.gsub(/[^a-z]+/, '-') -%>
+<% @meta_description = @category ? @category.meta_description : '' -%>
+<% @meta_keywords = @category ? @category.meta_keywords : '' -%>
+
+<% if @category -%>
+	<div class="breadcrumbs">
+		<% @category.breadcrumbs.each do |c| -%>
+			&raquo; <%= link_to(c.name, "#{@ROCKETCARTDIR}/#{c.path}") %>
+		<% end -%>
+	</div>
+
+	<h1><%= @category -%></h1>
+
+	<div id="array_div"></div>
+
+
+	<%= RedCloth.new(@category.description || '').to_html %>
+
+	<% @featured_products.each do |cur_feature| -%>
+		<div class="featured-product">
+			<%= render :partial => 'widget/featured_product', :locals => { :featured_product => cur_feature } -%>
+		</div>
+	<% end -%>
+
+	<% if !@subcategories.empty? -%>
+		<div id="sub-cats">
+			<ul>
+<%
+	@subcategories.each do |cur_sub|
+		if cur_sub
+-%>
+				<li>
+					<%= link_to cur_sub.name, "#{@ROCKETCARTDIR}/#{cur_sub.path}" -%>
+<%
+			if cur_sub.short_description
+-%>
+					<%= @design_config[:options][:subcat_description_separator] -%><span class="sub-cat-desc"><%= cur_sub.short_description -%></span>
+<%
+			end
+-%>
+				</li>
+<%
+		end
+	end
+-%>
+			</ul>
+		</div>
+	<% end -%>
+<% end -%>
+
+<% if @products and !@products.empty? -%>
+	<% if @result_pages -%>
+		<%= render :partial => 'paginator' %>
+	<% end -%>
+
+	<script type="text/javascript" id="prices_weights">
+
+	var asset_symbols = new Array();
+	asset_symbols['price'] = '<%= @currency.symbol -%>';
+	asset_symbols['weight'] = 'kg';
+
+	var prices_weights = new Array();
+	var visible_products = new Array();
+
+	<% @products.each do |product| -%>
+		<%= render :partial => "prices_weights_for_product", :locals => { :product => product, :option_values => @option_values } -%>
+	<% end -%>
+	<% @featured_products.each do |cur_feature| -%>
+		<%= render :partial => "prices_weights_for_product", :locals => { :product => cur_feature, :option_values => @option_values } -%>
+	<% end -%>
+
+	</script>
+
+	<div class="products">
+		<% @products.each do |product| -%>
+		<div class="product">
+			<% if product.image -%>
+				<%= link_to product_thumbnail(product), @ROCKETCARTDIR + product.path -%>
+			<% end -%>
+
+			<div class="details">
+				<h3><%= link_to product.name, @ROCKETCARTDIR + product.path %></h3>
+				<%= (RedCloth.new product.abbrev_description(@design_config[:options][:product_description_summary_length])).to_html %>
+				<p><%= link_to "View Details", @ROCKETCARTDIR + product.path -%></p>
+
+<%
+	if @bits_array && !@bits_array.empty? && @bits_array[product[:id]] && !@bits_array[product[:id]].empty?
+		counter = 0
+		@bits_array[product[:id]].each do |cur_bits|
+			counter += 1
+			if cur_bits
+-%>
+				<%= render :partial => 'category_buy_line', :locals => { :product => product, :bits => cur_bits, :counter => counter } -%>
+<%
+			end
+		end
+	else
+-%>
+		<%= render :partial => 'category_buy_line', :locals => { :product => product, :bits => nil, :counter => 1 } -%>
+<%
+	end
+-%>
+			</div>
+		</div>
+		<% end -%>
+	</div>
+
+	<% if @result_pages -%>
+		<%= render :partial => 'paginator' %>
+	<% end -%>
+<% elsif @subcategories.empty? %>
+	<p>There are no products available in this category.</p>
+<% end -%>
+
+<script type="text/javascript" id="prices_weights">
+	needs_updating = document.getElementsByClassName('price_weight');
+
+	for(var counter = 0; counter < needs_updating.length; counter++) {
+		update_from_product_option(needs_updating[counter]);
+	}
+</script>

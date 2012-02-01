@@ -1,0 +1,70 @@
+<% @page_title = @static_page.title || 'Products Overview' -%>
+<% @meta_keywords = @static_page.meta_keywords -%>
+<% @meta_description = @static_page.meta_description -%>
+
+<% if @product_catalogue -%>
+<%= RedCloth.new(@static_page.body || "").to_html %>
+		<ul>
+<%
+	@product_catalogue.each do |cur_top_level|
+		if cur_top_level
+-%>
+			<li><a href="#cat-<%= cur_top_level['category'].id -%>"><%= cur_top_level['category'].name -%></a></li>
+<%
+		end
+	end
+-%>
+		</ul>
+<%
+	@product_catalogue.each do |cur_top_level|
+		if cur_top_level
+-%>
+		<h2 id="cat-<%= cur_top_level['category'].id -%>"><%= cur_top_level['category'].name -%></h2>
+<%
+			counter = 0
+			closed = true
+
+			cur_top_level['products'] = cur_top_level['products'].sort {|a, b| a[:product_name] <=> b[:product_name]}
+			cur_top_level['products'].each do |cur_product|
+				if cur_product
+					if counter % 5 == 0
+						closed = false
+-%>
+		<div class="product-gallery-group">
+<%
+					end
+-%>
+			<div class="product-gallery">
+				<%= link_to product_thumbnail(cur_product, @design_config[:sizes][:overview_page_thumbnail_width], @design_config[:sizes][:overview_page_thumbnail_height]), cur_product.path %>
+				<p><strong><%= cur_product.name -%></strong><br />
+					<%= link_to 'View Details', cur_product.path %> | <%= link_to 'Buy Spices', cur_product.categories.first.path %>
+				</p>
+			</div>
+<%
+					if counter % 5 == 4
+						closed = true
+-%>
+		</div>
+<%
+					end
+					counter += 1
+				end
+			end
+
+			unless closed
+-%>
+		</div>
+<%
+			end
+		end
+	end
+-%>
+
+		<p>Product photography by <a href="http://www.digitalcactus.co.nz/">Digital Cactus</a></p>
+
+	</div>
+	<div class="clear-floats"></div>
+<% else -%>
+	<p>No products available</p>
+<% end -%>
+

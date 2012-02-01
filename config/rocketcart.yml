@@ -1,0 +1,156 @@
+--- 
+:search_engine_optimisation: 
+  :default_meta_description: 
+    :type: text
+    :value: The Spice Trader imports high quality Indian spices and other spices for online, wholesale and retail distribution in New Zealand. Buy spices online from the Spice Trader factory shop or from local Christchurch markets.
+    :level: 2
+  :default_meta_keywords: 
+    :type: text
+    :value: spices, spice, herbs, herbs, seeds, new zealand, nz, christchurch, factory shop, markets, market, fresh, organic, indian, cumin, cardamon, allspice, fenugreek, nutmeg, cloves, saffron, recipes, turmeric, coriander, encyclopedia, fennel, cuisine, mace, recipies, cooking, blends, cinnamon, garlic, india, ginger, masala, clove, cajun, salt, onion, recipe, curry, seeds, food, flavor, basil, fish, paprika, trade, mustard, blend, chilli, seasoning, herb, sauce, hot, thai, pepper, seed, wholesale, organic, ingredients, chili, chinese, mix, bulk, powder, ground
+    :level: 2
+:modules: 
+  :others_bought_time_limit: 
+    :type: int
+    :value: 6
+    :min: 1
+    :level: 3
+    :max: 48
+  :newsletter_signup_text: 
+    :type: string
+    :value: "I would like to receive regular email newsletters from SITENAME:"
+    :level: 2
+  :barcodes_spreadsheet_filename: 
+    :type: string
+    :value: SpiceTrader_barcodes.xls
+    :level: 2
+  :max_reviews_to_show: 
+    :type: int
+    :value: 2
+    :min: 1
+    :level: 2
+    :max: 8
+  :separate_delivery_address: 
+    :type: boolean
+    :value: true
+    :level: 2
+  :cart_summary_template: 
+    :type: string
+    :value: cart_summary_brief
+    :level: 3
+  :others_bought_price_factor: 
+    :type: float
+    :value: 0.5
+    :min: 0.1
+    :level: 3
+    :max: 10
+  :hide_weight_options: 
+    :type: boolean
+    :value: true
+    :level: 2
+  :others_bought_label: 
+    :type: string
+    :value: "Other people who purchased this product also bought:"
+    :level: 2
+  :others_bought_list_length: 
+    :type: int
+    :value: 4
+    :min: 1
+    :level: 2
+    :max: 20
+  :barcodes_spreadsheet_path: 
+    :type: string
+    :value: /public/barcodes/
+    :level: 3
+  :show_newsletter_signup: 
+    :type: boolean
+    :value: false
+    :level: 2
+  :credit_account_application_filename: 
+    :type: string
+    :value: SpiceTrader_credit_account_application.pdf
+    :level: 2
+  :allow_review_ratings: 
+    :type: boolean
+    :value: false
+    :level: 2
+  :num_featured_products: 
+    :type: int
+    :value: 4
+    :min: 1
+    :level: 2
+    :max: 12
+  :allow_review_comments: 
+    :type: boolean
+    :value: false
+    :level: 2
+  :require_review_moderation: 
+    :type: boolean
+    :value: true
+    :level: 2
+  :show_country: 
+    :type: boolean
+    :value: false
+    :level: 2
+  :credit_account_application_path: 
+    :type: string
+    :value: /public/credit_account/
+    :level: 3
+:demo: 
+  :user: 
+    :type: string
+    :value: admin-demo
+    :level: 3
+  :enabled: 
+    :type: boolean
+    :value: false
+    :level: 3
+:application: 
+  :url: 
+    :type: url
+    :value: http://www.thespicetrader.co.nz/
+    :level: 3
+  :team_name: 
+    :type: string
+    :value: The Spice Trader Ltd
+    :level: 2
+  :name: 
+    :type: string
+    :value: The Spice Trader
+    :level: 2
+  :password_hashing: 
+    :type: multichoice
+    :choices: 
+      :MD5: 
+      :SHA1: 
+    :level: 4
+  :directory: 
+    :type: string
+    :value: ""
+    :level: 3
+  :items_per_page: 
+    :type: int
+    :value: 10
+    :min: 5
+    :level: 2
+    :max: 100
+:emails: 
+  :default: 
+    :type: email
+    :value: enquiries@thespicetrader.co.nz
+    :level: 2
+  :contact: 
+    :type: email
+    :value: enquiries@thespicetrader.co.nz
+    :level: 2
+  :admin: 
+    :type: email
+    :value: thespicetrader@gmail.com
+    :level: 2
+  :shipping: 
+    :type: email
+    :value: sales@thespicetrader.co.nz
+    :level: 2
+  :password_reset: 
+    :type: email
+    :value: enquiries@thespicetrader.co.nz
+    :level: 2

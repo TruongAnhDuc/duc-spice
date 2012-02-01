@@ -1,0 +1,21 @@
+<%
+total_ratings = 0
+ratings.each_pair do |star, num|
+	total_ratings += num
+end
+-%><table><tr><th colspan="3" style="text-align: center;"><%= total_ratings -%> Ratings</th></tr><%
+for counter in 1..5 do
+	star = 6 - counter
+	num = ratings[star]
+	bar_width = ((num.to_f / total_ratings.to_f) * 50).round
+	back_width = 50 - bar_width
+-%><tr><td><%
+star.times do
+-%><img src="<%= @ROCKETCARTDIR + icon_path('star') -%>" alt="<%= star -%>" width="<%= @design_config[:sizes][:admin_icons_width] -%>" height="<%= @design_config[:sizes][:admin_icons_height] -%>" class="icon" /><%
+end
+(5 - star).times do
+-%><img src="<%= @ROCKETCARTDIR + icon_path('star-grey') -%>" alt="<%= star -%>" width="<%= @design_config[:sizes][:admin_icons_width] -%>" height="<%= @design_config[:sizes][:admin_icons_height] -%>" class="icon" /><%
+end
+-%></td><td><img src="<%= @ROCKETCARTDIR -%>/images/bar-chart-bar.png" alt="<%= num -%>" width="<%= bar_width -%>" height="<%= @design_config[:sizes][:admin_icons_height] -%>" class="icon" /><img src="<%= @ROCKETCARTDIR -%>/images/bar-chart-back.png" alt="<%= num -%>" width="<%= back_width -%>" height="<%= @design_config[:sizes][:admin_icons_height] -%>" class="icon" /></td><td>(<%= num -%>)</td></tr><%
+end
+-%></table>

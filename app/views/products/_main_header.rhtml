@@ -1,0 +1,28 @@
+			<div id="header">
+				<a id="logo" href="/" title="Kiwi International Products"><img src="/images/main-t-kiwi-products.png" alt="Kiwi International Products" /></a>
+				<div id="search">
+					<form action="/search/" method="post">
+						<input class="text" type="text" id="query" name="query" />
+						<input class="image" type="image" name="search" src="/images/btn-search.png" />
+						<div class="secondary-links">
+							<a href="/contact-us/">Contact Us</a> |
+							<a href="/about/safe-shopping/">Safe Shopping</a> |
+							<a href="/about/faq/">FAQ</a> | 
+							<a href="/">Home</a>
+						</div>
+					</form>
+				</div>
+				<ul id="menu">
+					<li id="menu-products">
+						<a class="selector" href="/products/" onmouseover="show_products_menu();"><span>&nbsp;</span>Products</a>
+						<div class="sub-menu" id="sub-products" style="display: none;" onmousemove="reset_timeout();">
+							<ul>
+								<%= Category.top_level.collect { |category| "<li>" + link_to("#{category.name}", "/products/#{category.path}/") + "</li>" } %>
+							</ul>
+						</div>
+					</li>
+					<li id="menu-wholesale"><a class="selector" href="/about/wholesale/" onmouseover="hide_products_menu();"><span>&nbsp;</span>Wholesale</a></li>
+					<li id="menu-profile"><a class="selector" href="/about/company-profile/" onmouseover="hide_products_menu();"><span>&nbsp;</span>Profile</a></li>
+					<li id="menu-comments"><a class="selector" href="/about/customer-comments/" onmouseover="hide_products_menu();"><span>&nbsp;</span>Comments</a></li>
+				</ul>
+			</div>

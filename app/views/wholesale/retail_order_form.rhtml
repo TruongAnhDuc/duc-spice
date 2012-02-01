@@ -1,0 +1,427 @@
+<% @page_title = "Retail Spices Order Form" -%>
+<% @no_cart_preview = true -%>
+
+<div id="h1-container">
+  <h1>Retail Spices Order Form</h1>
+</div>
+
+<!-- font-family: Georgia, Arial, Helvetica, serif; -->
+
+<% form_tag do -%>
+
+  <p style="margin-bottom:20px;">Enter the number of units required for each product ordered. When you have finished the order, click Confirm Order.</p>
+  <!--<p><input type="checkbox" name="non-priced" id="non-priced" onClick="order_form_update_quantities(false);show_hide_retail_prices();" value="1" /> Do you want non-priced product (barcode only)?</p>-->
+
+  <div id="animated_header" style="position:absolute; top:0px; left:0px; width: 750px;">
+    <div class="order-form-headers">
+      <div id="header_name">Product</div>
+      <div id="header_size">Net Weight</div>
+      <div id="header_rrp">Recommended Retail Price</div>
+      <div id="header_wsl">Wholesale Price</div>
+      <div id="header_qty">Quantity Ordered</div>
+      <div style="width: 230px; text-align: right;" id="order-form-buttons-header">
+        <%= submit_tag "Draft order", :name => "draft", :class => "button" %>
+        <%= submit_tag "Confirm order", :name => "order", :class => "button" %>
+      </div>
+    </div>
+  </div>
+
+  <div class="spacer omg_this_is_bad-stupid_ie" style="height: 44px;">&nbsp;</div>
+
+  <table class="cart" id="order-form-table" cellspacing="0">
+    <tbody>
+      <%
+      # OK, confession - I'm just going to go through each ProductOptionValue and add a line for it. This
+      # won't work if they ever assotiate multiple Option's with a Product, but the client has now
+      # actually requested things be done this way.
+
+      @prices_array = Hash.new
+
+      first_row = true
+      @products.each_with_index do |cur_product, i|
+        options_count = 0
+        cur_product.product_option_values.each do |cur_pov|
+          if cur_pov && !cur_pov.option_value.nil? && !cur_pov.option_value[:wholesale_only]
+            options_count += 1
+          end
+        end
+
+        rowspan = options_count + 1
+
+        cur_product.option_values.each do |cur_ov|
+          if cur_ov && !cur_ov[:wholesale_only]
+
+            # add prices to array
+            unless @prices_array[cur_product[:id]]
+              @prices_array[cur_product[:id]] = Hash.new
+            end
+            @prices_array[cur_product[:id]][cur_ov[:id]] = cur_ov[:wholesale_extra_cost]
+            -%>
+            <tr class="<%= i % 2 == 0 ? "even" : "odd" %>"<%= if first_row then " id=\"first-row\"" end -%>>
+              <td style="width:130px"><strong id="product_name_<%= cur_product[:id] -%>_<%= cur_ov[:id] -%>"><%= cur_product[:product_name] -%></strong></td>
+              <td style="width:45px"><label for="qty_<%= cur_product[:id] -%>_<%= cur_ov[:id] -%>"><%= cur_ov[:value].gsub("grams", "g") -%></label></td>
+              <td style="width:75px"><label for="qty_<%= cur_product[:id] -%>_<%= cur_ov[:id] -%>"><%= @currency.format(cur_ov[:extra_cost]).gsub("NZ ", "") -%></label></td>
+              <td style="width: 60px;"><label for="qty_<%= cur_product[:id] -%>_<%= cur_ov[:id] -%>" id="each_<%= cur_product[:id] -%>_<%= cur_ov[:id] -%>"><%= @currency.format(cur_ov[:wholesale_extra_cost]).gsub("NZ ", "") -%></label></td>
+              <td style="width: 92px;">
+                <input class="text qty" type="text" name="qty[<%= cur_product[:id] -%>_<%= cur_ov[:id] -%>]" id="qty_<%= cur_product[:id] -%>_<%= cur_ov[:id] -%>" value="" onChange="order_form_update_quantities(this);" size="4" maxlength="12" />
+                <input class="button" name="addtocart_<%= cur_product[:id] -%>_<%= cur_ov[:id] -%>" type="submit" value="Add" onclick="$('each_<%= cur_product[:id] -%>_<%= cur_ov[:id] -%>').focus(); return false;" />
+              </td>
+              <td class="sidebar" id="sidebar_<%= cur_product[:id] -%>_<%= cur_ov[:id] -%>" style="width: 230px;"></td>
+            </tr>
+            <%
+            first_row = false
+          end
+        end
+      end
+      # and a final row in case it's needed (for the 'total' bit of the side-bar)
+      -%>
+      <tr>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td class="sidebar" id="sidebar_x" style="width: 230px;">&nbsp;</td>
+      </tr>
+    </tbody>
+    <tfoot>
+    </tfoot>
+  </table>
+
+<% end -%>
+
+<script type="text/javascript">
+  //<![CDATA[
+<%
+# spit out @prices_array into javascript
+-%>
+  var prices_array = new Array();<%
+@prices_array.each_pair do |product_id, options_hash|
+  -%>
+    prices_array[<%= product_id -%>] = new Array();<%
+  options_hash.each_pair do |o_v_id, price|
+    -%>
+      prices_array[<%= product_id -%>][<%= o_v_id -%>] = <%= price -%>;<%
+    end
+end
+-%>
+
+  Effect.SlideRightIntoView = function(element) {
+    $(element).style.width = '0px';
+    $(element).style.overflow = 'hidden';
+    $(element).firstChild.style.position = 'relative';
+    Element.show(element);
+    new Effect.Scale(element, 100,
+    { scaleContent: false,
+      scaleY: false,
+      scaleMode: 'contents',
+      scaleFrom: 0,
+      afterUpdate: function(effect)
+      { effect.element.firstChild.style.width =
+          (effect.originalWidth - effect.element.clientWidth) + 'px'; }
+    }.extend(arguments[1] || {})
+  );
+  }
+
+  function show_hide_retail_prices()
+  {
+    var num_rows = $('order-form-table').rows.length;
+
+    if ($('non-priced').checked)
+    {
+      for (var i = 0; i < num_rows; i++)
+      {
+        if ($('order-form-table').rows[i].cells[2].firstChild)
+        {
+          $('order-form-table').rows[i].cells[2].className = 'hideme';
+        }
+      }
+
+      if ($('header_rrp').textContent)
+      {
+        $('header_rrp').textContent = '';
+      }
+      else
+      {
+        $('header_rrp').innerHTML = '';
+      }
+    }
+    else
+    {
+      for (var i = 0; i < num_rows; i++)
+      {
+        if ($('order-form-table').rows[i].cells[2].firstChild)
+        {
+          $('order-form-table').rows[i].cells[2].className = '';
+        }
+      }
+
+      if ($('header_rrp').textContent)
+      {
+        $('header_rrp').textContent = 'Retail Price';
+      }
+      else
+      {
+        $('header_rrp').innerHTML = 'Retail Price';
+      }
+    }
+  }
+
+  function order_form_update_quantities(changed_qty)
+  {
+    var total_cost = 0.0;
+    var total_items = 0;
+    var total_cell = false;
+
+    var num_rows = $('order-form-table').rows.length;
+
+    var sidebar_bottom_found = false;
+
+    var multiplier = 1.0;
+
+    //if ($('non-priced').checked)
+    //{
+    //  multiplier = 1.1;
+    //}
+
+    if ( $('order-form-table').rows[num_rows - 1].cells[5].textContent )
+    {
+      $('order-form-table').rows[num_rows - 1].cells[5].removeChild($('order-form-table').rows[num_rows - 1].cells[5].childNodes[0]);
+    }
+    else
+    {
+      $('order-form-table').rows[num_rows - 1].cells[5].innerHTML = '';
+    }
+
+    for (var i = 1; i < num_rows; i++)
+    {
+      var identifying_bits = $('order-form-table').rows[num_rows - i - 1].cells[5].id.split('_');
+
+      var qty_value = parseInt($('qty_' + identifying_bits[1] + '_' + identifying_bits[2]).value);
+
+      var single_cost = prices_array[identifying_bits[1]][identifying_bits[2]] * multiplier;
+
+      $('order-form-table').rows[num_rows - i - 1].cells[3].firstChild.innerHTML = '$' + single_cost.toFixed(2);
+
+      if ( $('order-form-table').rows[num_rows - i - 1].cells[5].textContent )
+      {
+        $('order-form-table').rows[num_rows - i - 1].cells[5].removeChild($('order-form-table').rows[num_rows - i - 1].cells[5].childNodes[0]);
+      }
+      else
+      {
+        $('order-form-table').rows[num_rows - i - 1].cells[5].innerHTML = '';
+      }
+
+      if (!sidebar_bottom_found)
+      {
+        if (qty_value) {
+          sidebar_bottom_found = true;
+          if ( $('order-form-table').rows[num_rows - i - 1].cells[5].textContent )
+          {
+            $('order-form-table').rows[num_rows - i - 1].cells[5].removeChild($('order-form-table').rows[num_rows - i - 1].cells[5].childNodes[0]);
+          }
+          else
+          {
+            $('order-form-table').rows[num_rows - i - 1].cells[5].innerHTML = '';
+          }
+
+          total_cell = $('order-form-table').rows[num_rows - i].cells[5];
+        }
+      }
+
+      if (sidebar_bottom_found)
+      {
+        if (qty_value)
+        {
+          var row_cost = single_cost * qty_value;
+
+          total_cost += row_cost;
+          total_items += qty_value;
+
+          if ( $('order-form-table').rows[num_rows - i - 1].cells[5].textContent )
+          {
+            new_div = document.createElement('div');
+            new_div.className = 'sidebar-middle';
+            new_div.textContent = '$' + commafy(row_cost.toFixed(2));
+            total_cell.appendChild(new_div);
+            $('order-form-table').rows[num_rows - i - 1].cells[5].appendChild(new_div);
+          }
+          else
+          {
+            image_options = ' alt="" style="border: none;"';
+
+            $('order-form-table').rows[num_rows - i - 1].cells[5].innerHTML = '<div class="sidebar-middle">x' + qty_value + ' = <span>$' + commafy(row_cost.toFixed(2)) + '</span></div>';
+          }
+        }
+        else
+        {
+          if ( $('order-form-table').rows[num_rows - i - 1].cells[5].textContent )
+          {
+            new_div = document.createElement('div');
+            new_div.className = 'sidebar-middle';
+            new_div.textContent = '&nbsp;';
+            total_cell.appendChild(new_div);
+            $('order-form-table').rows[num_rows - i - 1].cells[5].appendChild(new_div);
+          }
+          else
+          {
+            $('order-form-table').rows[num_rows - i - 1].cells[5].innerHTML = '<div class="sidebar-middle">&nbsp;</div>';
+          }
+        }
+
+        if (changed_qty == $('order-form-table').rows[num_rows - i - 1].cells[4].childNodes[1])
+        {
+          window.setTimeout('tick_sub_total(0, ' + qty_value + ', ' + identifying_bits[1] + ', ' + identifying_bits[2] + ')', oChaser.callRate);
+        }
+      }
+    }
+
+    if ( total_cell.textContent )
+    {
+      new_div = document.createElement('div');
+      new_div.className = 'sidebar-total';
+      new_div.textContent = 'TOTAL: ' + total_items + ' items @ $' + commafy(total_cost.toFixed(2));
+      total_cell.appendChild(new_div);
+    }
+    else
+    {
+      total_cell.innerHTML = '<div class="sidebar-total">TOTAL: ' + total_items + ' items @ $' + commafy(total_cost.toFixed(2)) + '</div>';
+    }
+  }
+
+  function tick_sub_total(next_quantity, max_quantity, product_id, o_v_id)
+  {
+    var multiplier = 1.0;
+
+    if ($('non-priced').checked)
+    {
+      multiplier = 1.1;
+    }
+
+    var new_cost = next_quantity * prices_array[product_id][o_v_id] * multiplier;
+
+    if ($('sidebar_' + product_id + '_' + o_v_id).firstChild.lastChild.textContent)
+    {
+      $('sidebar_' + product_id + '_' + o_v_id).firstChild.lastChild.textContent = '$' + commafy(new_cost.toFixed(2));
+    }
+    else
+    {
+      $('sidebar_' + product_id + '_' + o_v_id).firstChild.lastChild.innerHTML = '$' + commafy(new_cost.toFixed(2));
+    }
+
+    if (next_quantity < max_quantity)
+    {
+      window.setTimeout('tick_sub_total(' + (next_quantity + 1) + ', ' + max_quantity + ', ' + product_id + ', ' + o_v_id + ')', oChaser.callRate * 2);
+    }
+  }
+
+  function findPos(obj) {
+    var curleft = curtop = 0;
+    if (obj.offsetParent) {
+      curleft = obj.offsetLeft;
+      curtop = obj.offsetTop;
+      while (obj = obj.offsetParent) {
+        curleft += obj.offsetLeft;
+        curtop += obj.offsetTop;
+      }
+    }
+    return [curleft,curtop];
+  }
+
+  // The chaser object. Since we don't anticipate having more
+  // than one on a page, we don't bother making this into
+  // a class definition. All necessary properties are set as
+  // properties of this object to avoid global variables.
+  var oChaser = {
+    topMargin  : 0,
+    callRate   : 35,
+    ceiling    : 318,
+    slideTime  : 1200,
+    isIE       : document.all ? true : false,
+    chaserDiv  : $('animated_header')
+  }
+
+
+  // Main loop. Updates targetY, and decides whether to start
+  // the animation over again, continue an existing animation,
+  // or do nothing at all.
+  oChaser.main = function( )
+  {
+    this.currentY = findPos($('animated_header'))[1];
+    this.scrollTop  = this.isIE ? document.documentElement.scrollTop : window.pageYOffset;
+
+    var newTargetY  = Math.max( this.scrollTop + this.topMargin, this.ceiling );
+
+    this.newX = findPos($('body-inner'))[0];
+
+    //	if ( this.currentY != newTargetY ) {
+    //		if ( newTargetY != this.targetY ) {
+    //			this.targetY = newTargetY;
+    //			this.slideInit();
+    //		}
+    //		this.slide();
+    //	}
+    //
+    // Client doesn't like 'bouncing' - which is fair enough. But it's a work around for a client-side
+    // performance issue. Still - maybe that won't be an issue?
+
+    var newY = Math.max( this.scrollTop + this.topMargin, this.ceiling );
+    if ( this.isIE ) {
+      this.chaserDiv.style.pixelTop = newY;
+      this.chaserDiv.style.pixelLeft = this.newX;
+    } else {
+      this.chaserDiv.style.top = newY + "px";
+      this.chaserDiv.style.left = this.newX + "px";
+    }
+  }
+
+  // .slideInit( ). Initializes the slide animation. Sets properties
+  // of the oChaser object that will represent the various paramaters
+  // for the sine wave function.
+  oChaser.slideInit = function()
+  {
+    var now    = new Date();
+
+    this.A     = this.targetY - this.currentY;
+    this.B     = Math.PI / ( 2 * this.slideTime );
+    this.C     = now.getTime();
+    this.D     = this.currentY;
+  }
+
+
+
+  // .slide( ). Moves the oChaser one frame. Its rate decreases and
+  // is defined by a sine wave.
+  oChaser.slide = function()
+  {
+    var now   = new Date();
+    var newY  = this.A * Math.sin( this.B * ( now.getTime( ) - this.C ) ) + this.D;
+    newY      = Math.round( newY );
+
+    if ( ( this.A > 0 && newY > this.currentY ) || ( this.A < 0 && newY < this.currentY ) ) {
+
+      if ( this.isIE ) {
+        this.chaserDiv.style.pixelTop = newY;
+        this.chaserDiv.style.pixelLeft = this.newX;
+      } else {
+        this.chaserDiv.style.top = newY + "px";
+        this.chaserDiv.style.left = this.newX + "px";
+      }
+    }
+  }
+
+
+  $('header_name').style.width = $('first-row').cells[0].clientWidth - 16 + "px";
+  $('header_size').style.width = $('first-row').cells[1].clientWidth - 16 + "px";
+  $('header_rrp').style.width = $('first-row').cells[2].clientWidth - 16 + "px";
+  $('header_wsl').style.width = $('first-row').cells[3].clientWidth - 16 + "px";
+  $('header_qty').style.width = $('first-row').cells[4].clientWidth - 16 + "px";
+
+  // Arrange to have the main loop called as often as possible,
+  // but not more often than every 35 milliseconds.
+  // Even though some OS's can achieve better than that, there's no real reason to
+  // overload them if its not going to improve the animation quality very much.
+  // I tested, and better than 35ms doesn't do very much visually.
+  window.setInterval("oChaser.main()", oChaser.callRate);
+  //]]>
+</script>

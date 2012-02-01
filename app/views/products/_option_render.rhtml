@@ -1,0 +1,80 @@
+<%
+# This takes two objects - an Option and an array of OptionValues. Depending on the type of the
+# Option, the appropriate HTML for selecting it will be output.
+
+# SIMILAR TO THE ONE IN /views/admin
+
+# Note this now gets sent 'option_values' as a list of ProductOptionValue objects - NOT OptionValue
+# objects! This is needed to test against 'default_value' (which is only in ProductOptionValue).
+-%>
+<% if option.class.to_s == 'RadioButtons' -%>
+	<%
+		option_values.each do |option_value|
+			if option_value
+				selected_text = (option_value[:default_value] == '1') ? ' checked="checked"' : nil
+				selected_text ||= (option[:default_value] == option_value.option_value[:id].to_s) ? ' checked="checked"' : ''
+	-%>
+				<input type="radio" name="<%= 'option[' + option[:id].to_s + ']' -%>" class="option_value" value="<%= option_value.option_value[:id] -%>"<%= selected_text -%> onChange="update_from_product_option(this);"><%= option_value.option_value[:value] -%></input>
+	<%
+			end
+		end
+	-%>
+<% elsif option.class.to_s == 'CheckBox' -%>
+	<%
+		option_values.each do |option_value|
+			if option_value
+				selected_text = (option_value[:default_value] == '1') ? ' checked="checked"' : nil
+				selected_text ||= (option[:default_value] == option_value.option_value[:id].to_s) ? ' checked="checked"' : ''
+	-%>
+				<input type="checkbox" name="<%= 'option[' + option[:id].to_s + ']' -%>" class="option_value" value="<%= option_value.option_value[:id] -%>"<%= selected_text -%> onChange="update_from_product_option(this);" />
+				<label for="<%= 'option[' + option[:id].to_s + ']' -%>"><%= option[:name] -%></label>
+	<%
+			end
+		end
+	-%>
+<% elsif option.class.to_s == 'SingleChoiceOption' -%>
+	<select name="<%= 'option[' + option[:id].to_s + ']' -%>" class="option_value" onChange="update_from_product_option(this);">
+	<%
+		option_values.each do |option_value|
+			if option_value
+				selected_text = (option_value[:default_value] == '1') ? ' selected="selected"' : nil
+				selected_text ||= (option[:default_value] == option_value.option_value[:id].to_s) ? ' selected="selected"' : ''
+	-%>
+				<option value="<%= option_value.option_value[:id] -%>"<%= selected_text -%>><%= option_value.option_value[:value] -%></option>
+	<%
+			end
+		end
+	-%>
+	</select>
+<% elsif option.class.to_s == 'MultipleCheckbox' -%>
+	<%
+		option_values.each do |option_value|
+			if option_value
+				selected_text = (option_value[:default_value] == '1') ? ' checked="checked"' : nil
+				selected_text ||= (option[:default_value] == option_value.option_value[:id].to_s) ? ' checked="checked"' : ''
+	-%>
+				<input type="checkbox" name="<%= 'option[' + option[:id].to_s + ']' -%>[]" class="option_value" value="<%= option_value.option_value[:id] -%>"<%= selected_text -%> onChange="update_from_product_option(this);" />
+				<label for="<%= 'option[' + option[:id].to_s + ']' -%>"><%= option_value.option_value[:value] -%></label>
+	<%
+			end
+		end
+	-%>
+<% elsif option.class.to_s == 'MultiChoiceOption' -%>
+	<select multiple="multiple" name="<%= 'option[' + option[:id].to_s + ']' -%>[]" class="option_value" onChange="update_from_product_option(this);">
+	<%
+		option_values.each do |option_value|
+			if option_value
+				selected_text = (option_value[:default_value] == '1') ? ' selected="selected"' : nil
+				selected_text ||= (option[:default_value] == option_value.option_value[:id].to_s) ? ' selected="selected"' : ''
+	-%>
+				<option value="<%= option_value.option_value[:id] -%>"<%= selected_text -%>><%= option_value.option_value[:value] -%></option>
+	<%
+			end
+		end
+	-%>
+	</select>
+<% elsif option.class.to_s == 'TextOption' -%>
+	<input type="text" name="<%= 'option[' + option[:id].to_s + ']' -%>" class="option_value" size="30" value="<%=
+		option.default_value
+	-%>">
+<% end -%>

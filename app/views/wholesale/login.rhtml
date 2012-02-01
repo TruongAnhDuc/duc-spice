@@ -1,0 +1,156 @@
+<% @page_title = "Enter Your Details" %>
+
+<% if @thank_you -%>
+<h1>Thank You</h1>
+
+<p>Your application for a wholesale account has been recieved - we will reply to you shortly.</p>
+<% else -%>
+	<% if @current_user -%>
+<h1>Are you a wholesaler?</h1>
+
+<p>Then please apply to have your account upgraded to a wholesaler account so you can access the wholesale area of the site.</p>
+
+<p>You may <a href="/credit_account/SpiceTrader_credit_account_application.pdf">download the application form</a> for a credit account with The Spice Trader.</p>
+
+<% form_tag :action => :login do %>
+	<td><%= submit_tag 'Apply', :name => 'apply', :class => 'button' %></td>
+<% end %>
+	<% else -%>
+<h1>Welcome to the Wholesale Customer Area</h1>
+
+<p>If you already have a wholesale account, please enter your email address and password to log in and access the wholesale area.</p>
+<p>If you wish to apply for a wholesale account, please enter your details below. You also need to download the <a href="/credit_account/SpiceTrader_credit_account_application.pdf">Account Application</a> form. Then complete it and return it to us by post or fax.</p>
+
+<p>Once your application is approved, you will be provided with a password. This will enable you to login and place orders for our retail products and bulk spices.</p>
+
+<div class="fieldset">
+	<div class="legend">Already have a wholesale account?</div>
+	<% form_tag do %>
+		<table class="form">
+			<tr>
+				<td class="label" style="width: 100px;"><label for="email">Email</label></td>
+				<td class="field"><input class="text" type="text" name="email" id="email" /></td>
+			</tr>
+			<tr>
+				<td class="label"><label for="password">Password</label></td>
+				<td class="field"><input class="text" type="password" name="password" id="password" /></td>
+			</tr>
+			<tr>
+				<td></td>
+				<td><a href="/forgotten-password/">Forgotten your password?</a></td>
+			</tr>
+			<tr>
+				<td></td>
+				<td><%= submit_tag 'Login', :name => 'login', :class => 'button' %></td>
+			</tr>
+		</table>
+	<% end %>
+</div>
+
+<script type="text/javascript">
+	function propagate_business_name() {
+		var bus_name = $('user_first_name');
+		var billing_bus = $('billing_address_name');
+		var delivery_bus = $('delivery_address_name');
+
+		billing_bus.value = bus_name.value;
+		delivery_bus.value = bus_name.value;
+
+		return false;
+	}
+	function propagate_phone_no() {
+		var billing_no = $('billing_address_phone_no');
+		var delivery_no = $('delivery_address_phone_no');
+
+		delivery_no.value = billing_no.value;
+
+		return false;
+	}
+</script>
+<div class="fieldset">
+	<div class="legend">Enter your details below to apply for a wholesale account</div>
+	<% form_tag :action => :login do %>
+		<%= custom_error_messages_for "user", :title => "Oops! Something's wrong...", :class => "fieldset" %>
+<% if @billing_address and !@billing_address.valid? -%>
+<p>Please enter a billing address</p>
+		<%= custom_error_messages_for "billing_address", :title => "Oops! Something's wrong...", :class => "fieldset" %>
+<% end -%>
+<% if @delivery_address and !@delivery_address.valid? -%>
+<p>Please enter a delivery address</p>
+		<%= custom_error_messages_for "delivery_address", :title => "Oops! Something's wrong...", :class => "fieldset" %>
+<% end -%>
+		<table class="form">
+			<tr>
+				<td class="label" style="width: 100px;"><label for="user_email">Email</label></td>
+				<td class="field" colspan="4"><%= text_field 'user', 'email', :class => 'text' %></td>
+			</tr>
+			<tr>
+				<td class="label"><label for="user_first_name">Business Name</label></td>
+				<td class="field" colspan="4"><%= text_field 'user', 'first_name', :class => 'text', :onchange => 'return propagate_business_name();' %></td>
+			</tr>
+			<tr>
+				<td class="label"><label for="user_last_name">Contact Person</label></td>
+				<td class="field" colspan="4"><%= text_field 'user', 'last_name', :class => 'text' %></td>
+			</tr>
+			<tr>
+				<td colspan="2" class="legend">Billing Details</td>
+				<td>&nbsp;</td>
+				<td colspan="2" class="legend">Delivery Details</td>
+			</tr>
+			<tr>
+				<td class="label"><label for="billing_address_name">Billing Name</label></td>
+				<td class="field"><%= text_field 'billing_address', 'name', :class => 'text' %></td>
+				<td style="width: 20px;">&nbsp;</td>
+				<td class="label"><label for="delivery_address_name">Delivery Name</label></td>
+				<td class="field"><%= text_field 'delivery_address', 'name', :class => 'text' %></td>
+			</tr>
+			<tr>
+				<td class="label"><label for="billing_address_address">Address</label></td>
+				<td class="field"><%= text_area 'billing_address', 'address', :rows => 3 %></td>
+				<td></td>
+				<td class="label"><label for="delivery_address_address">Address</label></td>
+				<td class="field"><%= text_area 'delivery_address', 'address', :rows => 3 %></td>
+			</tr>
+			<tr>
+				<td class="label"><label for="billing_address_city">City</label></td>
+				<td class="field"><%= text_field 'billing_address', 'city', :class => 'text' %></td>
+				<td></td>
+				<td class="label"><label for="delivery_address_city">City</label></td>
+				<td class="field"><%= text_field 'delivery_address', 'city', :class => 'text' %></td>
+			</tr>
+			<tr>
+				<td class="label"><label for="billing_address_postcode">Postcode</label></td>
+				<td class="field"><%= text_field 'billing_address', 'postcode', :class => 'text' %></td>
+				<td></td>
+				<td class="label"><label for="delivery_address_postcode">Postcode</label></td>
+				<td class="field"><%= text_field 'delivery_address', 'postcode', :class => 'text' %></td>
+			</tr>
+<% if @configurator[:modules][:show_country] && @configurator[:modules][:show_country][:value] -%>
+			<tr>
+				<td class="label"><label for="billing_address_country">Country</label></td>
+				<td class="field"><%= country_select 'billing_address', 'country', nil %></td>
+				<td></td>
+				<td class="label"><label for="delivery_address_country">Country</label></td>
+				<td class="field"><%= country_select 'delivery_address', 'country', nil %></td>
+			</tr>
+<% end -%>
+			<tr>
+				<td class="label"><label for="billing_address_phone_no">Phone No.</label></td>
+				<td class="field"><%= text_field 'billing_address', 'phone_no', :class => 'text', :onchange => 'return propagate_phone_no();' %></td>
+				<td></td>
+				<td class="label"><label for="delivery_address_phone_no">Phone No.</label></td>
+				<td class="field"><%= text_field 'delivery_address', 'phone_no', :class => 'text' %></td>
+			</tr>
+			<tr>
+				<td></td>
+				<td colspan="4"><%= submit_tag 'Apply', :name => 'apply', :class => 'button' %></td>
+			</tr>
+		</table>
+	<% end %>
+</div>
+	<% end -%>
+
+<script type="text/javascript">
+	$('email').focus();
+</script>
+<% end -%>

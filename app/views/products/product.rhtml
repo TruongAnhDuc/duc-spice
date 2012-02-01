@@ -1,0 +1,224 @@
+<% @page_title = @product.page_title || @configurator[:application][:name][:value] + ' : ' + @product.name %>
+<% @body_class = @category.nil? ? 'products' : @category.name.downcase.gsub(/[^a-z]+/, '-') %>
+
+<script type="text/javascript" id="prices_weights">
+
+var asset_symbols = new Array();
+asset_symbols['price'] = '<%= @currency.symbol -%>';
+asset_symbols['weight'] = 'kg';
+
+var prices_weights = new Array();
+prices_weights[<%= @product.id -%>] = new Array();
+
+prices_weights[<%= @product.id -%>][0] = new Array();
+prices_weights[<%= @product.id -%>][0]['price'] = <%= @currency.convert(@product.raw_base_price) -%>;
+prices_weights[<%= @product.id -%>][0]['weight'] = <%= @product.raw_base_weight -%>;
+prices_weights[<%= @product.id -%>][0]['discount'] = <%= @product.discount -%>;
+prices_weights[<%= @product.id -%>][0]['discount_is_abs'] = <%= @product.discount_is_abs -%>;
+<%
+	if @option_values
+		@option_values.each_with_index do |cur_option_values, option_i|
+			if cur_option_values && !cur_option_values.empty?
+-%>
+prices_weights[<%= @product.id -%>][<%= option_i -%>] = new Array();
+<%
+				cur_option_values.each do |cur_option_value|
+					if cur_option_value
+-%>
+prices_weights[<%= @product.id -%>][<%= option_i -%>][<%= cur_option_value.option_value.id -%>] = new Array();
+prices_weights[<%= @product.id -%>][<%= option_i -%>][<%= cur_option_value.option_value.id -%>]['price'] = <%= @currency.convert(cur_option_value.option_value.extra_cost) -%>;
+prices_weights[<%= @product.id -%>][<%= option_i -%>][<%= cur_option_value.option_value.id -%>]['weight'] = <%= cur_option_value.option_value.extra_weight -%>;
+<%
+					end
+				end
+			end
+		end
+	end
+-%>
+var visible_products = new Array();
+visible_products[<%= @product.id -%>] = <%= @product.id -%>;
+
+</script>
+
+<div class="breadcrumbs">
+<% if @category && @category.breadcrumbs -%>
+	<% @category.breadcrumbs.each do |c| -%>
+		&raquo; <%= link_to(c.name, "#{@ROCKETCARTDIR}/#{c.path}") %>
+	<% end -%>
+<% end -%>
+	&raquo; <%= link_to(@product.name, "#{@ROCKETCARTDIR + @product.path}") %>
+</div>
+
+<div id="array_div"></div>
+
+<% if(flash[:notice] && !flash[:notice].empty?) -%>
+<div style="border: 2px solid #00CC00; padding: 8px; margin-bottom: 2ex;">
+	<p><%= flash[:notice] -%></p>
+</div>
+<% end -%>
+<% if(flash[:error] && !flash[:error].empty?) -%>
+<div style="border: 2px solid #CC0000; padding: 8px; margin-bottom: 2ex;">
+	<p><%= flash[:error] -%></p>
+</div>
+<% end -%>
+
+<h1><%= if @product.h1 && @product.h1 != '' then @product.h1 else @product.name end %></h1>
+
+<div class="product-info">
+	<% if @product.image -%>
+		<div class="thumbnail">
+			<%= link_to product_thumbnail(@product, @design_config[:sizes][:product_page_thumbnail_width], @design_config[:sizes][:product_page_thumbnail_height]), "/product_images/show/#{@product.image.id}", :target => '_blank', :onclick => "window.open(this.href,'image','width=#{@product.image.width},height=#{@product.image.height}'); return false;" %>
+		</div>
+	<% end -%>
+<%
+if @bits_array && !@bits_array.empty?
+	counter = 0
+	@bits_array.each do |cur_bits|
+		counter += 1
+		if cur_bits
+-%>
+<%= render :partial => 'product_details', :locals => { :bits => cur_bits, :counter => counter } -%>
+<%
+		end
+	end
+else
+-%>
+<%= render :partial => 'product_details', :locals => { :bits => nil, :counter => 1 } -%>
+<%
+end
+-%>
+</div>
+
+<div class="product-desc">
+<%= (RedCloth.new @product.description).to_html %>
+</div>
+
+<% if @product[:product_type_id] > 0 -%>
+<div class="product-custom">
+<%
+	@product.product_type.quirks.each do |cur_quirk|
+		@product.quirk_values.each do |cur_quirk_value|
+			if cur_quirk_value[:quirk_id] == cur_quirk[:id]
+-%>
+	<%= render :partial => "quirk", :locals => { :quirk => cur_quirk, :quirk_value => cur_quirk_value } -%>
+<%
+			end
+		end
+	end
+-%>
+
+</div>
+<% end -%>
+
+<% if @others_also_bought && @others_also_bought.length > 0 -%>
+<div class="others-also-bought">
+	<p><%= @configurator[:modules][:others_bought_label][:value] %></p>
+	<ul>
+		<% @others_also_bought.each do |prod| -%>
+		<li><%=link_to h(prod.product_name), prod.path %></li>
+		<% end -%>
+	</ul>
+</div>
+<% end -%>
+
+<%
+if @configurator[:modules][:allow_review_ratings] && @configurator[:modules][:allow_review_ratings][:value]
+	first_review = true
+	if @product.reviews && !@product.reviews.empty?
+		ratings = Hash.new
+		for k in 1..5 do
+			ratings[k] = 0
+		end
+
+		@product.reviews.each do |cur_review|
+			if (@configurator[:modules][:require_review_moderation] && !@configurator[:modules][:require_review_moderation][:value]) || (cur_review[:allowed] == "y")
+				ratings[cur_review[:rating]] += 1
+			end
+		end
+
+		ratings_total = 0.0
+		num_ratings = 0
+
+		for k in 1..5 do
+			ratings_total += (ratings[k] * k)
+			num_ratings += ratings[k]
+		end
+
+		if num_ratings > 0
+			first_review = false
+
+			the_rating = (ratings_total.to_f / num_ratings.to_f).round
+
+			the_popup_code = render :partial => "ratings_popup", :locals => { :ratings => ratings }
+			the_popup_code = the_popup_code.gsub "'", "\\'"
+-%>
+<script type="text/javascript">
+	var the_popup_text = '<%= the_popup_code -%>';
+</script>
+
+	<h2><strong>Average customer rating:</strong> <span onmouseover="return overlib(the_popup_text<%= @design_config[:options][:review_tooltip_options] -%> );" onmouseout="return nd();"><%= render :partial => "review_stars", :locals => { :stars => the_rating } -%></span></h2>
+
+	<h2>Latest customer reviews:</h2>
+
+<%
+			counter = 0
+			@product.reviews.each do |cur_review|
+				if (counter < @configurator[:modules][:max_reviews_to_show][:value]) && ((@configurator[:modules][:require_review_moderation] && !@configurator[:modules][:require_review_moderation][:value]) || (cur_review[:allowed] == "y"))
+					counter += 1
+-%>
+	<%= render :partial => "product_review", :locals => { :review => cur_review } -%>
+<%
+				end
+			end
+
+			if num_ratings > @configurator[:modules][:max_reviews_to_show][:value]
+-%>
+	<p><a href="<%= @product.reviews_path -%>">More reviews...</a></p>
+<%
+			end
+
+			if @can_post_review
+-%>
+<form action="<%= @ROCKETCARTDIR + @product.path -%>" method="post">
+	<%= render :partial => "/admin/reviews/star_choosing_javascript" -%>
+	<%= render :partial => "review_form", :locals => { :first => false } -%>
+</form>
+<%
+			end
+		end
+	end
+
+	if first_review
+		if @can_post_review
+-%>
+<form action="<%= @ROCKETCARTDIR + @product.path -%>" method="post">
+	<%= render :partial => "/admin/reviews/star_choosing_javascript" -%>
+	<%= render :partial => "review_form", :locals => { :first => true } -%>
+</form>
+<%
+		else
+			if @current_user
+-%>
+		<p>Your review is pending moderation.</p>
+<%
+			else
+-%>
+		<p>You must log in to post a review.</p>
+<%
+			end
+		end
+	end
+end
+-%>
+
+<% if @category && @category.breadcrumbs -%>
+<p class="return-to-category"><%= link_to("Return to #{h(@category.breadcrumbs.last.name)}", "#{@ROCKETCARTDIR}/#{@category.breadcrumbs.last.path}") %></p>
+<% end -%>
+
+<script type="text/javascript" id="prices_weights">
+	needs_updating = document.getElementsByClassName('price_weight');
+
+	for(var counter = 0; counter < needs_updating.length; counter++) {
+		update_from_product_option(needs_updating[counter]);
+	}
+</script>

@@ -1,0 +1,24 @@
+god:
+  id: 1
+  first_name: god
+  last_name: "deity.family"
+  email: god@example.com
+  hashed_password: <%= Digest::SHA1.hexdigest('betterthanyou') %>
+devil:
+  id: 2
+  first_name: lucifer
+  last_name: "haversham-proudfoot"
+  email: devil@example.com
+  hashed_password: <%= Digest::SHA1.hexdigest('badderthanyou') %>
+daemon:
+  id: 3
+  first_name: forked
+  last_name: process
+  email: forked@example.com
+  hashed_password: <%= Digest::SHA1.hexdigest('forkshurt') %>
+daemonw:
+  id: 4
+  first_name: forked
+  last_name: process
+  email: forkedw@example.com
+  hashed_password: <%= Digest::SHA1.hexdigest('forkshurt') %>

@@ -1,0 +1,40 @@
+default_free_shipping:
+  id: 1
+  name: Free Shipping
+  per_item: 0.0
+  per_kg: 0.0
+  flat_rate: 0.0
+  formula: 
+  formula_description: 
+  default_zone: 1
+  position: 1
+boxed_shipping:
+  id: 2
+  name: Boxed Shipping & Handling
+  per_item: 0.0
+  per_kg: 0.0
+  flat_rate: 5.0
+  formula: (I/10.0).ceil * 20
+  formula_description: "$20 per 10 products"
+  default_zone: 0
+  position: 2
+itemized_shipping:
+  id: 3
+  name: Itemized Shipping
+  per_item: 2.0
+  per_kg: 0.0
+  flat_rate: 0.0
+  formula: 
+  formula_description: 
+  default_zone: 0
+  position: 3
+weighted_shipping:
+  id: 4
+  name: Weighted Shipping
+  per_item: 0.0
+  per_kg: 2.0
+  flat_rate: 0.0
+  formula: 
+  formula_description: 
+  default_zone: 0
+  position: 4

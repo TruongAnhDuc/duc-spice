@@ -1,0 +1,118 @@
+<h1>Application Settings</h1>
+
+<% if @current_user.permissions > :client -%>
+<p>You can also choose <%= link_to 'which icon set to use', :action => :icon_sets -%>.</p>
+<% end -%>
+
+<% if(flash[:notice] && !flash[:notice].empty?) -%>
+<div style="border: 2px solid #00CC00; padding: 8px; margin-bottom: 2ex;">
+	<p>The following fields were updated:</p>
+	<ul>
+<% flash[:notice].each do |cur_notice| -%>
+		<li><%= h(cur_notice) -%></li>
+<% end -%>
+	</ul>
+</div>
+<% end -%>
+
+<% if(flash[:errors] && !flash[:errors].empty?) -%>
+<div class="errorExplanation" id="errorExplanation">
+	<p>There were problems with the following fields:</p>
+	<ul>
+<% flash[:errors].each do |cur_error| -%>
+		<li><%= h(cur_error) -%></li>
+<% end -%>
+	</ul>
+</div>
+<% end -%>
+
+<% form_tag :action => :settings do %>
+	<% @configurator.options.each_pair do |group_name, options| -%>
+		<% if group_name.to_s != 'demo' -%>
+			<div class="fieldset">
+				<div class="legend"><%= group_name.to_s.humanize %></div>
+				<table class="form">
+				<% options.each_pair do |key, values_array| -%>
+					<% if @current_user.permissions >= values_array[:level] -%>
+						<tr>
+							<td class="label"><label for="<%= "settings_#{group_name}_#{key}" %>"><%= key.to_s.humanize %>:</label></td>
+							<td class="field">
+						<%
+						case values_array[:type]
+							when 'boolean'
+						-%>
+									<select name="<%= "settings[#{group_name}][#{key}]" %>" id="<%= "settings_#{group_name}_#{key}" %>">
+										<option value="0"<%= (values_array[:value].is_a? FalseClass) ? ' selected="selected"' : '' %>>No</option>
+										<option value="1"<%= (values_array[:value].is_a? TrueClass) ? ' selected="selected"' : '' %>>Yes</option>
+									</select>
+						<%
+							when 'text'
+						-%>
+								<textarea class="text" name="<%= "settings[#{group_name}][#{key}]" %>" id="<%= "settings_#{group_name}_#{key}" %>" rows="5" cols="60"><%= h(values_array[:value]) %></textarea>
+						<%
+							when 'password'
+						-%>
+								<input class="text" name="<%= "settings[#{group_name}][#{key}]" %>" id="<%= "settings_#{group_name}_#{key}" %>" type="password" />
+								<input class="text" name="<%= "settings[#{group_name}][#{key}_confirmation]" %>" id="<%= "settings_#{group_name}_#{key}_confirmation" %>" type="password" />
+
+						<%
+							# displays identically to 'string' (default)
+							#when 'email'
+						-%>
+						<%
+							# displays identically to 'string' (default)
+							#when 'url'
+						-%>
+						<%
+							when 'int'
+								if values_array[:max]
+									min = values_array[:min] || 0
+									max = values_array[:max]
+						-%>
+									<select name="<%= "settings[#{group_name}][#{key}]" %>" id="<%= "settings_#{group_name}_#{key}" %>">
+									<% for cur in min..max -%>
+										<option value="<%= cur -%>"<%= if values_array[:value] == cur then ' selected="selected"' end -%>><%= cur -%></option>
+									<% end -%>
+									</select>
+						<%
+								end
+							when 'float'
+						-%>
+								<input class="text" name="<%= "settings[#{group_name}][#{key}]" %>" id="<%= "settings_#{group_name}_#{key}" %>" value="<%=h values_array[:value] %>"/>
+						<%
+							when 'multichoice'
+						-%>
+								<select name="<%= "settings[#{group_name}][#{key}]" %>" id="<%= "settings_#{group_name}_#{key}" %>">
+								<% for cur in values_array[:choices] -%>
+									<option value="<%= cur -%>"<%= if values_array[:value] == cur[0].to_s then ' selected="selected"' end -%>><%= cur -%></option>
+								<% end -%>
+								</select>
+						<%
+						# assume the else is 'string' - most common
+							else
+						-%>
+								<input class="text" name="<%= "settings[#{group_name}][#{key}]" %>" id="<%= "settings_#{group_name}_#{key}" %>" value="<%=h values_array[:value] %>" />
+						<%
+						end
+						-%>
+								<%= show_tooltip(group_name.to_sym, key.to_sym) -%>
+							</td>
+						</tr>
+					<% end -%>
+				<% end -%>
+				</table>
+			</div>
+		<% end -%>
+	<% end -%>
+
+	<p>
+		<%= submit_tag 'Save', :name => 'save', :class => 'button' %>
+		<% if @demo_admin -%>
+		Note: Changes to these settings will not be saved as this is a demonstration.
+		<% end %>
+	</p>
+<% end %>
+
+<ul class="tips">
+	<li>You shouldn't really ever need to change anything in here, unless you need your emails to appear to be sent from a different address.</li>
+</ul>

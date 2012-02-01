@@ -1,0 +1,21 @@
+<% @page_title = @static_page.title || 'Rocket Cart' -%>
+<% @meta_keywords = @static_page.meta_keywords -%>
+<% @meta_description = @static_page.meta_description -%>
+<% @body_class = (@static_page.path =~ /^\/about\/([^\/]+)/) ? $1 : nil -%>
+
+<%=
+contents = RedCloth.new(@static_page.body || "").to_html
+
+if contents.include?("FEATUREDPRODUCTS")
+	features = Feature.for_static_page(@static_page[:id])
+
+	features_chunk = ''
+	features.each do |cur_feature|
+		features_chunk += render :partial => "widget/featured_product", :locals => { :featured_product => cur_feature }
+	end
+
+	contents.gsub("FEATUREDPRODUCTS", features_chunk)
+else
+	contents
+end
+%>

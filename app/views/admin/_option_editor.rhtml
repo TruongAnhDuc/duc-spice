@@ -1,0 +1,27 @@
+<div id="legend-<%= @option.id -%>-closer" class="legend"><a class="expand-button" href="#" onclick="return option_collapse(<%= @option.id -%>);">&ndash;</a> <%= @option.name + ' (' + @option.class.option_type -%><%= if (@option.comment.nil? or @option.comment.empty?) then  ')' else '<em> - ' + @option.comment + '</em>)' end -%> [<%= link_to('delete', { :action => :delete_option, :id => @option.id }, :confirm => 'Really delete this option?') %>]</div>
+<div id="legend-<%= @option.id -%>-opener" class="legend" style="display: none;"><%= link_to_remote '+', { :update => "option-editor-#{@option.id}", :url => { :action => :option_editor, :id => @option.id } }, :class => 'expand-button' %> <%= @option.name + ' (' + @option.class.option_type -%><%= if (@option.comment.nil? or @option.comment.empty?) then ')' else '<em> - ' + @option.comment + '</em>)' end -%> [<%= link_to('delete', { :action => 'delete_option', :id => @option.id }, :confirm => 'Really delete this option?') %>]</div>
+<%
+	# The endcolor must match .fieldset in the CSS but be careful of how many levels deep we are as they differ...
+%>
+<% form_remote_tag :html => { :id => "option-form-#{@option.id}" }, :update => "option-editor-#{@option.id}", :url => { :action => :option_editor, :id => @option.id }, :complete => "new Effect.Highlight('option-save-text-#{@option.id}', {startcolor:'#FF0000', endcolor:'#CCCCCC', duration: 3});" do -%>
+	<input type="hidden" name="do" value="save" id="do-<%= @option.id %>" />
+	<table class="option-gui">
+		<tr>
+			<td class="name">Name: <input class="text" type="text" name="name" value="<%= @option.name %>"><%= show_tooltip(:option, :name) -%></td>
+			<td class="comment">Comment: <input class="text" type="text" name="comment" value="<%= @option.comment %>"><%= show_tooltip(:option, :comment) -%></td>
+		</tr>
+		<tr>
+			<td colspan="2" class="preview">Preview: <%= render(:partial => 'option_render', :locals => { :option => @option, :option_values => @option.values }) -%><%= show_tooltip(:option, :preview) -%></td>
+		</tr>
+		<tr>
+			<td colspan="2" class="config">
+				<%= render(:partial => 'option_config', :locals => { :option => @option, :option_values => @option.values }) -%>
+			</td>
+		</tr>
+		<tr>
+			<td colspan="2" class="buttons">
+				<%= submit_tag 'Save', :name => 'save', :class => 'button' %> &nbsp; <span class="option-save-text-cc" id="option-save-text-<%= @option.id %>"<% unless show_saved_text %> style="padding: 0px;"<% end %>><% if show_saved_text %>Option successfully saved.<% end %></span>
+			</td>
+		</tr>
+	</table>
+<% end -%>

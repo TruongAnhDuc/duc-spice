@@ -1,0 +1,41 @@
+<% if @current_user -%>
+	<p>Currently logged in as <strong><%= @current_user -%></strong></p>
+	<div id="user-links">
+<%
+		unless @current_user.permissions < :staff
+-%>
+		<%= link_to "Admin", :controller => :admin -%> |
+<%
+		end
+-%>
+		<%= link_to "Change password", :controller => :static_pages, :action => :change_password -%> |
+		<a href="?logout=1">Log out</a>
+	</div>
+<% else -%>
+<div id="login">
+<%
+# Don't use a form_tag here because it'll set the action attribute to whatever the current request
+# is.  If someone adds something to their cart using AJAX then logs in, it will end up adding another
+# of that product to their cart!
+-%>
+	<form method="post">
+		<table class="form">
+		<tr id="userman-email">
+			<td class="label"><label for="um_email">Email:</label></td>
+			<td class="field"><input class="text" type="text" name="email" id="um_email" /></td>
+		</tr>
+		<tr id="userman-password">
+			<td class="label"><label for="um_password">Password:</label></td>
+			<td class="field"><input class="text" type="password" name="password" id="um_password" /></td>
+		</tr>
+		<tr id="userman-submit">
+			<td></td>
+			<td><input name="login" type="submit" value="Login" /></td>
+		</tr>
+		<tr>
+			<td colspan="2"><%= link_to "Forgotten your password?", :controller => :static_pages, :action => :forgotten_password -%></td>
+		</tr>
+		</table>
+	</form>
+</div>
+<% end -%>

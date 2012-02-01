@@ -1,0 +1,18 @@
+<% if featured_product -%>
+<h2><%= link_to featured_product.product_name, @ROCKETCARTDIR + featured_product.path %></h2>
+<table cellpadding="0" cellspacing="0">
+	<tr>
+		<td>
+			<%= link_to product_thumbnail(featured_product), @ROCKETCARTDIR + featured_product.path %>
+		</td>
+		<td class="price_weight product-details-form" id="product-details-form-<%= featured_product.id -%>-1">
+			<% if !featured_product.discount.zero? -%>
+				<span id="price-<%= featured_product[:id] -%>-1" class="price" title="Normally <%= @currency.format(featured_product.base_price) -%>">(Normally <%= @currency.format(featured_product.base_price) -%>)</span> <span id="discount-<%= featured_product[:id] -%>-1" class="discount featured-product-price" title="<%= @currency.format(featured_product.price) -%>"><%= @currency.format(featured_product.price) -%></span>
+			<% else -%>
+				<span id="price-<%= featured_product[:id] -%>-1" class="price featured-product-price" title="<%= @currency.format(featured_product.price) -%>"><%= @currency.format(featured_product.price) -%></span>
+			<% end -%>
+			<p><%= featured_product.description -%> &nbsp; &nbsp;<%= link_to "[More]", @ROCKETCARTDIR + featured_product.path %></p>
+		</td>
+	</tr>
+</table>
+<% end -%>

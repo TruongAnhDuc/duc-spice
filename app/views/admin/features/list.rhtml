@@ -1,0 +1,83 @@
+<% @page_title = "Rocket Cart Admin Area : Featured Products" -%>
+
+<h1>Featured Products</h1>
+
+<!-- Is a search box here really needed?  Do we envisage dozens/hundreds of featured products?
+<% form_tag do %>
+<fieldset>
+	<legend>Search</legend>
+	Product Code, Name, Description or ID:
+	<input class="text" type="text" name="query" value="<%= @query || '' %>" />
+	<input class="button" type="submit" name="search" value="Search" />
+</fieldset>
+<% end %>
+-->
+
+<p><%= link_to 'Create a new featured product', { :action => :new } %></p>
+
+<% if @features_count.zero? -%>
+	<p>No featured products found</p>
+<% else -%>
+
+<%= render :partial => 'admin/paginator' %>
+
+<% form_tag :action => :list do %>
+<table class="list">
+	<thead>
+	<tr class="actions">
+		<td colspan="6">
+			Selected featured products:<br />
+			<%= submit_tag 'Delete', :name => 'delete', :class => 'button', :onclick => 'return confirm(\'Really delete the selected featured products permanently?\')' %>
+		</td>
+	</tr>
+	<tr class="list-header">
+		<th>Select</th>
+		<th></th>
+		<th>Code <%= render :partial => 'admin/sorting_arrows', :locals => { :column => 'code' } %></th>
+		<th>
+			Name <%= render :partial => 'admin/sorting_arrows', :locals => { :column => 'name' } %>
+			Categories & Static Pages
+		</th>
+		<th>In Layout?</th>
+		<th></th>
+	</tr>
+	</thead>
+	<tbody>
+		<% @features.each_with_index do |cur_feature, i| -%>
+			<tr class="<%= (i % 2 == 0) ? 'odd' : 'even' %>">
+				<td><input class="checkbox" type="checkbox" name="select[<%= cur_feature.id %>]" value="1" /></td>
+				<td>
+<% if(!cur_feature.until or (cur_feature.until + 1) > Date.today) %>
+					<img src="<%= @ROCKETCARTDIR + icon_path('star') %>" alt="Currently featured" title="Currently featured" width="<%= @design_config[:sizes][:admin_icons_width].to_s %>" height="<%= @design_config[:sizes][:admin_icons_height].to_s %>" class="icon" />
+<% end %>
+				</td>
+				<td><%= cur_feature.product.product_code %></td>
+				<td>
+					<%= link_to cur_feature.product.product_name, { :action => :edit, :id => cur_feature } %><br />
+					<span><%=
+					output = Array.new
+
+					cur_feature.categories.each do |cur_cat|
+						output << "(C) #{cur_cat[:name]}"
+					end
+
+					cur_feature.static_pages.each do |cur_stat|
+						output << "(S) #{cur_stat[:name]}"
+					end
+
+					output.join(", ")
+					%></span>
+				</td>
+				<td><%= if cur_feature[:in_layout] then "Yes" end -%></td>
+				<td nowrap="nowrap" class="icons">
+					<%= action_icon("Edit", "edit", { :action => :edit, :id => cur_feature }) -%>
+				</td>
+			</tr>
+		<% end -%>
+	</tbody>
+</table>
+<% end %>
+
+<%= render :partial => 'admin/paginator' %>
+
+<% end -%>

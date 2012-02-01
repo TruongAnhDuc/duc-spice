@@ -1,0 +1,21 @@
+<tr class="<%= ((@row_toggle+=1) % 2 == 1) ? 'odd' : 'even' %>">
+	<td><% if category_row.id > 1 -%><input class="checkbox" type="checkbox" name="select[<%= category_row.id %>]" value="1" /><% end -%></td>
+	<td>
+		<%= '&rarr;' * category_row.path.count('/') %>
+		<%= link_to category_row.name, { :action => :edit, :id => category_row.id } %>
+	</td>
+	<td><%= if category_row.parent.nil? then '(none)' else category_row.parent.name end %></td>
+	<td nowrap="nowrap" class="icons" rowspan="2">
+		<%= action_icon("View", "view", "#{@ROCKETCARTDIR}/#{category_row.path}") -%>
+		&nbsp;
+		<%= action_icon("Edit", "edit", { :action => :edit, :id => category_row.id }) -%>
+	</td>
+</tr>
+<tr class="<%= (@row_toggle % 2 == 1) ? 'odd' : 'even' %>">
+	<td></td>
+	<td colspan="2">
+		<span style="visibility: hidden;"><%= '&rarr;' * category_row.path.count('/') %></span>
+		<%= category_row.path %>
+	</td>
+</tr>
+<%= render(:partial => 'category_row', :collection => category_row.children) -%>

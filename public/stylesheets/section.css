@@ -1,0 +1,415 @@
+body {
+	background-color: #8A5326;
+	margin: 0px;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 11px;
+	line-height: 18px;
+	color: #492100;
+}
+p {
+	margin-top: 5px;
+	margin-bottom: 12px;
+}
+
+#container {
+	width: 822px;
+	margin-right: auto;
+	margin-left: auto;
+	background-image: url(/images/bg.gif);
+}
+#header {
+	width: 798px;
+	margin-right: auto;
+	margin-left: auto;
+	background-image: url(/images/h-bg.jpg);
+}
+#logo {
+	float: left;
+	width: 327px;
+	height: 190px;
+}
+#sect-logo {
+	float: left;
+	width: 327px;
+	height: 116px;
+}
+#flash {
+	float: left;
+	width: 471px;
+	height: 190px;
+}
+#sect-h-img {
+	float: left;
+	width: 471px;
+	height: 160px;
+}
+#nav-container {
+	width: 798px;
+	height: 36px;
+	clear: both;
+}
+#nav {
+	width: 798px;
+	height: 36px;
+	background-image: url(/images/nav.jpg);
+	position: relative;
+	margin: 0px; padding: 0;
+}
+#nav li {
+    margin: 0;
+	padding: 0;
+	list-style: none;
+    position: absolute;
+	top: 0;
+}
+#nav li, #nav li a {
+    height: 36px;
+	display: block;
+}
+
+#link-home { left: 0px; width: 56px; }
+#link-what-are-spices { left: 56px; width: 123px; }
+#link-spice-history { left: 180px; width: 104px; }
+#link-our-spice-products { left: 284px; width: 138px; }
+#link-buy-spices { left: 422px; width: 89px; }
+#link-recipes-and-tips { left: 511px; width: 112px; }
+#link-enquiries { left: 622px; width: 77px; }
+#link-shopping-info { left: 698px; width: 101px; }
+
+#link-home a:hover { background: url(/images/nav.jpg) -0px -36px no-repeat;}
+#link-what-are-spices a:hover { background: url(/images/nav.jpg) -56px -36px no-repeat;}
+#link-spice-history a:hover { background: url(/images/nav.jpg) -180px -36px no-repeat;}
+#link-our-spice-products a:hover { background: url(/images/nav.jpg) -284px -36px no-repeat;}
+#link-buy-spices a:hover { background: url(/images/nav.jpg) -422px -36px no-repeat;}
+#link-recipes-and-tips a:hover { background: url(/images/nav.jpg) -511px -36px no-repeat;}
+#link-enquiries a:hover { background: url(/images/nav.jpg) -622px -36px no-repeat;}
+#link-shopping-info a:hover { background: url(/images/nav.jpg) -698px -36px no-repeat;}
+
+#nav a span {
+	display: none;
+}
+#body-container {
+	width: 798px;
+	margin-right: auto;
+	margin-left: auto;
+	background-image: url(/images/body-bg.jpg);
+	background-repeat: no-repeat;
+}
+#body {
+	width: 750px;
+	margin-right: auto;
+	margin-left: auto;
+}
+#body-inner {
+	float: left;
+	width: 750px;
+}
+#body-inner-inner {
+	width: 520px;
+	float: left;
+}
+#body-inner-large {
+	width: 750px;
+	float: left;
+}
+#side-bar {
+	width: 230px;
+	float: left;
+	text-align: right;
+}
+.cta {
+	margin-top: 10px;
+	margin-bottom: 2px;
+}
+h1 {
+	margin-top: 0px;
+	margin-bottom: 10px;
+	font-size: 16px;
+	font-weight: bold;
+	color: #C0282D;
+	background-image: url(/images/h1-img.gif);
+	background-repeat: no-repeat;
+	padding-top: 14px;
+	padding-left: 42px;
+	border-bottom-width: 1px;
+	border-bottom-style: solid;
+	border-bottom-color: #0054A6;
+	padding-bottom: 1px;
+}
+#h1-container {
+	padding-top: 15px;
+}
+h2 {
+	font-size: 14px;
+	font-weight: bold;
+	margin-top: 15px;
+	border-bottom: 1px dashed #8A5326;
+	padding-bottom: 0px;
+	margin-bottom: 0px;
+	color: #CC0000;
+}
+h3 {
+	font-size: 12px;
+	font-weight: bold;
+	margin-top: 0px;
+	margin-bottom: 10px
+}
+h3.tagline {
+	font-size: 11px;
+	font-weight: normal;
+}
+#footer {
+	background-image: url(/images/footer.gif);
+	background-repeat: no-repeat;
+	width: 822px;
+	margin-right: auto;
+	margin-left: auto;
+	clear: both;
+}
+#footer-links {
+	width: 750px;
+	margin-right: auto;
+	margin-left: auto;
+	padding-top: 24px;
+}
+#footer-links p, #footer-links a {
+	color: #F9F2E4;
+	font-size: 11px;
+	line-height: 20px;
+}
+.spice-fact {
+	background-image: url(/images/spice-fact-bg.gif);
+	width: 520px;
+	background-repeat: repeat-y;
+	margin-top: 20px;
+}
+.spice-fact p {
+	margin-left: 15px;
+	margin-top: 5px;
+	margin-right: 15px;
+	margin-bottom: 5px;
+	line-height: 14px;
+}
+.spice-fact-title {
+	background-image: url(/images/spice-fact-title.gif);
+	background-repeat: no-repeat;
+	height: 14px;
+	width: 520px;
+}
+.spice-tip-title {
+	background-image: url(/images/spice-tip-title.gif);
+	background-repeat: no-repeat;
+	height: 14px;
+	width: 520px;
+}
+.spice-fact-footer {
+	background-image: url(/images/spice-fact-footer.gif);
+	background-repeat: no-repeat;
+	height: 9px;
+	width: 520px;
+}
+#body-inner ul {
+	margin-top: 10px;
+	margin-bottom: 10px;
+	margin-left: 30px;
+	padding-left: 0px;
+}
+#body-inner ul li {
+	margin-top: 2px;
+	margin-bottom: 2px;
+	background-image: url(/images/bullet.gif);
+	padding-left: 17px;
+	background-repeat: no-repeat;
+	list-style-type: none;
+	background-position: 0px 4px;
+	margin-left: 0px;
+}
+.clear-floats {
+	clear: both;
+}
+a {
+	color: #C0282D;
+	text-decoration: underline;
+}
+a:hover {
+	text-decoration: none;
+}
+#cart-summary {
+	background-image: url(/images/shopping-cart-bg.gif);
+	background-repeat: no-repeat;
+	height: 26px;
+	width: 332px;
+	float: right;
+	font-size: 10px;
+}
+#cart-links {
+	float: left;
+	margin-top: 4px;
+}
+#cart-contents {
+	float: left;
+	width: 204px;
+	margin-left: 22px;
+	margin-top: 4px;
+	display: inline;
+}
+.products {
+}
+.product {
+	border-top: none;
+	border-bottom: 1px dashed #8A5326;
+	background: url(/images/no-image.gif) no-repeat 8px 4px;
+	margin-top: 8px;
+	position: relative;
+	clear: both;
+}
+.product .thumbnail {
+	position: absolute;
+	margin-top: 4px;
+	margin-left: 8px;
+	border: 1px solid #8A5326;
+}
+.product .details {
+	margin: 0px 0px 0px 150px;
+}
+.product form {
+	display: inline;
+	padding: 0px;
+}
+.breadcrumbs {
+	border-bottom: 1px dashed #8A5326;
+	padding: 0px 0px 8px;
+	margin-bottom: 8px;
+}
+.product-info {
+	float: right;
+	width: 204px;
+	padding: 8px;
+	background: #E9DCC9;
+	border: 1px solid #8A5326;
+	margin-left: 8px;
+	margin-top: 35px;
+	margin-bottom: 8px;
+	text-align: center;
+}
+.product-info .price_weight {
+	font-size: 18px;
+	padding: 8px 0px 10px;
+	line-height: 18px;
+	margin: 0px 0px 10px;
+	font-family: "Georgia", serif;
+	border-bottom: 1px dashed #8A5326;
+}
+.product-info .price_weight .weight {
+	font-size: 14px;
+}
+.product-info .thumbnail img {
+	border: 1px solid #8A5326;
+}
+.product-info input.button {
+	width: 200px;
+}
+.product-gallery-group {
+	border-bottom: 1px dashed #8A5326;
+	height: 180px;
+}
+.product-gallery {
+	text-align: center;
+	width: 150px;
+	float: left;
+	margin-top: 13px;
+}
+.product-gallery p {
+	margin-top: 4px;
+	margin-bottom: 0px;
+	line-height: 14px;
+}
+.product-gallery .thumbnail {
+	border: 1px solid #8A5326;
+}
+form{
+	margin: 0px;
+}
+form .view-details {
+	margin-top: 10px;
+}
+.button {
+	background: #C0282D;
+	color: white;
+	font: bold 11px Verdana, sans-serif;
+	border: 1px solid #C0282D;
+	border-color: #E89DA0 #000000 #000000 #E89DA0;
+}
+.button2 {
+	margin-top: 8px;
+	background: #C0282D;
+	color: white;
+	font: bold 11px Verdana, sans-serif;
+	border: 1px solid #C0282D;
+	border-color: #E89DA0 #000000 #000000 #E89DA0;
+}
+input.text, textarea, select {
+	font: 11px Verdana, sans-serif;
+	color: black;
+	background: #FFFFFF;
+	border: 1px solid #8A5326;
+}
+.blue-cta-box {
+	width: 212px;
+	background-color: #0054A6;
+	margin-top: 10px;
+	margin-bottom: 2px;
+	float: right;
+}
+.blue-cta-box-top {
+	width: 212px;
+	height: 7px;
+	background-image: url(/images/blue-cta-box-top.gif);
+	background-repeat: no-repeat;
+}
+.blue-cta-box-bottom {
+	width: 212px;
+	height: 7px;
+	background-image: url(/images/blue-cta-box-bottom.gif);
+	background-repeat: no-repeat;
+}
+.blue-cta-box-inner {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 11px;
+	font-weight: bold;
+	color: #FFFFFF;
+	width: 189px;
+	margin-right: 12px;
+	margin-left: 12px;
+	text-align: center;
+}
+.blue-cta-box-inner a, .blue-cta-box-inner a:hover {
+	color: #FFFFFF;
+}
+.blue-cta-box-inner p {
+	margin-top: 8px;
+	margin-bottom: 8px;
+	line-height: 14px;
+}
+
+#wholesale-links {
+	float: right;
+	padding-top: 4px;
+	height: 26px;
+}
+
+#wholesale-links a {
+	padding-right: 2em;
+}
+
+#wholesale-links a.noline {
+	padding-right: 1em;
+	text-decoration: none;
+}
+
+#wholesale-links a img {
+	vertical-align: middle;
+}
+.review-form a img {
+	border: none;
+}

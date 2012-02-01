@@ -1,0 +1,40 @@
+<% @page_title = "Draft Orders" %>
+
+<h1>Draft Orders</h1>
+
+<% if flash[:notice] -%>
+	<div class="notice"><%= flash[:notice] %></div>
+<% elsif flash[:error] -%>
+	<div class="errorExplanation"><%= flash[:error] %></div>
+<% end -%>
+
+<% if @drafts && !@drafts.empty? -%>
+<p>To view details for a draft order, or to confirm or delete it, click on 'View / Edit'.</p>
+
+<table class="cart" cellspacing="0">
+	<thead>
+		<tr>
+			<th>ID</th>
+			<th>Created</th>
+			<th>Value</th>
+			<th>Items</th>
+			<th></th>
+		</tr>
+	</thead>
+	<tbody>
+<% @drafts.each_with_index do |cur_order, i| -%>
+		<tr class="<%= i % 2 == 0 ? "even" : "odd" %>">
+			<td><%= cur_order[:id] -%></td>
+			<td><%= cur_order[:created_at].strftime("%a %b %d %Y, %H:%M") -%></td>
+			<td><%= @currency.format(cur_order.total) -%></td>
+			<td><%= cur_order.items.length -%></td>
+			<td nowrap="nowrap" class="icons">
+				<%= action_icon("View / Edit", "view", { :action => :draft, :id => cur_order }) -%>
+			</td>
+		</tr>
+<% end -%>
+	</tbody>
+</table>
+<% else -%>
+<p>You currently have no draft orders.</p>
+<% end -%>

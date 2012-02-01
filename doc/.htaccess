@@ -1,0 +1,9 @@
+AuthUserFile /home/rocketcartavatarconz/www/doc/.htpasswd
+
+AuthName "Rocket Cart Documentation"
+AuthType Basic
+
+<Limit GET PUT POST>
+require user rocketcart
+</Limit>
+

@@ -1,0 +1,4 @@
+<%= sprintf('%.4f', currency.exchange_rate) %>
+<%= currency.updated_at.strftime('(%I:%M%p)') unless currency.updated_at.nil? %>
+<br />
+<%= if @design_config[:options][:show_extra_admin_icons] and @design_config[:options][:show_extra_admin_icons] == 'yes' then link_to_remote '<img src="' + @ROCKETCARTDIR + icon_path('reload') + '" alt="Update" title="Update" width="' + @design_config[:sizes][:admin_icons_width].to_s + '" height="' + @design_config[:sizes][:admin_icons_height].to_s + '" class="icon" />', :update => "rate-#{currency.id}", :url => { :action => :update, :id => currency.id }, :loading => "$('rate-#{currency.id}').innerHTML = 'updating...';" end %>&nbsp;<%= link_to_remote 'Update', :update => "rate-#{currency.id}", :url => { :action => :update, :id => currency.id }, :loading => "$('rate-#{currency.id}').innerHTML = 'updating...';" %>

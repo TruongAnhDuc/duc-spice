@@ -1,0 +1,35 @@
+#!/bin/sh
+
+# This script is used to expire the demo period.  It is called by at(1), set up by start.sh.
+# It can also be called manually from the command-line if you want to cut someone's session short.
+
+# Clear out the at queue in case this was run from the command-line
+# Note we don't care if there is a session active or not: we'll restore the app regardless.
+for QUEUE in `atq | cut -f 1`; do atrm $QUEUE; done
+
+# Now we restore the database.
+if [ -f ~/www/demo/dump.sql.gz ]; then
+	DB_DETAILS=`/usr/bin/php -q ~/www/demo/demo.php db_details`
+
+	DB_DB=`echo $DB_DETAILS | cut -d " " -f 1`
+	DB_USER=`echo $DB_DETAILS | cut -d " " -f 2`
+	DB_PASS=`echo $DB_DETAILS | cut -d " " -f 3`
+
+	# aaarrrgghhh!  I hate MySQL!
+	# For the record, mysqldump just dumps out the tables in alphabetical order with no regard
+	# to foreign key constraints.  I found the code below in a MySQL newsgroup.
+	(
+		echo "SET AUTOCOMMIT=0;"
+		echo "SET FOREIGN_KEY_CHECKS=0;"
+		zcat ~/www/demo/dump.sql.gz
+		echo "SET FOREIGN_KEY_CHECKS=1;"
+		echo "COMMIT;"
+		echo "SET AUTOCOMMIT=1;"
+	) | mysql --user=$DB_USER --password=$DB_PASS $DB_DB 
+else
+	echo "Warning: Database dump file not found.  The database will not be restored."
+fi
+
+# Now we reset the password in the database to its default value.
+# The full path to php needs to be specified otherwise the production server will reject it.
+/usr/bin/php -q ~/www/demo/demo.php stop

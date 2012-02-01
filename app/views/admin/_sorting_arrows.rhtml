@@ -1,0 +1,25 @@
+<div><%=
+link_to(
+	image_tag(
+		"#{icon_path('up2')}",
+		{
+			:alt => "Sort by #{column} ascending",
+			:title => "Sort by #{column} ascending",
+			:size => "#{@design_config[:sizes][:admin_icons_width]}x#{@design_config[:sizes][:admin_icons_height]}",
+			:class => "icon"
+		}
+	),
+	"?s-#{column}=asc")
+-%>&nbsp;<%=
+link_to(
+	image_tag(
+		"#{icon_path('down2')}",
+		{
+			:alt => "Sort by #{column} descending",
+			:title => "Sort by #{column} descending",
+			:size => "#{@design_config[:sizes][:admin_icons_width]}x#{@design_config[:sizes][:admin_icons_height]}",
+			:class => "icon"
+		}
+	),
+	"?s-#{column}=desc")
+-%></div>

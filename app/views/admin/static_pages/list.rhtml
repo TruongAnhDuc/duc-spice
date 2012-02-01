@@ -1,0 +1,59 @@
+<% @page_title = "Rocket Cart Admin Area : Static Pages" -%>
+
+<h1>Static Pages</h1>
+
+<p>You can add, edit or delete the static content pages in your site in this area. No knowledge of HTML is required, but you must follow instructions carefully to ensure page formatting is consistent, links between pages are created correctly and links to old / new pages are kept intact.<p>
+
+<p><%= link_to 'Create a new static page', { :action => :new } %></p>
+
+
+<% if @static_page_count.zero? -%>
+	<p>No static pages found</p>
+<% else -%>
+
+<%= render :partial => 'admin/paginator' %>
+
+<% form_tag :action => :list do %>
+<table class="list">
+	<thead>
+	<tr class="actions">
+		<td colspan="4">
+			Selected static pages:<br />
+				<%= submit_tag 'Delete', :name => 'delete', :class => 'button', :onclick => 'return confirm(\'Really delete the selected static pages permanently?\')' %>
+			<% if @demo_admin -%>
+				<br />Note: static pages cannot be modified by a demonstration user.
+			<% end %>
+		</td>
+	</tr>
+	<tr class="list-header">
+		<th>Select</th>
+		<th>Name <%= render :partial => 'admin/sorting_arrows', :locals => { :column => 'name' } %></th>
+		<th>Path <%= render :partial => 'admin/sorting_arrows', :locals => { :column => 'path' } %></th>
+		<th></th>
+	</tr>
+	</thead>
+	<tbody>
+		<% @static_pages.each_with_index do |p, i| -%>
+			<tr class="<%= (i % 2 == 0) ? "odd" : "even" %>">
+				<td><% unless p.form_name -%><input class="checkbox" type="checkbox" name="select[<%= p.id %>]" value="1" /><% end -%></td>
+				<td><%= p.name %></td>
+				<td><%= link_to p.path, { :action => :edit, :id => p } %></td>
+				<td class="icons">
+					<%= action_icon("View", "view", p.path) -%>
+					&nbsp;
+					<%= action_icon("Edit", "edit", { :action => :edit, :id => p }) -%>
+				</td>
+			</tr>
+		<% end -%>
+	</tbody>
+</table>
+<% end %>
+
+<%= render :partial => 'admin/paginator' %>
+
+<% end %>
+
+<ul class="tips">
+	<li>If you delete any static pages, check your other pages to see if they were linking to the deleted page. You will have to edit the link on these pages to ensure that users are not clicking through to an empty area.</li>
+	<li>Note: The maximum number of pages you can create depends on the edition of Rocket Cart you are leasing.</li>
+</ul>

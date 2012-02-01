@@ -1,0 +1,50 @@
+#!/bin/sh
+
+# This script sets up the Rocket Cart demo user with a specified password and activates
+# their account for a specified amount of time (default is 2 days).
+
+NUM_ARGS=$#
+
+if [ "$NUM_ARGS" -lt "2" ]; then
+	echo "Usage: $0 password [time in days]"
+	exit 1
+fi
+
+# First, activate the account.
+# the full path to php needs to be specified otherwise the production server will reject it.
+/usr/bin/php -q ~/www/demo/demo.php start $1
+
+# can't test $? directly
+EXIT_CODE=$?
+
+if [ "$EXIT_CODE" -ne "0" ]; then
+	exit 1
+fi
+
+DB_DETAILS=`/usr/bin/php -q ~/www/demo/demo.php db_details`
+
+DB_DB=`echo $DB_DETAILS | cut -d " " -f 1`
+DB_USER=`echo $DB_DETAILS | cut -d " " -f 2`
+DB_PASS=`echo $DB_DETAILS | cut -d " " -f 3`
+
+SESSION_ACTIVE=`atq`
+
+if [ -z "$SESSION_ACTIVE" ]; then
+	# Don't use -p as this will always prompt.
+	mysqldump --opt --allow-keywords --user=$DB_USER --password=$DB_PASS $DB_DB | gzip -c > ~/www/demo/dump.sql.gz
+else
+	echo "A session is already active: not dumping the database"
+fi
+
+# Now set the account to expire after the specified time
+if [ -z $2 ]; then
+	EXPIRY=2
+else
+	EXPIRY=$2
+fi
+
+# Clear out at the queue; this means repeated runnings of this script will extend the running time
+# instead of running the stop script twice!
+for QUEUE in `atq | cut -f 1`; do atrm $QUEUE; done
+
+at -f ~/www/demo/stop now + $EXPIRY days

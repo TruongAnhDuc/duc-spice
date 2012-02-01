@@ -1,0 +1,30 @@
+<% @page_title = "Rocket Cart Admin Area : Product Types" -%>
+
+<h1>Product Types</h1>
+
+<% form_tag :action => :new do %>
+<div class="fieldset">
+	<div class="legend">Create a new product type</div>
+	<input class="text" type="text" name="product_type[name]" id="product_type_name" />
+	<%= show_tooltip(:product_types, :create_new) -%>
+	<%= submit_tag 'Create', :name => 'create', :class => 'button' %>
+</div>
+<% end %>
+
+<div class="fieldset">
+	<div class="legend">Existing Product Types</div>
+
+	<% if @product_types.empty? -%>
+		<p>There are no product types available.</p>
+	<% else -%>
+		<% @product_types.each do |pt| -%>
+			<div class="fieldset" id="product-type-editor-<%= pt.id %>">
+				<% if @product_type && @product_type == pt -%>
+					<%= render :partial => 'editor', :locals => { :show_saved_text => false } %>
+				<% else -%>
+					<div class="legend"><%= link_to_remote '+', { :update => "product-type-editor-#{pt.id}", :url => { :action => :editor, :id => pt.id } }, :class => 'expand-button' %> <%= pt.name -%> [<%= link_to('delete', { :action => 'delete', :id => pt.id }, :confirm => 'Really delete this product type?') %>]</div>
+				<% end -%>
+			</div>
+		<% end -%>
+	<% end -%>
+</div>

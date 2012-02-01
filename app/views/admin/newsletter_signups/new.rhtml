@@ -1,0 +1,28 @@
+<% @page_title = "Rocket Cart Admin Area : Add Newsletter Signup" -%>
+
+<h1>New Newsletter Signup</h1>
+<p>(Required fields are marked with a *)</p>
+
+<%= custom_error_messages_for(:newsletter_signup) -%>
+
+<% form_tag({ :action => :new }) do %>
+	<div class="fieldset">
+		<div class="legend">Create New Newsletter Signup</div>
+
+		<table class="form">
+			<tr>
+				<td class="label"><label for="newsletter_signup_email">* Email:</label></td>
+				<td class="field"><%= text_field 'newsletter_signup', 'email', :class => 'text' %></td>
+			</tr>
+			<tr>
+				<td class="label"><label for="newsletter_signup_first_name">* First Name:</label></td>
+				<td class="field"><%= text_field 'newsletter_signup', 'first_name', :class => 'text' %></td>
+			</tr>
+			<tr>
+				<td class="label"><label for="newsletter_signup_last_name">Last Name:</label></td>
+				<td class="field"><%= text_field 'newsletter_signup', 'last_name', :class => 'text' %></td>
+			</tr>
+		</table>
+	</div>
+	<p><%= submit_tag 'Save', :name => 'save', :class => 'button' %></p>
+<% end %>

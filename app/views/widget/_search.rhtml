@@ -1,0 +1,9 @@
+<div id="search">
+	<% form_tag( { :controller => :products, :action => :search }, :method => :get) do -%>
+		<p>
+			<input class="text" type="text" name="query" />
+			<input class="button" type="submit" value="Search" /><br />
+			<%= link_to "Advanced Search", :controller => :products, :action => :search -%>
+		</p>
+	<% end -%>
+</div>

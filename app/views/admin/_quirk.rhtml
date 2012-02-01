@@ -1,0 +1,20 @@
+		<tr>
+			<td class="label">
+				<label for="quirk_<%= id -%>"><%= if required then "<span class=\"required\">* </span>" end -%><%= name -%>:</label>
+			</td>
+			<td class="field">
+<% if type == "TextQuirk" -%>
+				<%= text_area "quirk", id, :class => "text", :rows => 3, :value => value %>
+<% elsif type == "HtmlQuirk" -%>
+				<%= text_area "quirk", id, :class => "text", :rows => 15, :value => value %>
+
+				<%= render :partial => "rich_editor", :locals => { :element_id => "quirk_#{id}" } %>
+<% elsif type == "BooleanQuirk" -%>
+<%
+	# IntegerQuirk, UrlQuirk, ImageQuirk
+	else
+-%>
+				<%= text_field "quirk", id, :class => "text", :value => value %>
+<% end -%>
+			</td>
+		</tr>

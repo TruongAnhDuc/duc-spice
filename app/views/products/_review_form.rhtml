@@ -1,0 +1,31 @@
+<div class="review-form">
+<% if @first -%>
+	<h3>Be the first to post a review of this product:</h3>
+<% else -%>
+	<h3>Add your review to this product:</h3>
+<% end -%>
+
+	<table>
+		<tbody>
+			<tr>
+				<td>
+					<p>Rating:</p>
+				</td>
+				<td>
+					<span onmouseout="star_reset();"><a href="#" onmouseover="star_hover(1);" onclick="star_select(1); return false;"><img src="<%= @ROCKETCARTDIR -%>/images/icons/crystal/star.png" alt="1" width="16" height="16" class="icon" id="star-icon-1" /></a><a href="#" onmouseover="star_hover(2);" onclick="star_select(2); return false;"><img src="<%= @ROCKETCARTDIR -%>/images/icons/crystal/star.png" alt="2" width="16" height="16" class="icon" id="star-icon-2" /></a><a href="#" onmouseover="star_hover(3);" onclick="star_select(3); return false;"><img src="<%= @ROCKETCARTDIR -%>/images/icons/crystal/star.png" alt="3" width="16" height="16" class="icon" id="star-icon-3" /></a><a href="#" onmouseover="star_hover(4);" onclick="star_select(4); return false;"><img src="<%= @ROCKETCARTDIR -%>/images/icons/crystal/star-grey.png" alt="4" width="16" height="16" class="icon" id="star-icon-4" /></a><a href="#" onmouseover="star_hover(5);" onclick="star_select(5); return false;"><img src="<%= @ROCKETCARTDIR -%>/images/icons/crystal/star-grey.png" alt="5" width="16" height="16" class="icon" id="star-icon-5" /></a></span>
+					<input type="hidden" name="review[rating]" id="review_rating" value="3"></input>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<label for="review_comments">Comments:</label>
+				</td>
+				<td>
+					<textarea id="review_comments" name="review[comments]"></textarea>
+				</td>
+			</tr>
+		</tbody>
+	</table>
+
+	<%= submit_tag "Submit", :name => "submit", :class => "button" -%>
+</div>

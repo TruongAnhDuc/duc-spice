@@ -1,0 +1,28 @@
+prices_weights[<%= product.id -%>] = new Array();
+
+prices_weights[<%= product.id -%>][0] = new Array();
+prices_weights[<%= product.id -%>][0]['price'] = <%= @currency.convert(product.base_price) -%>;
+prices_weights[<%= product.id -%>][0]['weight'] = <%= product.base_weight -%>;
+prices_weights[<%= product.id -%>][0]['discount'] = <%= product.discount -%>;
+prices_weights[<%= product.id -%>][0]['discount_is_abs'] = <%= product.discount_is_abs -%>;
+<%
+	if option_values && option_values[product.id]
+		option_values[product.id].each_with_index do |cur_option_values, option_i|
+			if cur_option_values && !cur_option_values.empty?
+-%>
+prices_weights[<%= product.id -%>][<%= option_i -%>] = new Array();
+<%
+				cur_option_values.each do |cur_option_value|
+					if cur_option_value
+-%>
+prices_weights[<%= product.id -%>][<%= option_i -%>][<%= cur_option_value.option_value.id -%>] = new Array();
+prices_weights[<%= product.id -%>][<%= option_i -%>][<%= cur_option_value.option_value.id -%>]['price'] = <%= @currency.convert(cur_option_value.option_value.extra_cost) -%>;
+prices_weights[<%= product.id -%>][<%= option_i -%>][<%= cur_option_value.option_value.id -%>]['weight'] = <%= cur_option_value.option_value.extra_weight -%>;
+<%
+					end
+				end
+			end
+		end
+	end
+-%>
+visible_products[<%= product.id -%>] = <%= product.id -%>;

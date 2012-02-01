@@ -1,0 +1,8 @@
+<%=
+if @shipping_zones then
+	select 'order', 'shipping_zone_id', @shipping_zones.collect { |z| ["#{z.name}" + ((z.describe_price and !z.describe_price.empty?) ? " (#{z.describe_price})" : ''), z.id] }, {}, { :onchange => 'update_summary();' }
+else
+	# FIXMEH! (please)? - need to think about this
+	''
+end
+%>

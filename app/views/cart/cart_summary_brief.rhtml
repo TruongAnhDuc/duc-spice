@@ -1,0 +1,20 @@
+<%
+
+if @cart.items.empty?
+	number_text = 'No items'
+else
+	number = 0
+	@cart.items.each do |cur_item|
+		number += cur_item.quantity
+	end
+
+	if number == 1
+		number_text = '1 item'
+	else
+		number_text = number.to_s + ' items'
+	end
+end
+
+-%>
+<div id="cart-contents"><strong>Shopping Cart:</strong> <%= number_text -%> in your cart</div>
+<div id="cart-links"><%= link_to "View Cart", :controller => :cart, :action => :show -%> | <%= link_to "Checkout", :controller => :cart, :action => :checkout -%></div>

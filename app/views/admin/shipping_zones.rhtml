@@ -1,0 +1,49 @@
+<h1>Shipping Options</h1>
+
+<% form_tag do %>
+	<div class="fieldset">
+		<div class="legend">Add A New Shipping Option</div>
+		<p>
+			<%= text_field_tag 'new_zone_name' %>
+			<%= show_tooltip(:shipping_zones, :create_new) -%>
+			<%= submit_tag 'Create', :name => 'create', :class => 'button' %>
+		</p>
+	</div>
+<% end %>
+
+<% if @shipping_zones.empty? -%>
+	<p>No shipping options have been defined. </p>
+<% else -%>
+	<% free_countries = Country.countries.values - @shipping_zones.collect { |zone| zone.countries.collect { |country| country.name } }.flatten -%>
+	<% @shipping_zones.each do |@zone| %>
+		<div class="fieldset" id="zone-<%= @zone.id %>">
+			<div class="legend">
+				<form style="display: block; margin: 0px; padding: 0px; text-align: right;" method="post">
+					<input type="hidden" name="id" value="<%= @zone.id %>" />
+					<span style="float: left; padding: 2px 0px;">
+						<a class="expand-button" id="expand-button-<%= @zone.id -%>" href="#" onclick="show_toggle('zone-gui-<%= @zone.id -%>', 'expand-button-<%= @zone.id -%>');return false;">+</a>
+						<%= @zone.name %>
+					</span>
+					<%= submit_tag 'Set as default', :name => 'default', :class => 'button', :disabled => @zone.is_default? %>
+					<%= submit_tag 'Move Up', :name => 'move_up', :class => 'button', :disabled => @zone.first? %>
+					<%= submit_tag 'Move Down', :name => 'move_down', :class => 'button', :disabled => @zone.last? %>
+					<%= submit_tag 'Delete', :name => 'delete', :class => 'button' %>
+				</form>
+			</div>
+			<div class="fieldset" id="zone-editor-<%= @zone.id %>">
+				<%= render :partial => 'zone_editor' %>
+			</div>
+		</div>
+	<% end -%>
+	<script type="text/javascript">
+	<% @shipping_zones.each do |cur_zone| -%>
+		show_toggle('zone-gui-<%= cur_zone.id -%>', 'expand-button-<%= cur_zone.id -%>');
+	<% end -%>
+	</script>
+<% end -%>
+
+<a name="_tips"></a>
+<ul class="tips">
+	<li>Hold down <strong>[Control]</strong> to select multiple items in a list box.</li>
+	<li>Use the arrow buttons (<strong>&lt;</strong> and <strong>&gt;</strong>) to add or remove the selected items.</li>
+</ul>

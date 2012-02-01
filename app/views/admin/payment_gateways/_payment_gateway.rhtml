@@ -1,0 +1,33 @@
+<tr>
+	<td class="label"><label>Description</label></td>
+	<td><%= @payment_gateway.description %></td>
+</tr>
+<tr>
+	<td class="label"><label>Configuration</label></td>
+	<td>
+		<% if @config.nil? -%>
+			No additional configuration is available for this module.
+		<% else -%>
+			<% @config.each_pair do |label, section| -%>
+				<div class="fieldset" style="width: 350px">
+					<div class="legend"><%= label.to_s.titleize %></div>
+					<table class="form" style="width: 350px">
+					<% section.each_pair do |key, value| -%>
+						<tr>
+							<td class="label"><label for="<%= "config_#{label}_#{key}" %>"><%= key.to_s.gsub(/_/, " ").capitalize.gsub(/\b([a-z])/) { $1.capitalize } %>:</label></td>
+							<td class="field">
+<% if @current_user.permissions >= :admin then -%>
+								<input class="text" style="width: 200px;" type="text" name="<%= "config[#{label}][#{key}]" %>" id="<%= "config_#{label}_#{key}" %>" value="<%=h value %>" />
+<% else -%>
+								<%=h value %>
+<% end -%>
+							</td>
+						</tr>
+					<% end -%>
+					</table>
+				</div>
+			<% end -%>
+		<% end -%>
+	</td>
+</tr>
+

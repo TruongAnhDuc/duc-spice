@@ -1,0 +1,6 @@
+livestock_chicken:
+  category_id: 2
+  product_id: 1
+livestock_cow:
+  category_id: 2
+  product_id: 2

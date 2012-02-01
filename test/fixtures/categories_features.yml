@@ -1,0 +1,21 @@
+livestock_optioner:
+  category_id: 2
+  feature_id: 1
+pigs_chicken:
+  category_id: 3
+  feature_id: 2
+root_cow2:
+  category_id: 1
+  feature_id: 3
+dogs_cow2:
+  category_id: 4
+  feature_id: 3
+dogs_cow3:
+  category_id: 4
+  feature_id: 4
+root_persian:
+  category_id: 1
+  feature_id: 5
+root_moggy_bad:
+  category_id: 1
+  feature_id: 6

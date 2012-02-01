@@ -1,0 +1,77 @@
+<h1>New Review</h1>
+
+<%= render :partial => "star_choosing_javascript" -%>
+
+<% form_tag do -%>
+
+<div class="fieldset">
+	<div class="legend">Review Details</div>
+
+	<table>
+		<tbody>
+			<tr>
+				<td>
+					<label for="review_product_id">Product:</label>
+				</td>
+				<td>
+					<select name="review[product_id]" id="review_product_id">
+<% @products_by_category.each do |c| -%>
+						<optgroup label="<%= c[:name] %>">
+<% c[:products].each do |p| -%>
+							<option value="<%= p.id %>"><%= p.name %></option>
+<% end -%>
+						</optgroup>
+<% end -%>
+					</select>
+<%= show_tooltip(:review, :product_id) -%>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<label for="review_user_id">User:</label>
+				</td>
+				<td>
+					<select id="review_user_id" name="review[user_id]">
+						<optgroup label="Admins">
+<% @admins.each do |cur_user| -%>
+							<option value="<%= cur_user[:id] -%>"><%= cur_user[:name] -%></option>
+<% end -%>
+						</optgroup>
+						<optgroup label="Staff">
+<% @staff.each do |cur_user| -%>
+							<option value="<%= cur_user[:id] -%>"><%= cur_user[:name] -%></option>
+<% end -%>
+						</optgroup>
+						<optgroup label="Customers">
+<% @customers.each do |cur_user| -%>
+							<option value="<%= cur_user[:id] -%>"><%= cur_user[:name] -%></option>
+<% end -%>
+						</optgroup>
+					</select>
+<%= show_tooltip(:review, :user_id) -%>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<p>Rating:</p>
+				</td>
+				<td>
+					<span onmouseout="star_reset();"><a href="#" onmouseover="star_hover(1);" onclick="star_select(1); return false;"><img src="<%= @ROCKETCARTDIR -%>/images/icons/crystal/star.png" alt="1" width="16" height="16" class="icon" id="star-icon-1" /></a><a href="#" onmouseover="star_hover(2);" onclick="star_select(2); return false;"><img src="<%= @ROCKETCARTDIR -%>/images/icons/crystal/star.png" alt="2" width="16" height="16" class="icon" id="star-icon-2" /></a><a href="#" onmouseover="star_hover(3);" onclick="star_select(3); return false;"><img src="<%= @ROCKETCARTDIR -%>/images/icons/crystal/star.png" alt="3" width="16" height="16" class="icon" id="star-icon-3" /></a><a href="#" onmouseover="star_hover(4);" onclick="star_select(4); return false;"><img src="<%= @ROCKETCARTDIR -%>/images/icons/crystal/star-grey.png" alt="4" width="16" height="16" class="icon" id="star-icon-4" /></a><a href="#" onmouseover="star_hover(5);" onclick="star_select(5); return false;"><img src="<%= @ROCKETCARTDIR -%>/images/icons/crystal/star-grey.png" alt="5" width="16" height="16" class="icon" id="star-icon-5" /></a></span>
+					<input type="hidden" name="review[rating]" id="review_rating" value="3"></input>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<label for="review_comments">Comments:</label>
+				</td>
+				<td>
+					<textarea cols="50" rows="6" id="review_comments" name="review[comments]"></textarea>
+				</td>
+			</tr>
+		</tbody>
+	</table>
+</div>
+
+<%= submit_tag "Save", :name => "edit", :class => "button" -%>
+
+<% end -%>

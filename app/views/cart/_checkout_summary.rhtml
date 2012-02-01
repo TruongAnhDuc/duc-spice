@@ -1,0 +1,122 @@
+<table class="order" cellspacing="0">
+  <thead>
+    <tr>
+      <th colspan="2">Product</th>
+      <th>Price</th>
+      <% unless @configurator[:modules][:hide_weight_options] && @configurator[:modules][:hide_weight_options][:value] -%>
+        <th>Weight</th>
+      <% end -%>
+      <th>Qty</th>
+      <th>Total</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @items.each_with_index do |item,i| -%>
+      <%
+      options_count = 0
+      @option_values[item.product.id].each do |cur_option|
+        if cur_option
+          options_count += 1
+        end
+      end
+      cur_product = item.product
+
+      item_price = item.total_unit_price
+      #				item.line_item_option_values.each do |cur_o_v|
+      #					if cur_o_v
+      #						item_price += cur_o_v[:extra_cost]
+      #					end
+      #				end
+
+      rowspan = options_count + 1
+      -%>
+      <tr class="<%= i % 2 == 0 ? 'even' : 'odd' %>">
+        <td colspan="2"><strong><%= cur_product.name -%></strong></td>
+        <td align="right"><%= if item.final_unit_price && item.final_unit_price > 0 then @currency.format(item.final_unit_price * @multiplier) end -%></td>
+        <% unless @configurator[:modules][:hide_weight_options] && @configurator[:modules][:hide_weight_options][:value] -%>
+          <td><%= format('%.2f', cur_product.base_weight) %>kg</td>
+        <% end -%>
+        <td class="qty" rowspan="<%= rowspan %>"><%= item.quantity -%></td>
+        <td rowspan="<%= rowspan %>" align="right"><%= @currency.format(item_price * item.quantity * @multiplier) %></td>
+      </tr>
+      <%
+      @option_values[item[:product_id]].each_with_index do |cur_option_values, option_i|
+        if cur_option_values && !cur_option_values.empty?
+          chosen_option = nil
+          @options.each do |cur_option|
+            if cur_option[:id] == option_i
+              chosen_option = cur_option
+            end
+          end
+
+          if chosen_option
+            selected_option_values = []
+            item.line_item_option_values.each do |cur_line_item_option_value|
+              if cur_line_item_option_value.option_value[:option_id] == option_i
+                selected_option_values << cur_line_item_option_value
+              end
+            end
+
+
+
+
+
+            weight_from_option = 0.0
+            cost_from_option = 0.0
+
+            selected_option_values.each do |cur_selected|
+              if cur_selected
+                weight_from_option += cur_selected[:extra_weight]
+                cost_from_option += cur_selected[:extra_cost]
+              end
+            end
+
+            unless item.discount_is_abs
+              cost_from_option -= cost_from_option * (item.discount / 100)
+            end
+            -%>
+            <tr class="<%= i % 2 == 0 ? 'even' : 'odd' %>">
+              <td><%= chosen_option.label %></td>
+              <td>
+                <%=
+                option_values_text = Array.new
+                selected_option_values.each do |cur_selected|
+                  if cur_selected
+                    option_values_text << cur_selected.option_value[:value]
+                  end
+                end
+                option_values_text.join(', ')
+                -%>
+              </td>
+              <td align="right"><% if cost_from_option > 0.0 -%>+<%= @currency.format(cost_from_option * @multiplier) -%><% end -%></td>
+              <% unless @configurator[:modules][:hide_weight_options] && @configurator[:modules][:hide_weight_options][:value] -%>
+                <td><% if weight_from_option > 0.0 -%>+<%= format('%.2f', weight_from_option) -%>kg<% end -%></td>
+              <% end -%>
+            </tr>
+          <%
+          end
+        end
+      end
+    end
+    -%>
+  </tbody>
+  <tfoot>
+    <tr>
+      <td colspan="3"><strong>Spices</strong></td>
+      <% unless @configurator[:modules][:hide_weight_options] && @configurator[:modules][:hide_weight_options][:value] -%>
+        <td><%= format('%.2f', @cart.total_weight) %>kg</td>
+      <% end -%>
+      <td class="total qty"><%= @items.inject(0) { |sum, i| sum + i.quantity } %></td>
+      <td class="total" align="right"><%= @currency.format(@subtotal) %></td>
+    </tr>
+    <tr>
+      <td><strong>Freight</strong></td>
+      <td colspan="<%= if @configurator[:modules][:hide_weight_options] && !@configurator[:modules][:hide_weight_options][:value] then '4' else '3' end -%>"><%= if @shipping_zone then "#{@shipping_zone.name}" + (@shipping_zone.describe_price ? "(#{@shipping_zone.describe_price})" : '') else '<strong>To be advised</strong>' end %></td>
+      <td class="total" align="right"><%= if @shipping_zone then @currency.format(@shipping_cost) else "" end %></td>
+    </tr>
+    <tr class="total-row">
+      <td colspan="<%= if @configurator[:modules][:hide_weight_options] && !@configurator[:modules][:hide_weight_options][:value] then '5' else '4' end -%>"><strong>Total</strong></td>
+      <td class="total" align="right"><strong><%= @currency.format(@total) %></strong></td>
+    </tr>
+  </tfoot>
+</table>

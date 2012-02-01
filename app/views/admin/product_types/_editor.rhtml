@@ -1,0 +1,23 @@
+<div id="legend-<%= @product_type.id -%>-closer" class="legend"><a class="expand-button" href="#" onclick="return product_type_collapse(<%= @product_type.id -%>);">&ndash;</a> <%= @product_type.name -%> [<%= link_to('delete', { :action => :delete, :id => @product_type.id }, :confirm => 'Really delete this product type?') %>]</div>
+<div id="legend-<%= @product_type.id -%>-opener" class="legend" style="display: none;"><%= link_to_remote '+', { :update => "product-type-editor-#{@product_type.id}", :url => { :action => :editor, :id => @product_type.id } }, :class => 'expand-button' %> <%= @product_type.name -%> [<%= link_to('delete', { :action => 'delete', :id => @product_type.id }, :confirm => 'Really delete this product type?') %>]</div>
+<%
+	# The endcolor must match .fieldset in the CSS but be careful of how many levels deep we are as they differ...
+%>
+<% form_remote_tag :html => { :id => "product-type-form-#{@product_type.id}" }, :update => "product-type-editor-#{@product_type.id}", :url => { :action => :editor, :id => @product_type.id }, :complete => "new Effect.Highlight('product-type-save-text-#{@product_type.id}', {startcolor:'#FF0000', endcolor:'#CCCCCC', duration: 3});" do -%>
+	<input type="hidden" name="do" value="save" id="do-<%= @product_type.id %>" />
+	<table class="product-type-gui">
+		<tr>
+			<td class="name">Name: <input class="text" type="text" name="name" value="<%= @product_type.name %>"><%= show_tooltip(:product_type, :name) -%></td>
+		</tr>
+		<tr>
+			<td colspan="2" class="config">
+				<%= render(:partial => 'config', :locals => { :product_type => @product_type }) -%>
+			</td>
+		</tr>
+		<tr>
+			<td colspan="2" class="buttons">
+				<%= submit_tag 'Save', :name => 'save', :class => 'button' %> &nbsp; <span class="product-type-save-text-cc" id="product-type-save-text-<%= @product_type.id %>"<% unless show_saved_text %> style="padding: 0px;"<% end %>><% if show_saved_text %>Product Type successfully saved.<% end %></span>
+			</td>
+		</tr>
+	</table>
+<% end -%>

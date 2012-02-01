@@ -1,0 +1,13 @@
+<% @page_title = @configurator[:application][:name][:value] + ' : Product not found' %>
+
+<div class="breadcrumbs">
+	<% @category.breadcrumbs.each do |c| -%>
+		&raquo; <%= link_to(c.name, "#{@ROCKETCARTDIR}/#{c.path}") %>
+	<% end -%>
+</div>
+
+<h1>Product Not Found</h1>
+
+<div class="product-desc">
+	<p>Sorry, the requested product was not found.</p>
+</div>

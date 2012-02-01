@@ -1,0 +1,39 @@
+<table class="order">
+<thead>
+	<tr>
+		<th>Code</th>
+		<th colspan="2">Product</th>
+		<th>Price</th>
+		<th>Qty</th>
+		<th>Total</th>
+	</tr>
+</thead>
+<tbody>
+	<% @items.each_with_index do |item,i| -%>
+		<% options = item.options || {} -%>
+		<% product = item.product -%>
+		<% rowspan = product.product_options.length + 1 -%>
+		<tr>
+			<td rowspan="<%= rowspan %>"><%= product.product_code %></td>
+			<td colspan="2"><%= product.name %></td>
+			<td class="price" rowspan="<%= rowspan %>"><%= format('$%.2f', item.unit_price) %></td>
+			<td class="qty" rowspan="<%= rowspan %>"><%= item.quantity %></td>
+			<td class="price" rowspan="<%= rowspan %>"><%= format('$%.2f', item.unit_price * item.quantity) %></td>
+		</tr>
+		<% item.product.product_options.find(:all, :include => [:option]).each do |product_option| -%>
+			<% v = options[product_option.option_id] -%>
+			<tr class="<%= i % 2 == 0 ? 'even' : 'odd' %>">
+				<td><%= product_option.option.label %></td>
+				<td><%= product_option.option.describe_value(v) %></td>
+			</tr>
+		<% end -%>
+	<% end -%>
+</tbody>
+<tfoot>
+	<tr>
+		<td colspan="4"></td>
+		<td class="total qty"><%= @items.inject(0) { |sum, i| sum + i.quantity } %></td>
+		<td class="total price"><%= format('$%.2f', @items.inject(0.0) { |sum, i| sum + i.quantity * i.unit_price }) %></td>
+	</tr>
+</tfoot>
+</table>

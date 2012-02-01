@@ -1,0 +1,6 @@
+AuthUserFile /etc/apache2/stats-htpasswd
+AuthGroupFile /dev/null
+AuthName "website statistics area"
+AuthType Basic
+
+require valid-user

@@ -1,0 +1,67 @@
+<% @page_title = "Rocket Cart Admin Area : Reviews" -%>
+
+<h1>Reviews</h1>
+
+<% if(flash[:notice] && !flash[:notice].empty?) -%>
+<div style="border: 2px solid #00CC00; padding: 8px; margin-bottom: 2ex;">
+	<p><%= flash[:notice] -%></p>
+</div>
+<% end -%>
+
+<%= link_to "Manually add a review", { :controller => "admin/reviews", :action => :new } -%>
+
+<% if @reviews.empty? -%>
+	<p>No reviews yet.</p>
+<% else -%>
+
+<%= render :partial => 'admin/paginator' %>
+
+<% form_tag do %>
+<table class="list">
+	<thead>
+	<tr class="list-header">
+		<th>Product <%= render :partial => 'admin/sorting_arrows', :locals => { :column => 'product' } %></th>
+		<th>Rating <%= render :partial => 'admin/sorting_arrows', :locals => { :column => 'rating' } %></th>
+		<th>User <%= render :partial => 'admin/sorting_arrows', :locals => { :column => 'user' } %></th>
+		<th>Shown <%= render :partial => 'admin/sorting_arrows', :locals => { :column => 'shown' } %></th>
+		<th>&nbsp;</th>
+	</tr>
+	</thead>
+	<tbody>
+		<% @reviews.each_with_index do |cur_review, i| -%>
+			<tr class="<%= (i % 2 == 0) ? 'odd' : 'even' %>">
+				<td>
+					<%= cur_review.product %>
+				</td>
+				<td>
+<% cur_review[:rating].times do -%>
+					<img src="<%= @ROCKETCARTDIR + icon_path('star') -%>" alt="<%= cur_review[:rating] -%>" width="<%= @design_config[:sizes][:admin_icons_width] -%>" height="<%= @design_config[:sizes][:admin_icons_height] -%>" class="icon" />
+<% end -%>
+<% (5 - cur_review[:rating]).times do -%>
+					<img src="<%= @ROCKETCARTDIR + icon_path('star-grey') -%>" alt="<%= cur_review[:rating] -%>" width="<%= @design_config[:sizes][:admin_icons_width] -%>" height="<%= @design_config[:sizes][:admin_icons_height] -%>" class="icon" />
+<% end -%>
+				</td>
+				<td>
+					<%= cur_review.user %>
+				</td>
+				<td>
+<% if (@configurator[:modules][:require_review_moderation] && !@configurator[:modules][:require_review_moderation][:value]) || (cur_review[:allowed] == "y") -%>
+					<img src="<%= @ROCKETCARTDIR + icon_path('save') -%>" alt="Shown" width="<%= @design_config[:sizes][:admin_icons_width] -%>" height="<%= @design_config[:sizes][:admin_icons_height] -%>" class="icon" />
+<% elsif cur_review[:allowed] == "n" -%>
+					<img src="<%= @ROCKETCARTDIR + icon_path('delete') -%>" alt="Hidden" width="<%= @design_config[:sizes][:admin_icons_width] -%>" height="<%= @design_config[:sizes][:admin_icons_height] -%>" class="icon" />
+<% else -%>
+					<img src="<%= @ROCKETCARTDIR -%>/images/blank.gif" alt="Not moderated" width="<%= @design_config[:sizes][:admin_icons_width] -%>" height="<%= @design_config[:sizes][:admin_icons_height] -%>" class="icon" />
+<% end -%>
+				</td>
+				<td>
+					<%= action_icon("Edit", "edit", { :action => :edit, :id => cur_review[:id] }) -%>
+				</td>
+			</tr>
+		<% end -%>
+	</tbody>
+</table>
+<% end %>
+
+<%= render :partial => 'admin/paginator' %>
+
+<% end -%>

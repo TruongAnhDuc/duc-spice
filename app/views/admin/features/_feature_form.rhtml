@@ -1,0 +1,85 @@
+	<div class="fieldset">
+		<div class="legend">Product</div>
+		<table class="form">
+		<tr>
+			<td class="label"><label for="feature_product_id">Product:</label></td>
+			<td class="field">
+				<select name="feature[product_id]" id="feature_product_id">
+				<% @products_by_category.each do |c| -%>
+					<optgroup label="<%= c[:name] %>">
+					<% c[:products].each do |p| -%>
+						<option value="<%= p.id %>"<%= ' selected="selected"' if p.id == @feature.product_id %>><%= p.name %></option>
+					<% end -%>
+					</optgroup>
+				<% end -%>
+				</select>
+				<%= show_tooltip(:feature, :product_id) -%>
+			</td>
+		</tr>
+		<tr>
+			<td class="label"><label for="feature_description">Description:</label></td>
+			<td class="field"><%= text_area 'feature', 'description', :rows => 20 %><%= show_tooltip(:feature, :description) -%></td>
+		</tr>
+		<tr>
+			<td class="label"><label for="category_id">Categories:</label></td>
+			<td class="field">
+				<select id="category_id" multiple="multiple" name="category[id][]" size="5">
+					<% Category.find(:all).each do |cur_cat| -%>
+						<option value="<%= cur_cat.id -%>"<%= ' selected="selected"' if @feature_categories.include?(cur_cat.id) %>><%= cur_cat.option_label %></option>
+					<% end -%>
+				</select><%= show_tooltip(:feature, :category_id) -%><br />
+				<input type="hidden" name="feature_all_levels" value="1" />
+			</td>
+		</tr>
+		<tr>
+			<td class="label"><label for="static_page_id">Static Pages:</label></td>
+			<td class="field">
+				<select id="static_page_id" multiple="multiple" name="static_page[id][]" size="5">
+					<% StaticPage.find(:all).each do |cur_stat| -%>
+						<option value="<%= cur_stat.id -%>"<%= ' selected="selected"' if @feature_static_pages.include?(cur_stat.id) %>><%= cur_stat.option_label %></option>
+					<% end -%>
+				</select><%= show_tooltip(:feature, :static_page_id) -%><br />
+			</td>
+		</tr>
+		<tr>
+			<td class="label"><label for="feature_in_layout">Show in layout:</label></td>
+			<td class="field">
+				<%= check_box 'feature', 'in_layout', { :class => 'checkbox' } %>
+				<%= show_tooltip(:feature, :in_layout) -%><br />
+			</td>
+		</tr>
+		<tr>
+			<td class="label"><label for="feature_weighting">Weighting:</label></td>
+			<td class="field">
+				Show less often
+				<% (1..5).each do |i| %>
+				<%= radio_button 'feature', 'weighting', i %>
+				<% end %>
+				Show more often
+				<%= show_tooltip(:feature, :weighting) -%>
+			</td>
+		</tr>
+		<tr>
+			<td class="label"><label for="feature_until">Featured Until:</label></td>
+			<td>
+				<input class="text" style="width: 10em;" type="text" id="featured_until" name="feature[until]" value="<%= if @feature.until then @feature.until.strftime('%d/%m/%Y') end %>" />
+				<button id="trigger_featured_until">
+					<%= image_tag(
+						icon_path('calendar'),
+						{
+							:alt => "Calendar",
+							:title => "Calendar",
+							:size => "#{@design_config[:sizes][:admin_icons_width]}x#{@design_config[:sizes][:admin_icons_height]}",
+							:class => "icon"
+						}
+					) %>
+				</button>
+				<%= show_tooltip(:feature, :until) -%>
+			</td>
+		</tr>
+		<tr>
+			<td></td>
+			<td><input class="button" type="submit" name="save" value="Save" /></td>
+		</tr>
+		</table>
+	</div>

@@ -1,0 +1,6 @@
+--- 
+:rocket_secure: 
+  :url_failure: /cart/payment_gateway
+  :url_success: /cart/order_complete
+  :merchant_id: "1"
+  :encryption_key: 8bD39fCB3476e98734dCcCA4

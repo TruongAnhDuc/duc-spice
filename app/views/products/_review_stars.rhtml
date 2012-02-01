@@ -1,0 +1,5 @@
+<% stars.times do
+-%><img src="<%= @ROCKETCARTDIR + icon_path('star') -%>" alt="<%= stars -%>" width="<%= @design_config[:sizes][:admin_icons_width] -%>" height="<%= @design_config[:sizes][:admin_icons_height] -%>" class="icon" /><%
+end
+(5 - stars).times do
+-%><img src="<%= @ROCKETCARTDIR + icon_path('star-grey') -%>" alt="<%= stars -%>" width="<%= @design_config[:sizes][:admin_icons_width] -%>" height="<%= @design_config[:sizes][:admin_icons_height] -%>" class="icon" /><% end -%>

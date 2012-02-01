@@ -1,0 +1,43 @@
+<% @page_title = "Rocket Cart Admin Area : Payment Gateways" -%>
+
+<h1>Payment Gateways</h1>
+
+<% form_tag do %>
+<div class="fieldset">
+	<div class="legend">Select a Payment Module</div>
+	<table class="form">
+	<tbody id="module-select">
+		<tr>
+			<td class="label"><label for="module">Module:</label></td>
+			<td>
+				<select name="module" id="module" onchange="$('module-config').innerHTML = '<tr><td></td><td><strong>Loading...</strong></td></tr>'; new Ajax.Updater('module-config', '/admin/payment_gateways/edit/?id=' + $F('module'), {asynchronous:true})">
+					<option value="0"<%= ' selected="selected"' unless !@payment_gateway.id.nil? %>>(none)</option>
+					<% if @payment_gateways -%>
+						<% @payment_gateways.each do |gateway| -%>
+							<option value="<%= gateway.id %>"<%= ' selected="selected"' unless gateway.active.zero? %>><%=h gateway.name %></option>
+						<% end -%>
+					<% end -%>
+				</select>
+			</td>
+		</tr>
+	</tbody>
+	<tbody id="module-config">
+		<%= render :partial => 'payment_gateway' %>
+	</tbody>
+	<tbody>
+		<tr>
+			<td></td>
+			<td>
+<% if @current_user.permissions >= :admin then -%>
+				<%= submit_tag 'Save', :name => 'save', :class => 'button' %>
+<% end -%>
+			</td>
+		</tr>
+	</tbody>
+	</table>
+</div>
+<% end %>
+
+<ul class="tips">
+	<li>Before activating a payment module, make sure it's been configured properly (your web site administrator will be able to help you with this).</li>
+</ul>

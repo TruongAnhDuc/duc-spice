@@ -1,0 +1,33 @@
+<table class="order">
+<thead>
+	<th colspan="2">DPS Response</th>
+</thead>
+<tbody>
+<%
+	require 'hpricot'
+
+	doc = Hpricot(response)
+
+	# aarrgghh - DPS have changed their XML to enclose with <Request> instead of <Response>.
+	if doc.search("/Request").length > 0
+		(doc/'request>').each do |cur_el|
+-%>
+	<tr>
+		<td class="label"><%= cur_el.name -%></td>
+		<td><%= cur_el.innerHTML -%></td>
+	</tr>
+<%
+		end
+	else
+		(doc/'response>').each do |cur_el|
+-%>
+	<tr>
+		<td class="label"><%= cur_el.name -%></td>
+		<td><%= cur_el.innerHTML -%></td>
+	</tr>
+<%
+		end
+	end
+-%>
+</tbody>
+</table>

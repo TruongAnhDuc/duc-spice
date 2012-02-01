@@ -1,0 +1,152 @@
+	<script type="text/javascript" id="prices_weights">
+
+	var showing_objects = 'lineitems';
+
+	var asset_symbols = new Array();
+	asset_symbols['price'] = '<%= @currency.symbol -%>';
+	asset_symbols['weight'] = 'kg';
+
+	var prices_weights = new Array();
+	var visible_products = new Array();
+
+	<%
+	@items.each_with_index do |cur_item, x_counter|
+		product = cur_item.product
+	-%>
+	prices_weights[<%= x_counter -%>] = new Array();
+	prices_weights[<%= x_counter -%>][<%= product.id -%>] = new Array();
+
+	prices_weights[<%= x_counter -%>][<%= product.id -%>][0] = new Array();
+	prices_weights[<%= x_counter -%>][<%= product.id -%>][0]['price'] = <%= @currency.convert(product.base_price * @multiplier) -%>;
+	prices_weights[<%= x_counter -%>][<%= product.id -%>][0]['weight'] = <%= product.base_weight -%>;
+	prices_weights[<%= x_counter -%>][<%= product.id -%>][0]['discount'] = <%= product.discount -%>;
+	prices_weights[<%= x_counter -%>][<%= product.id -%>][0]['discount_is_abs'] = <%= product.discount_is_abs -%>;
+	<%
+		if @option_values && @option_values[product.id]
+			@option_values[product.id].each_with_index do |cur_option_values, option_i|
+				if cur_option_values && !cur_option_values.empty?
+	-%>
+	prices_weights[<%= x_counter -%>][<%= product.id -%>][<%= option_i -%>] = new Array();
+	<%
+					cur_option_values.each do |cur_option_value|
+						if cur_option_value
+							if cur_option_value.wholesale_only
+								the_price = cur_option_value.wholesale_extra_cost
+							else
+								the_price = cur_option_value.extra_cost
+							end
+	-%>
+	prices_weights[<%= x_counter -%>][<%= product.id -%>][<%= option_i -%>][<%= cur_option_value.id -%>] = new Array();
+	prices_weights[<%= x_counter -%>][<%= product.id -%>][<%= option_i -%>][<%= cur_option_value.id -%>]['price'] = <%= @currency.convert(the_price * @multiplier) -%>;
+	prices_weights[<%= x_counter -%>][<%= product.id -%>][<%= option_i -%>][<%= cur_option_value.id -%>]['weight'] = <%= cur_option_value.extra_weight -%>;
+	<%
+						end
+					end
+				end
+			end
+		end
+	-%>
+	visible_products[<%= x_counter -%>] = <%= product.id -%>;
+	<% end -%>
+	</script>
+
+	<div id="array_div"></div>
+
+	<table class="cart" cellspacing="0">
+	<thead>
+		<tr>
+			<th></th>
+			<th>Code</th>
+			<th colspan="2">Name</th>
+			<th style="text-align: right;">Price</th>
+<% unless @configurator[:modules][:hide_weight_options] && @configurator[:modules][:hide_weight_options][:value] -%>
+			<th>Weight</th>
+<% end -%>
+			<th>Qty</th>
+			<th>Total</th>
+		</tr>
+	</thead>
+	<tbody>
+		<% @items.each_with_index do |item, i| -%>
+			<%
+				options_count = 0
+				@option_values[item.product.id].each do |cur_option|
+					if cur_option
+						options_count += 1
+					end
+				end
+
+				rowspan = options_count + 1
+			-%>
+			<tr class="<%= i % 2 == 0 ? 'even' : 'odd' %>">
+				<td rowspan="<%= rowspan %>"><input class="checkbox" type="checkbox" name="select[<%= i %>]" id="select_<%= i %>" value="1" /></td>
+				<td rowspan="<%= rowspan %>"><label for="select_<%= i %>"><strong><%= item.product.product_code %></strong></label></td>
+				<td colspan="2"><strong><label for="select_<%= i %>"><%= item.product.name %></strong></label></td>
+				<td align="right" id="price_<%= i -%>_<%= item[:product_id] -%>"><%= @currency.format(item.final_unit_price * @multiplier) %></td>
+<% unless @configurator[:modules][:hide_weight_options] && @configurator[:modules][:hide_weight_options][:value] -%>
+				<td id="weight_<%= i -%>_<%= item[:product_id] -%>"><%= format('%.2f', item.product.base_weight) %>kg</td>
+<% end -%>
+				<td rowspan="<%= rowspan %>" id="qty_<%= i -%>_<%= item[:product_id] -%>"><input class="text qty" type="text" name="qty[<%= i %>]" id="qty[<%= i %>]" value="<%= item.quantity %>" onChange="cart_update_totals_and_grands();" size="4" maxlength="12" /></td>
+				<td rowspan="<%= rowspan %>" align="right" id="total_<%= i -%>_<%= item[:product_id] -%>"><%= @currency.format(item.total_unit_price * item.quantity * @multiplier) %></td>
+			</tr>
+<%
+			@option_values[item[:product_id]].each_with_index do |cur_option_values, option_i|
+				if cur_option_values && !cur_option_values.empty?
+					chosen_option = nil
+					@options.each do |cur_option|
+						if cur_option[:id] == option_i
+							chosen_option = cur_option
+						end
+					end
+
+					if chosen_option
+						selected_option_values = []
+						item.line_item_option_values.each do |cur_option_value|
+							if cur_option_value.option_value[:option_id] == option_i
+								selected_option_values << cur_option_value
+							end
+						end
+-%>
+			<tr class="<%= i % 2 == 0 ? 'even' : 'odd' %>">
+				<td><%= chosen_option.label %></td>
+				<td>
+					<%= render(:partial => 'option_render', :locals => { :option_values => cur_option_values, :option => chosen_option, :selected_option_values => selected_option_values, :item_id => i }) -%>
+				</td>
+<%
+						weight_from_option = 0.0
+						cost_from_option = 0.0
+
+						selected_option_values.each do |cur_selected|
+							if cur_selected
+								weight_from_option += cur_selected[:extra_weight]
+								cost_from_option += cur_selected[:extra_cost]
+							end
+						end
+
+						unless item.discount_is_abs
+							cost_from_option -= cost_from_option * (item.discount / 100)
+						end
+-%>
+				<td align="right" id="price_<%= i -%>_<%= item[:product_id] -%>_<%= option_i -%>"><% if cost_from_option > 0.0 -%>+<%= @currency.format(cost_from_option * @multiplier) -%><% end -%></td>
+<% unless @configurator[:modules][:hide_weight_options] && @configurator[:modules][:hide_weight_options][:value] -%>
+				<td id="weight_<%= i -%>_<%= item[:product_id] -%>_<%= option_i -%>"><% if weight_from_option > 0.0 -%>+<%= format('%.2f', weight_from_option) -%>kg<% end -%></td>
+<% end -%>
+			</tr>
+<%
+					end
+				end
+			end
+		end
+-%>
+	</tbody>
+	<tfoot>
+		<tr>
+			<td colspan="5"><strong>Total:</strong></td>
+<% unless @configurator[:modules][:hide_weight_options] && @configurator[:modules][:hide_weight_options][:value] -%>
+			<td id="grand_weight"><%= format('%.2f', @cart.total_weight) %>kg</td>
+<% end -%>
+			<td id="grand_qty"><%= @items.inject(0) { |sum, i| sum + i.quantity * @multiplier } %></td>
+			<td align="right" id="grand_total"><strong><%= @currency.format(@cart.total_price * @multiplier) %></strong></td>
+		</tr>
+	</tfoot>
+	</table>

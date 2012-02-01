@@ -1,0 +1,63 @@
+<% @page_title = "Draft Order ##{@draft[:id]}" %>
+
+<h1>Draft Order #<%= @draft[:id] -%></h1>
+
+<h2>For <%= @draft.user -%></h2>
+
+<% if @delivery_address -%>
+<h3><%= simple_format(h @delivery_address.to_s) -%></h3>
+<% end -%>
+
+<p>This draft order was created on <%= @draft[:created_at].strftime("%a %b %d %Y, %H:%M") -%></p>
+
+<table class="order" cellspacing="0">
+<thead>
+	<tr>
+		<th>Name</th>
+		<th>Size</th>
+<% unless @configurator[:modules][:hide_weight_options] && @configurator[:modules][:hide_weight_options][:value] -%>
+		<th>Weight</th>
+<% end -%>
+<% if @draft[:priced] -%>
+		<th>Retail Price</th>
+<% end -%>
+		<th>Wholesale Price</th>
+		<th>Quantity</th>
+		<th align="right">Total</th>
+	</tr>
+</thead>
+<tbody>
+	<% @draft.items.each_with_index do |item, i| -%>
+		<tr class="<%= i % 2 == 0 ? 'even' : 'odd' %>">
+			<td><strong><%= item.product.name %></strong></td>
+			<td><%= item.option_value.value %></td>
+<% unless @configurator[:modules][:hide_weight_options] && @configurator[:modules][:hide_weight_options][:value] -%>
+			<td><%= format('%.2f', item.product.base_weight) %>kg</td>
+<% end -%>
+<% if @draft[:priced] -%>
+			<td><%= @currency.format(item.option_value[:extra_cost]).gsub("NZ ", "") -%></td>
+<% end -%>
+			<td><%= @currency.format(item.option_value[:wholesale_extra_cost]).gsub("NZ ", "") -%></td>
+			<td><%= item.quantity %></td>
+			<td align="right"><%= @currency.format(item.total) %></td>
+		</tr>
+<% end -%>
+</tbody>
+<tfoot>
+	<tr>
+		<td colspan="<%= if @draft[:priced] then "5" else "4" end -%>"><strong>Freight</strong></td>
+<% unless @configurator[:modules][:hide_weight_options] && @configurator[:modules][:hide_weight_options][:value] -%>
+		<td></td>
+<% end -%>
+		<td align="right" id="grand_shipping"><strong>At Cost</strong></td>
+	</tr>
+	<tr>
+		<td colspan="<%= if @draft[:priced] then "4" else "3" end -%>"><strong>Total</strong></td>
+<% unless @configurator[:modules][:hide_weight_options] && @configurator[:modules][:hide_weight_options][:value] -%>
+		<td></td>
+<% end -%>
+		<td id="grand_qty"><%= @draft.items.inject(0) { |sum, i| sum + i.quantity } %></td>
+		<td align="right" id="grand_total"><strong><%= @currency.format(@draft.total) %></strong></td>
+	</tr>
+</tfoot>
+</table>

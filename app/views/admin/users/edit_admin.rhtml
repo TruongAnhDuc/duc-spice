@@ -1,0 +1,92 @@
+<% @page_title = "Rocket Cart Admin Area : Edit Admin" -%>
+
+<h1>Edit Admin</h1>
+
+<%= error_messages_for "admin" %>
+
+<p>(Required fields are marked with a *)</p>
+
+<% form_tag do %>
+	<div class="fieldset">
+		<div class="legend">Admin Details</div>
+
+		<table class="form">
+			<tbody>
+				<tr>
+					<td class="label">
+						Level
+					</td>
+					<td class="field">
+						<%= @admin.permissions %>
+					</td>
+				</tr>
+				<tr>
+					<td class="label">
+						* <%= content_tag("label", "First Name", :for => "admin_first_name") %>
+					</td>
+					<td class="field">
+						<%= text_field 'admin', 'first_name', :class => 'text' %><%= show_tooltip(:user, :first_name) %>
+					</td>
+				</tr>
+				<tr>
+					<td class="label">
+						<%= content_tag("label", "Last Name", :for => "admin_last_name") %>
+					</td>
+					<td class="field">
+						<%= text_field 'admin', 'last_name', :class => 'text' %><%= show_tooltip(:user, :last_name) %>
+					</td>
+				</tr>
+				<tr>
+					<td class="label">
+						* <%= content_tag("label", "Email", :for => "admin_email") %>
+					</td>
+					<td class="field">
+						<%= text_field 'admin', 'email', :class => 'text' %><%= show_tooltip(:user, :email) %>
+					</td>
+				</tr>
+				<tr>
+					<td class="label">
+						* <%= content_tag("label", "Active?", :for => "admin_active") %>
+					</td>
+					<td class="field">
+						<select name="admin[active]" id="admin_active">
+							<option value="1"<%= if @admin[:active] then " selected=\"selected\"" end -%>>Yes</option>
+							<option value="0"<%= unless @admin[:active] then " selected=\"selected\"" end -%>>No</option>
+						</select>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+
+	<%= submit_tag "Save Changes", :name => "save", :class => "button" %>
+
+	<p>Leave the password fields blank to have Rocket Cart generate a password for you.</p>
+
+	<div class="fieldset">
+		<div class="legend">Password</div>
+
+		<table class="form">
+			<tbody>
+				<tr>
+					<td class="label">
+						<%= content_tag("label", "Password", :for => "admin_password") %>
+					</td>
+					<td class="field">
+						<%= password_field 'admin', 'password', :class => 'text' %><%= show_tooltip(:user, :password) %>
+					</td>
+				</tr>
+				<tr>
+					<td class="label">
+						<%= content_tag("label", "Password (confirm)", :for => "admin_password_confirmation") %>
+					</td>
+					<td class="field">
+						<%= password_field 'admin', 'password_confirmation', :class => 'text' %><%= show_tooltip(:user, :password_confirm) %>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+
+	<%= submit_tag "Change Password", :name => "password", :class => "button" %>
+<% end %>

@@ -1,0 +1,96 @@
+<style type="text/css">@import url(/calendar/calendar-win2k-1.css);</style>
+<script type="text/javascript" src="/calendar/calendar.js"></script>
+<script type="text/javascript" src="/calendar/lang/calendar-en.js"></script>
+<script type="text/javascript" src="/calendar/calendar-setup.js"></script>
+<h1>Featured Product</h1>
+
+<%= error_messages_for(:featured_product) %>
+
+<% form_tag :action => :featured_product do %>
+	<div class="fieldset">
+		<div class="legend">Product</div>
+		<table class="form">
+		<tr>
+			<td class="label"><label for="featured_product_product_code">Product Code:</label></td>
+			<td class="field"><%= text_field 'featured_product', 'product_code', :class => 'text' %><%= show_tooltip(:featured_product, :product_code) -%></td>
+		</tr>
+		<tr>
+			<td class="label"><label for="featured_product_featured_product_id">Product:</label></td>
+			<td class="field">
+				<select name="featured_product[featured_product_id]"<%= @auto_new_featured_product ? ' onChange=\'window.location="/admin/featured_product/" + this.value\';' : '' %>
+				<% @products_by_category.each do |c| -%>
+					<optgroup label="<%= c[:name] %>">
+					<% c[:products].each do |p| -%>
+						<option value="<%= p.id %>"<%= ' selected="selected"' if p.id == @featured_product.featured_product_id %>><%= p.name %></option>
+					<% end -%>
+					</optgroup>
+				<% end -%>
+				</select>
+				<%= show_tooltip(:featured_product, :featured_product_id) -%>
+			</td>
+		</tr>
+		<tr>
+			<td class="label"><label for="featured_product_base_price">Base Price:</label></td>
+			<td class="field">
+				<div style="width: 1em; float: left;">$</div><%= text_field 'featured_product', 'base_price', :class => 'text nostretch', :value => format('%.2f', @featured_product.base_price) %><input type="checkbox" id="featured_product_use_base_price" onChange="discount_use_base_price();" /> <label for="featured_product_use_base_price">Use original product price <%= @featured_product.product.nil? ? '' : ('($' + format('%.2f', @featured_product.product.base_price) + ')') %></label> <%= show_tooltip(:featured_product, :base_price) -%>
+			</td>
+		</tr>
+		<tr>
+			<td class="label"><label for="featured_product_discount">Discount:</label></td>
+			<td class="field"><div style="width: 1em; float: left;" id="discount_absolute">&nbsp;</div><%= text_field 'featured_product', 'discount', :class => 'text nostretch' -%> <span style="width: 1em;" id="discount_percent">%</span> : <label for="featured_product[discount_is_abs]">Discount is a </label><%= select 'featured_product', 'discount_is_abs', [ [ 'Percentage', false ], [ 'Dollar Value', true ] ], {}, {:onchange => 'show_discount_abs_perc();'} -%><%= show_tooltip(:featured_product, :discount) -%></td>
+		</tr>
+		<tr>
+			<td class="label"><label for="featured_product_description">Description:</label></td>
+			<td class="field"><%= text_area 'featured_product', 'description', :rows => 20 %><%= show_tooltip(:featured_product, :description) -%></td>
+		</tr>
+		<tr>
+			<td class="label"><label for="featured_product_featured_in">Category:</label></td>
+			<td class="field">
+				<%= select 'featured_product', 'featured_in', Category.all.collect { |c| [c.option_label, c.id] }, { :include_blank => false } %><%= show_tooltip(:featured_product, :featured_in) -%><br />
+				<%= check_box 'featured_product', 'featured_all_levels', { :class => 'checkbox' } %>
+				<label for="featured_product_featured_all_levels">Also display this featured product in subcategories of this category</label>
+			</td>
+		</tr>
+		<tr>
+			<td class="label"><label for="featured_product_featured_weighting">Weighting:</label></td>
+			<td class="field">
+				Show less often
+				<% (1..5).each do |i| %>
+				<%= radio_button 'featured_product', 'featured_weighting', i %>
+				<% end %>
+				Show more often
+				<%= show_tooltip(:featured_product, :featured_weighting) -%>
+			</td>
+		</tr>
+		<tr>
+			<td class="label"><label for="featured_product_featured_until">Featured Until:</label></td>
+			<td>
+				<input class="text" style="width: 10em;" type="text" id="featured_until" name="featured_product[featured_until]" value="<%= if @featured_product.featured_until then @featured_product.featured_until.strftime('%d/%m/%Y') end %>" />
+				<button id="trigger_featured_until">
+					<img src="<%= icon_path('calendar') -%>" alt="Calendar" title="Calendar" width="<%= @design_config[:sizes][:admin_icons_width] -%>" height="<%= @design_config[:sizes][:admin_icons_height] -%>" class="icon" />
+				</button>
+				<%= show_tooltip(:featured_product, :featured_until) -%>
+			</td>
+		</tr>
+		<tr>
+			<td></td>
+			<td><input class="button" type="submit" name="save" value="Save" /></td>
+		</tr>
+		</table>
+	</div>
+<% end %>
+<%= render :partial => 'rich_editor', :locals => { :element_id => 'featured_product_description' } -%>
+<script type="text/javascript">
+	show_discount_abs_perc();
+	if(parseFloat($F('featured_product_base_price')) == 0)
+		$('featured_product_use_base_price').checked = true;
+	discount_use_base_price();
+
+	Calendar.setup(
+		{
+			inputField : 'featured_until',
+			ifFormat : '%d/%m/%Y',
+			button : 'trigger_featured_until'
+		}
+	);
+</script>

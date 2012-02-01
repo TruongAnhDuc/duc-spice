@@ -1,0 +1,108 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" >
+	<head>
+		<title><%= if @page_title && !@page_title.empty? then @page_title else @configurator[:application][:name][:value] end -%></title>
+		<meta name="author" content="Avatar Web Promotions" />
+		<meta name="description" content="<%= if @meta_description && !@meta_description.empty? then @meta_description else @configurator[:search_engine_optimisation][:default_meta_description][:value] end %>" />
+		<meta name="keywords" content="<%= if @meta_keywords && !@meta_keywords.empty? then @meta_keywords else @configurator[:search_engine_optimisation][:default_meta_keywords][:value] end %>" />
+		<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+<style type="text/css">
+/*<![CDATA[*/
+   body {
+       background: white;
+       color: black;
+       font: 11px Arial, Helvetica, sans-serif;
+	   margin: 10px 20px 10px 20px;
+   }
+
+   p {
+       margin: 0px 0px 2ex;
+   }
+
+   a {
+   	color: #0054A6;
+   }
+
+   a:hover {
+   	color: #C0282D;
+   }
+
+   table.order {
+       margin: 0px 0px 2ex;
+       padding: 0px;
+       border-collapse: collapse;
+       border-spacing: 0px;
+	   width: 539px;
+   }
+
+   table.order td,
+   table.order th {
+       margin: 0px;
+       padding: 2px 4px;
+       border-collapse: collapse;
+       border-spacing: 0px;
+       border-bottom: 1px solid #8A5326;
+       text-align: left;
+       vertical-align: top;
+   }
+
+   table.order td.price {
+       text-align: right;
+   }
+
+   table.order th {
+       background: #8A5326;
+       color: white;
+       border-bottom: 2px solid #C0262D;
+   }
+
+   table.order tfoot {
+       border-top: 2px solid #C0262D;
+   }
+
+   table.order tfoot td {
+       background: #8A5326;
+	   color: white;
+       border: none;
+   }
+   #footer {
+		color: #0054A6;
+		font: 11px Arial, Helvetica, sans-serif;
+   }
+   .odd {
+		background: #F9F2E4;
+   }
+
+   .order-number {
+		color: #C0262D;
+		font-weight: bold;
+   }
+
+   @media print {
+   table.order th {
+       color: #0054A6;
+   }
+
+   table.order tfoot td {
+	   color: #0054A6;
+   }
+   }
+
+/*]]>*/
+</style>
+	</head>
+	<body class="printable">
+		<table width="550" border="0" align="center" cellpadding="0" cellspacing="0">
+			<tr>
+				<td>
+					<img src="http://www.thespicetrader.co.nz/email/images/the-spice-trader-banner.gif" alt="The Spice Trader" width="550" height="62" />
+				</td>
+			</tr>
+			<tr>
+				<td>
+				<%= @content_for_layout %>
+				</td>
+			</tr>
+		</table>
+	</body>
+</html>

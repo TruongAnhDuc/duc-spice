@@ -1,0 +1,21 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+chicken:
+  id: 1
+  product_code: EC2
+  product_name: "Exploding Chicken"
+  base_price: 56000.0
+  base_weight: 2.0
+  description: "Cute, clucky, cuddly - and lethal. Must be female..."
+  discount: 0
+  discount_is_abs: 0
+  available: 1
+cow:
+  id: 2
+  product_code: COW4
+  product_name: "Homicidal Bovine"
+  base_price: 132000.0
+  base_weight: 1500.0
+  description: "A raging tower of beef and spittle whose demented mind yearns only to eviscerate the bodies of its enemies. (wow, scarey!)"
+  discount: 50
+  discount_is_abs: 0
+  available: 0

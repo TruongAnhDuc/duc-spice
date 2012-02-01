@@ -1,0 +1,31 @@
+<div id="cart-contents">
+<% if @cart.items.empty? -%>
+	<p>There are currently no items in your cart.</p>
+<% else -%>
+	<ul>
+		<%
+		@cart.items.each_with_index do |i, count|
+		-%>
+
+			<li class="cart_product">
+				<div class="cart_product_image">
+					<% if i.product.image -%>
+						<%= link_to(product_thumbnail(i.product, @design_config[:sizes][:cart_summary_thumbnail_width], @design_config[:sizes][:cart_summary_thumbnail_height]), i.product.path) -%>
+					<% end -%>
+				</div>
+				<div class="cart_product_info">
+					<%= "<a href=\"#{i.product.path}\">#{i.product.name}</a>" %><br />
+					<%= "#{i.quantity} &times; <span class=\"price\" title=\"NZ$" + format('%.2f', i.unit_price) + '">' + @currency.format(i.total_unit_price) + "</span>" %>
+				</div>
+			</li>
+			<li class="cart_divider"></li>
+		<% end -%>
+	</ul>
+	<p>Total: <strong><span class="price" title="NZ$<%= format('%.2f', @cart.total_price) %>"><%= @currency.format(@cart.total_price) %></span></strong></p>
+<% end -%>
+</div>
+<div id="cart-links">
+	<p>
+		<%= link_to "View Cart", :controller => :cart, :action => :show -%> | <%= link_to "Checkout", :controller => :cart, :action => :checkout -%>
+	</p>
+</div>

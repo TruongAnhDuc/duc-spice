@@ -1,0 +1,70 @@
+<p>This review of <%= @review.product -%> by <%= @review.user -%> has <%= if (@review[:allowed] == "y" || @review[:allowed] == "n") then "already" else "not yet" end -%> been moderated.</p>
+
+<table class="list">
+	<thead>
+		<tr class="list-header odd">
+			<th>Product</th>
+			<td>
+<% if @review.product.image -%>
+				<%= product_thumbnail(@review.product, 100, 100) %><br />
+<% end -%>
+				<strong><%= @review.product %></strong>
+			</td>
+		</tr>
+	</thead>
+	<tbody>
+		<tr class="even">
+			<th>User</th>
+			<td>
+				<%= @review.user %>
+			</td>
+		</tr>
+		<tr class="odd">
+			<th>Rating</th>
+			<td>
+<% @review[:rating].times do -%>
+					<img src="<%= @ROCKETCARTDIR + icon_path('star') -%>" alt="<%= @review[:rating] -%>" width="<%= @design_config[:sizes][:admin_icons_width] -%>" height="<%= @design_config[:sizes][:admin_icons_height] -%>" class="icon" />
+<% end -%>
+<% (5 - @review[:rating]).times do -%>
+					<img src="<%= @ROCKETCARTDIR + icon_path('star-grey') -%>" alt="<%= @review[:rating] -%>" width="<%= @design_config[:sizes][:admin_icons_width] -%>" height="<%= @design_config[:sizes][:admin_icons_height] -%>" class="icon" />
+<% end -%>
+			</td>
+		</tr>
+		<tr class="even">
+			<th>Comments</th>
+			<td>
+<% form_tag do %>
+				<textarea cols="50" rows="6" id="review_comments" name="review[comments]"><%= @review[:comments] -%></textarea><br />
+				<%= submit_tag 'Edit', :name => 'edit', :class => 'button' %>
+<% end %>
+			</td>
+		</tr>
+		<tr class="odd">
+			<th>Date Added</th>
+			<td>
+				<%= @review[:created_at] -%>
+			</td>
+		</tr>
+		<tr class="even">
+			<th>Shown</th>
+			<td>
+<% if (@configurator[:modules][:require_review_moderation] && !@configurator[:modules][:require_review_moderation][:value]) || (@review[:allowed] == "y") -%>
+					<img src="<%= @ROCKETCARTDIR + icon_path('save') -%>" alt="Shown" width="<%= @design_config[:sizes][:admin_icons_width] -%>" height="<%= @design_config[:sizes][:admin_icons_height] -%>" class="icon" />
+<% elsif @review[:allowed] == "n" -%>
+					<img src="<%= @ROCKETCARTDIR + icon_path('delete') -%>" alt="Hidden" width="<%= @design_config[:sizes][:admin_icons_width] -%>" height="<%= @design_config[:sizes][:admin_icons_height] -%>" class="icon" />
+<% else -%>
+					<img src="<%= @ROCKETCARTDIR -%>/images/blank.gif" alt="Not moderated" width="<%= @design_config[:sizes][:admin_icons_width] -%>" height="<%= @design_config[:sizes][:admin_icons_height] -%>" class="icon" />
+<% end -%>
+			</td>
+		</tr>
+	</tbody>
+</table>
+
+<% form_tag do %>
+<% unless @review[:allowed] == "y" -%>
+	<%= submit_tag 'Show', :name => 'show', :class => 'button' %>
+<% end -%>
+<% unless @review[:allowed] == "n" -%>
+	<%= submit_tag 'Hide', :name => 'hide', :class => 'button' %>
+<% end -%>
+<% end %>

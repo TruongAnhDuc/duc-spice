@@ -1,0 +1,183 @@
+div.order-form-headers div {
+	margin: 0px 0px 2ex;
+	padding: 2px 8px;
+	background: #8A5326;
+	color: white;
+	font-weight: bold;
+	text-align: left;
+	float: left;
+}
+
+#animated_header input.button {
+	padding: 0px;
+	width: 105px;
+	margin: 0px 5px 0px 0px;
+}
+
+#order-form-buttons-header {
+	padding: 2px 0px 2px 20px;
+}
+
+table.cart {
+	width: 100%;
+	margin: 0px;
+	padding: 0px;
+	border-collapse: collapse;
+	border-spacing: 0px;
+}
+
+table.cart td {
+	vertical-align: top;
+	margin: 0px;
+	padding: 2px 8px;
+	border-collapse: collapse;
+	border-spacing: 0px;
+}
+
+table.cart th {
+	margin: 0px 0px 2ex;
+	padding: 2px 8px;
+	border-collapse: collapse;
+	border-spacing: 0px;
+	background: #8A5326;
+	color: white;
+	font-weight: bold;
+	text-align: left;
+}
+
+table.cart input.qty {
+	width: 2em;
+	text-align: right;
+	margin-right: 5px;
+}
+
+table.cart tr.even td {
+	background: white;
+}
+table.cart tr.even td.hideme {
+	color: white;
+}
+table.cart tr.odd td.hideme {
+	color: #F9F2E4;
+}
+
+table.cart tfoot td {
+	background: #E9DCC9;
+}
+
+div#header_name, div#header_size, div#header_qty, div#order-form-buttons-header {
+	padding-top: 13px;
+	height: 29px;
+}
+div#header_rrp, div#header_wsl {
+	height: 40px;
+}
+
+table#order-form-table td.sidebar {
+	padding: 0px 0px 0px 20px;
+	margin: 0px;
+}
+
+div#animated_header {
+	height: 46px;
+}
+
+table#order-form-table td.sidebar div.sidebar-middle {
+	height: 22px;
+	border-width: 0px 1px 0px 1px;
+	border-style: solid;
+	border-color: black;
+	background-color: white;
+	background-color: rgba(255, 255, 255, 0.6);
+	padding-left: 70px;
+}
+
+* html table#order-form-table td.sidebar div.sidebar-middle {
+	height: 23px;
+	background-color: white;
+}
+
+table#order-form-table td.sidebar div.sidebar-total {
+	height: 21px;
+	border-width: 0px 1px 1px 1px;
+	border-style: solid;
+	border-color: black;
+	background-color: white;
+	background-color: rgba(255, 255, 255, 0.6);
+	text-align: center;
+	font-weight: bold;
+}
+
+* html table#order-form-table td.sidebar div.sidebar-total {
+	height: 22px;
+	background-color: white;
+}
+
+input.text, textarea, select {
+	font: 11px Verdana, sans-serif;
+	border: 1px solid #8A5326;
+	background: white;
+}
+
+table.order {
+	width: 100%;
+	margin: 0px 0px 2ex;
+	padding: 0px;
+	border-collapse: collapse;
+	border-spacing: 0px;		
+}
+
+table.order td,
+table.order th {
+	margin: 0px;
+	padding: 2px 4px;
+	border-collapse: collapse;
+	border-spacing: 0px;
+	border-bottom: 1px solid #8A5326;
+	text-align: left;
+	vertical-align: top;
+}
+
+table.order td.price {
+	text-align: right;
+}
+
+table.order th {
+	background: #8A5326;
+	color: white;
+	border-bottom: 2px solid #8A5326;
+}
+
+table.order tfoot {
+	border-top: 2px solid #8A5326;
+}
+
+table.order tfoot td {
+	background: #E9DCC9;
+	border: none;
+}
+
+.fieldset {
+	margin: 0px 0px 8px;
+	padding: 8px;
+	background: #E9DCC9;
+	position: relative;
+}
+
+.fieldset .fieldset {
+	margin: 0px 0px 8px;
+	background: #E9DCC9;
+	width: auto;
+}
+
+.fieldset .legend,
+#body .fieldset h2 {
+	margin: -8px -8px 8px;
+	padding: 2px 8px;
+	background: #8A5326;
+	color: white;
+	font: bold 11px Georgia, serif;
+	text-transform: none;
+}
+
+ 

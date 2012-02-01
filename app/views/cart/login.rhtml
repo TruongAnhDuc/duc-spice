@@ -1,0 +1,67 @@
+<% @page_title = "Enter Your Details" %>
+
+<h1>Been here before?</h1>
+
+<p>Have you shopped with us before? If so, please enter your email address and password to log in and proceed to the checkout.</p>
+<p>If not, please take a moment to fill in your details below to continue with the checkout process. It only takes a moment, and that's all the information we need from you to register.</p>
+
+<div class="fieldset">
+	<div class="legend">Yes, I already have a password</div>
+	<% form_tag do %>
+		<table class="form">
+		<tr>
+			<td class="label"><label for="email">Email Address:</label></td>
+			<td class="field"><input class="text" type="text" name="email" id="email" /></td>
+		</tr>
+		<tr>
+			<td class="label"><label for="password">Password:</label></td>
+			<td class="field"><input class="text" type="password" name="password" id="password" /></td>
+		</tr>
+		<tr>
+			<td></td>
+			<td><a href="/forgotten-password/">Forgotten your password?</a></td>
+		</tr>
+		<tr>
+			<td></td>
+			<td><%= submit_tag 'Login', :name => 'login', :class => 'button' %></td>
+		</tr>
+		</table>
+	<% end %>
+</div>
+
+<% form_tag :action => :login do %>
+	<div class="fieldset">
+		<div class="legend">No, here are my details</div>
+		<%= custom_error_messages_for "user", :title => "Oops! Something's wrong...", :class => "fieldset" %>
+		<table class="form">
+			<tr>
+				<td class="label"><label for="user_email">Email Address:</label></td>
+				<td class="field"><%= text_field 'user', 'email', :class => 'text' %></td>
+			</tr>
+			<tr>
+				<td class="label"><label for="user_password">Password:</label></td>
+				<td class="field"><%= password_field 'user', 'password', :class => 'text' %></td>
+			</tr>
+			<tr>
+				<td class="label"><label for="user_password_confirmation">Confirm Password:</label></td>
+				<td class="field"><%= password_field 'user', 'password_confirmation', :class => 'text' %></td>
+			</tr>
+			<tr>
+				<td class="label"><label for="user_first_name">First Name:</label></td>
+				<td class="field"><%= text_field 'user', 'first_name', :class => 'text' %></td>
+			</tr>
+			<tr>
+				<td class="label"><label for="user_last_name">Last Name:</label></td>
+				<td class="field"><%= text_field 'user', 'last_name', :class => 'text' %></td>
+			</tr>
+			<tr>
+				<td></td>
+				<td><%= submit_tag 'Register', :name => 'register', :class => 'button' %></td>
+			</tr>
+		</table>
+	</div>
+<% end %>
+
+<script type="text/javascript">
+	$('email').focus();
+</script>

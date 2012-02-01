@@ -1,0 +1,9 @@
+<div class="paginator">
+	<%= @result_pages.item_count %> product(s) found | 
+
+	<%= link_to_unless(!@result_pages.current.previous, "&laquo;", {:params => params.merge("page" => @result_pages.current.previous)}, { :rel => "prev", :title => "Previous" }) + "&nbsp;" %>
+	<% for page in @result_pages -%>
+		<%= link_to_unless(@result_pages.current.number == page.number, page.number, {:params => params.merge("page" => page)}) %>&nbsp;
+	<% end -%>
+	<%= link_to_unless(!@result_pages.current.next, "&raquo;", {:params => params.merge("page" => @result_pages.current.next)}, { :rel => "next", :title => "Next" }) + "&nbsp;" %>
+</div>

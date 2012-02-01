@@ -1,0 +1,49 @@
+<% @cap = Captcha.new -%>
+<% @page_title = @static_page.title || "Contact Us" -%>
+<% @meta_keywords = @static_page.meta_keywords -%>
+<% @meta_description = @static_page.meta_description -%>
+
+<%= RedCloth.new(@static_page.body || "").to_html %>
+
+<% form_tag do %>
+<% if @code_error -%>
+	<p style="color: #f00;"><span style="font-weight: bold;">Error:</span> the code you entered was incorrect. Please try again.</p>
+<% end -%>
+<div class="fieldset">
+	<table class="form">
+		<tr>
+			<td class="label"><label for="name">Your name:</label></td>
+			<td class="field"><input class="text" type="text" name="name" id="name" value="<%= @your_name %>" /></td>
+		</tr>
+		<tr>
+			<td class="label"><label for="email">Your email:</label></td>
+			<td class="field"><input class="text" type="text" name="email" id="email" value="<%= @your_email %>" /></td>
+		</tr>
+		<tr>
+			<td valign="top" class="label"><label for="comments">Comments:</label></td>
+			<td valign="top" class="field"><textarea name="comments" id="comments"><%= h(@your_comments) %></textarea></td>
+		</tr>
+		<tr>
+			<td valign="top" class="label"><label for="code">Code:</label></td>
+			<td valign="top" class="field">(Please enter this code below)<br /><img style="border: 1px solid #A2A2A2; background-color: #FFFFFF; padding: 2px 2px 2px 2px;" src="/captcha/?r=<%= @cap.code_ref %>" width="80" height="25" /></td>
+		</tr>
+		<tr>
+			<td class="label"><label for="code">Enter Code:</label></td>
+			<td class="field"><input class="text" type="text" name="code" id="code" /></td>
+		</tr>
+<% if @configurator[:modules][:show_newsletter_signup] && @configurator[:modules][:show_newsletter_signup][:value] -%>
+		<tr>
+			<td class="label">&nbsp;</td>
+			<td class="field"><input type="checkbox" name="newsletter" id="newsletter" value="newsletter" class="checkbox" /> <label for="newsletter"><%= @configurator[:modules][:newsletter_signup_text][:value] -%></label></td>
+		</tr>
+<% end -%>
+		<tr>
+			<td>&nbsp;</td>
+			<td>
+				<input type="hidden" name="code_ref" value="<%= @cap.code_ref %>" />
+				<input class="button" type="submit" name="send" value="Send Enquiry" />
+			</td>
+		</tr>
+	</table>
+</div>
+<% end %>

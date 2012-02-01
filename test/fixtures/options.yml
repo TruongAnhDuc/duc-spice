@@ -1,0 +1,18 @@
+gun:
+  id: 1
+  name: Firearm
+  type: SingleChoiceOption
+  default_value: 
+  comment: 
+melee:
+  id: 2
+  name: Melee Weapon
+  type: SingleChoiceOption
+  default_value: 
+  comment: 
+diff:
+  id: 3
+  name: Difference
+  type: RadioButtons
+  default_value: 
+  comment: 

@@ -1,0 +1,9 @@
+home_optioner:
+  feature_id: 1
+  static_page_id: 3
+home_cow2:
+  feature_id: 3
+  static_page_id: 3
+aboutus_cow3:
+  feature_id: 4
+  static_page_id: 1

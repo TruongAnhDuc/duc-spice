@@ -1,0 +1,24 @@
+livestock_chicken:
+  category_id: 2
+  product_id: 1
+livestock_cow:
+  category_id: 2
+  product_id: 2
+livestock_cow2:
+  category_id: 2
+  product_id: 3
+livestock_cow3:
+  category_id: 2
+  product_id: 4
+utilities_optioner:
+  category_id: 6
+  product_id: 5
+cats_persian:
+  category_id: 5
+  product_id: 6
+cats_moggy:
+  category_id: 5
+  product_id: 7
+cats_moggy_bad:
+  category_id: 5
+  product_id: 8

@@ -1,0 +1,95 @@
+<style type="text/css">@import url(/calendar/calendar-win2k-1.css);</style>
+<script type="text/javascript" src="/calendar/calendar.js"></script>
+<script type="text/javascript" src="/calendar/lang/calendar-en.js"></script>
+<script type="text/javascript" src="/calendar/calendar-setup.js"></script>
+
+<h1>Order Report</h1>
+
+<% form_tag do %>
+<div class="fieldset">
+	<div class="legend">Report Criteria</div>
+	<table class="form">
+	<tr>
+		<td>
+			<strong>Start Date:</strong>
+		</td>
+		<td>
+			<input class="text" style="width: 10em;" type="text" id="start_date" name="start_date" value="<%= if @start_date then @start_date.strftime('%d/%m/%Y') end %>" />
+			<button id="trigger_start_date">
+				<img src="<%= icon_path('calendar') -%>" alt="Calendar" title="Calendar" width="<%= @design_config[:sizes][:admin_icons_width] -%>" height="<%= @design_config[:sizes][:admin_icons_height] -%>" class="icon" />
+			</button>
+		</td>
+	</tr>
+	<tr>
+		<td>
+			<strong>End Date:</strong>
+		</td>
+		<td>
+			<input class="text" style="width: 10em;" type="text" id="end_date" name="end_date" value="<%= if @end_date then @end_date.strftime('%d/%m/%Y') end %>" />
+			<button id="trigger_end_date">
+				<img src="<%= icon_path('calendar') -%>" alt="Calendar" title="Calendar" width="<%= @design_config[:sizes][:admin_icons_width] -%>" height="<%= @design_config[:sizes][:admin_icons_height] -%>" class="icon" />
+			</button>
+		</td>
+	</tr>
+	<tr>
+		<td></td>
+		<td>
+			<%= submit_tag 'View Below', :name => 'view', :class => 'button' %>
+			<%= submit_tag 'Download', :name => 'download', :class => 'button' %>
+			<%= show_tooltip(:report, :view_download) -%>
+		</td>
+	</tr>
+	</table>
+</div>
+<% end %>
+
+<% if @report_title -%>
+
+<h2><%= @report_title -%></h2>
+
+<%= render :partial => 'paginator' %>
+
+<table class="list">
+	<thead>
+		<tr>
+			<th>ID</th>
+			<th>Date</th>
+			<th>User</th>
+			<th>Country</th>
+			<th>Items</th>
+			<th>Total</th>
+		</tr>
+	</thead>
+	<tbody>
+<% @orders.each_with_index do |cur_order, i| -%>
+		<tr class="<%= (i % 2 == 0) ? 'odd' : 'even' %>">
+			<td><%= link_to cur_order.id, :action => :order, :id => cur_order%></td>
+			<td><%= cur_order.created_at.strftime('%d/%m/%Y, %I:%M%p') %></td>
+			<td><%= cur_order.user.to_s -%></td>
+			<td><%= cur_order.delivery_address ? cur_order.delivery_address.country : cur_order.billing_address.country -%></td>
+			<td><%= cur_order.items.count -%></td>
+			<td><%= format('$%.2f', cur_order.total) %></td>
+		</tr>
+<% end -%>
+	</tbody>
+</table>
+
+<%= render :partial => 'paginator' %>
+
+<% end -%>
+<script type="text/javascript">
+Calendar.setup(
+{
+inputField : 'start_date',
+ifFormat : '%d/%m/%Y',
+button : 'trigger_start_date'
+}
+);
+Calendar.setup(
+{
+inputField : 'end_date',
+ifFormat : '%d/%m/%Y',
+button : 'trigger_end_date'
+}
+);
+</script>

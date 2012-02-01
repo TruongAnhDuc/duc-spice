@@ -1,0 +1,194 @@
+<% @page_title = 'Checkout' %>
+
+<script type="text/javascript">
+	function toggle_delivery()
+	{
+		Element.toggle('delivery_details');
+
+		if ($('billing_address_country').onchange == null || $('billing_address_country').onchange == undefined)
+		{
+			$('billing_address_country').onchange = new Function("new Ajax.Updater('shipping-zone-container', '/cart/shipping_zone_selector?country='+escape(this.value), {asynchronous:true, onLoading:function() { $('shipping-zone-container').innerHTML = 'Loading...'; }, onComplete:function() { update_summary(); } })");
+		}
+		else
+		{
+			$('billing_address_country').onchange = null;
+		}
+	}
+</script>
+
+<h1>Checkout</h1>
+
+<p>Please enter your details below to complete the order process. You may still change your order by updating <%= link_to 'your cart', :action => :show %>.</p>
+<% if !@order.nil? -%>
+<%= custom_error_messages_for 'order', :title => 'Oops! Something\'s wrong...', :class => 'fieldset o' %>
+<% end -%>
+<% if !@billing_address.nil? -%>
+<%= custom_error_messages_for 'billing_address', :title => 'Oops! Something\'s wrong...', :class => 'fieldset b' %>
+<% end -%>
+<%
+#SNIP=separate_delivery_address
+# DO NOT REMOVE THE ABOVE COMMENT. It is used to remove the above feature
+if @configurator[:modules][:separate_delivery_address] && @configurator[:modules][:separate_delivery_address][:value] && !@order.delivery_address.nil? && @delivery_address_wanted -%>
+<%= custom_error_messages_for 'delivery_address', :title => 'Oops! Something\'s wrong...', :class => 'fieldset d' %>
+<% end
+# DO NOT REMOVE THE BELOW COMMENT. It is used to remove the above feature
+#/SNIP=separate_delivery_address
+-%>
+
+<% form_tag do %>
+<div class="fieldset">
+	<div class="legend">Your Details</div>
+
+	<script type="text/javascript">
+		function update_summary() {
+			shipping_zone_id = $F('order_shipping_zone_id');
+			new Ajax.Updater('checkout-summary', '/cart/checkout_summary?shipping_zone_id='+shipping_zone_id, {asynchronous:true, onLoading:function() { $('checkout-summary').innerHTML = 'Loading...' }});
+		}
+	</script>
+
+	<table class="form">
+		<tr>
+			<td class="label"><label for="billing_address_name">Name</label></td>
+			<td class="field"><%= text_field 'billing_address', 'name', :class => 'text' %></td>
+		</tr>
+		<tr>
+			<td class="label"><label for="order_shipping_email">Email</label></td>
+			<td class="field"><%= text_field 'order', 'shipping_email', :class => 'text', :value => (@order.shipping_email ? @order.shipping_email : @current_user.email) %></td>
+		</tr>
+		<tr>
+			<td class="label"><label for="billing_address_address">Address</label></td>
+			<td class="field"><%= text_area 'billing_address', 'address', :rows => 3 %></td>
+		</tr>
+		<tr>
+			<td class="label"><label for="billing_address_city">City</label></td>
+			<td class="field"><%= text_field 'billing_address', 'city', :class => 'text' %></td>
+		</tr>
+		<tr>
+			<td class="label"><label for="billing_address_postcode">Postcode</label></td>
+			<td class="field"><%= text_field 'billing_address', 'postcode', :class => 'text' %></td>
+		</tr>
+<% if @configurator[:modules][:show_country] && @configurator[:modules][:show_country][:value] -%>
+		<tr>
+			<td class="label"><label for="billing_address_country">Country</label></td>
+			<td class="field"><%= country_select 'billing_address', 'country', nil, {}, { :onchange => "new Ajax.Updater('shipping-zone-container', '/cart/shipping_zone_selector?country='+escape(this.value), {asynchronous:true, onLoading:function() { $('shipping-zone-container').innerHTML = 'Loading...'; }, onComplete:function() { update_summary(); } })" } %></td>
+		</tr>
+<% end -%>
+		<tr>
+			<td class="label"><label for="billing_address_phone_no">Phone No.</label></td>
+			<td class="field"><%= text_field 'billing_address', 'phone_no', :class => 'text' %></td>
+		</tr>
+<% if @configurator[:modules][:show_newsletter_signup] && @configurator[:modules][:show_newsletter_signup][:value] -%>
+		<tr>
+			<td class="label">&nbsp;</td>
+			<td class="field"><input type="checkbox" name="newsletter" value="newsletter" class="checkbox" /> <%= @configurator[:modules][:newsletter_signup_text][:value] -%></td>
+		</tr>
+<% end -%>
+	</table>
+</div>
+
+<div class="fieldset" id="invoice_chooser">
+	<div class="legend">Invoice type</div>
+
+	<table class="form">
+		<tr>
+			<td class="label" style="width: 300px;"><label for="invoice_chooser_button">Please tick the box if you require a paper invoice</label></td>
+			<td class="field"><%= check_box 'order', 'printed_invoice' %></td>
+		</tr>
+		<tr>
+			<td colspan="2" class="label"><label for="invoice_chooser_button">By default you will recieve a printable electronic invoice</label></td>
+		</tr>
+	</table>
+</div>
+
+<%
+#SNIP=separate_delivery_address
+# DO NOT REMOVE THE ABOVE COMMENT. It is used to remove the above feature
+if @configurator[:modules][:separate_delivery_address] && @configurator[:modules][:separate_delivery_address][:value] -%>
+<div class="fieldset" id="delivery_chooser">
+	<div class="legend">Separate Delivery</div>
+
+	<table class="form">
+		<tr>
+			<td class="label" style="width: 300px;"><label for="delivery_chooser_button">Deliver to a different address?</label></td>
+			<td class="field">
+<%
+	selected_text = @delivery_address_wanted ? ' checked="checked"' : ''
+-%>
+				<input id="delivery_chooser_button_" name="delivery_chooser_button[]" onclick="javascript:toggle_delivery();" type="checkbox" value="1"<%= selected_text -%> />
+				<input name="delivery_chooser_button[]" type="hidden" value="0" />
+			</td>
+		</tr>
+	</table>
+</div>
+<div class="fieldset" id="delivery_details">
+	<div class="legend">Delivery Details</div>
+
+	<table class="form">
+		<tr>
+			<td class="label"><label for="delivery_address_name">Delivery Name</label></td>
+			<td class="field"><%= text_field 'delivery_address', 'name', :class => 'text' %></td>
+		</tr>
+		<tr>
+			<td class="label"><label for="delivery_address_address">Address</label></td>
+			<td class="field"><%= text_area 'delivery_address', 'address', :rows => 3 %></td>
+		</tr>
+		<tr>
+			<td class="label"><label for="delivery_address_city">City</label></td>
+			<td class="field"><%= text_field 'delivery_address', 'city', :class => 'text' %></td>
+		</tr>
+		<tr>
+			<td class="label"><label for="delivery_address_postcode">Postcode</label></td>
+			<td class="field"><%= text_field 'delivery_address', 'postcode', :class => 'text' %></td>
+		</tr>
+<% if @configurator[:modules][:show_country] && @configurator[:modules][:show_country][:value] -%>
+		<tr>
+			<td class="label"><label for="delivery_address_country">Country</label></td>
+			<td class="field"><%= country_select 'delivery_address', 'country', nil, {}, { :onchange => "new Ajax.Updater('shipping-zone-container', '/cart/shipping_zone_selector?country='+escape(this.value), {asynchronous:true, onLoading:function() { $('shipping-zone-container').innerHTML = 'Loading...'; }, onComplete:function() { update_summary(); } })" } %></td>
+		</tr>
+<% end -%>
+		<tr>
+			<td class="label"><label for="delivery_address_phone_no">Phone No.</label></td>
+			<td class="field"><%= text_field 'delivery_address', 'phone_no', :class => 'text' %></td>
+		</tr>
+	</table>
+</div>
+
+<script type="text/javascript">
+	Element.hide('delivery_details');
+	<%= if @delivery_address_wanted then 'toggle_delivery();' end -%>
+</script>
+
+<% end
+# DO NOT REMOVE THE BELOW COMMENT. It is used to remove the above feature
+#/SNIP=separate_delivery_address
+-%>
+
+<div class="fieldset" id="shipping_zone">
+	<div class="legend">Freight Charges</div>
+
+<%
+if @current_user[:sees_wholesale]
+-%>
+	<p><strong>Please note that freight will be charged at cost for wholesale orders</strong></p>
+<%
+else
+-%>
+	<table class="form">
+		<tr>
+			<td class="label"><label for="order_shipping_zone_id">Shipping Option</label></td>
+			<td class="field" id="shipping-zone-container"><%= render :partial => 'shipping_zone_selector' %></td>
+		</tr>
+	</table>
+<%
+end
+-%>
+</div>
+
+<div id="checkout-summary"><%= render :partial => 'checkout_summary' %></div>
+
+<p><%= submit_tag 'Continue', :name => 'continue', :class => 'button' %></p>
+<% end %>
+
+<% if @draft_order -%>
+DRAFT ORDER
+<% end -%>

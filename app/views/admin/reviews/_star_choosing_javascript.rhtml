@@ -1,0 +1,58 @@
+<script type="text/javascript">
+//<![CDATA[
+
+var chosen_rating = 3;
+
+function star_hover(rating)
+{
+	if (parseInt(rating) > 1)
+	{
+		$('star-icon-2').src = '<%= @ROCKETCARTDIR -%>/images/icons/crystal/star.png';
+	}
+	else
+	{
+		$('star-icon-2').src = '<%= @ROCKETCARTDIR -%>/images/icons/crystal/star-grey.png';
+	}
+
+	if (parseInt(rating) > 2)
+	{
+		$('star-icon-3').src = '<%= @ROCKETCARTDIR -%>/images/icons/crystal/star.png';
+	}
+	else
+	{
+		$('star-icon-3').src = '<%= @ROCKETCARTDIR -%>/images/icons/crystal/star-grey.png';
+	}
+
+	if (parseInt(rating) > 3)
+	{
+		$('star-icon-4').src = '<%= @ROCKETCARTDIR -%>/images/icons/crystal/star.png';
+	}
+	else
+	{
+		$('star-icon-4').src = '<%= @ROCKETCARTDIR -%>/images/icons/crystal/star-grey.png';
+	}
+
+	if (parseInt(rating) > 4)
+	{
+		$('star-icon-5').src = '<%= @ROCKETCARTDIR -%>/images/icons/crystal/star.png';
+	}
+	else
+	{
+		$('star-icon-5').src = '<%= @ROCKETCARTDIR -%>/images/icons/crystal/star-grey.png';
+	}
+}
+
+function star_select(rating)
+{
+	chosen_rating = parseInt(rating);
+
+	$('review_rating').value = chosen_rating;
+}
+
+function star_reset()
+{
+	star_hover(chosen_rating);
+}
+
+//]]>
+</script>

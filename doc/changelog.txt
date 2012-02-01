@@ -1,0 +1,581 @@
+Rocket Cart changelog
+
+Doesn't include code-oriented housekeeping/refactoring etc changes.
+
+Key:
+f - feature
+i - improvement
+u - usability
+b - bugfix
+s - security
+d - design
+
+##################
+RocketCart v1.5.0
+2008-??-?? SVN:????
+
+
+##################
+RocketCart v1.4.1
+2008-05-02 SVN:2561
+
+A bugfix release
+
+i - Separate homepage layout now available (Trac #61).
+i - Review form textarea size should be set in CSS, not source-code
+b - Fixed broken email addresses in content (Trac #58)
+b - Category names can no longer be blank (Trac #55)
+b - Deleting categories was redirecting to the wrong place (Trac #59)
+b - Products with no Category are now viewable
+b - Products-Overview page was closing div's when it shouldn't have
+b - Bugfix for configuration changes on 'show_country' config option
+b - Review text updated for if you aren't logged in
+b - Order total/subtotal's correctly stored in the DB for the payment gateways
+
+
+##################
+RocketCart v1.4.0
+2008-02-26 SVN:2233
+
+This is a cut-down feature release from what was intended as 1.4, but is still
+a large features release. It focuses on larger long-term feature requests.
+
+Major changes from v1.3.2:
+- ALL Static Pages are integrated (including homepage etc) for editing etc
+- Ratings and reviews can be submitted on products by customers
+- Newsletter signups available through front-end, manageable through admin area
+- Products can be given a Product Type, which can in turn have custom fields
+
+Significant minor changes:
+- Rocket Cart can now be installed into a subdirectory of a domain
+- Users are manageable through the admin area (setting passwords etc)
+- Featured products now no longer have their own price and/or discount
+
+
+f - Reviews submittable and viewable from the front-end
+f - Reviews can be edited, added and moderated in the admin area
+f - User management added to Rocket Cart
+f - Product Types and Quirks (custom fields) added - you can add/edit/delete
+	them
+f - RocketCart can be housed in a subdirectory
+f - Featured products can be inserted into a static page through the use of the
+	special syntactic keyword 'FEATUREDPRODUCTS'
+f - Featured products can be inserted into Category pages
+f - Homepage, search page, products overview page and contact-us form all made
+	into editable static pages
+f - Top-level Category is editable (URL, name etc) rather than hard-coded as
+	'products'
+f - Newsletter signup feature added (configurable from admin area).
+i - Short Description's added to both Products and Categories (for when they
+	appear in parent Categories)
+u - login page labels fixed, cursor focus moved
+b - Featured products now convert prices with the currency previewer
+b - Weird bug in search page (how did this not get found before?)
+b - Odd bugfix for when a Product's base_price wasn't castable to float
+b - Products report fixed to handle products with ProductOptions
+b - Labels on forms fixed up
+b - If no Shipping Zone is sent from the checkout form (I still don't know how
+	/ when this manages to happen, but anyway...), then the default is chosen
+b - Fixed bug in Payment Express gateway where shipping wasn't being added to
+	the order total
+u - Admin area lists are now sortable on each column via icons in the table
+	headers
+u - Page titles made descriptive in the admin area
+d - flash notices styled
+
+
+##################
+RocketCart v1.3.2
+2007-11-28 SVN:1724
+
+A bugfix release for a nasty shipping-not-charged bug in the payment gateway.
+
+b - Shipping cost is included in the total sent from the payment gateway.
+
+
+##################
+RocketCart v1.3.1
+2007-10-17 SVN:1466
+
+This is a large bugfix update for v1.3.0 - with lessons learnt from two new
+sites. Changes from v1.3.0 include:
+
+f - Product expiry integrated
+f - Password hashing algorithm changing integrated
+f - Added phone number field to the Address model
+f - Users can now change their passwords in the front-end!
+i - Product details page now contains a link to return to the category, to
+	hopefully lessen the chance of people using their "back" button.  If
+	someone has added something to the cart then uses "back", the browser
+	shows its cached version of the cart module without the new product...
+i - The appropriate country is now shown in both billing & shipping addresses
+	in the checkout
+i - If no payment gateway is set up, the order status becomes "in_progress" (I
+	have yet to bring across the "orders awaiting payment" screen as it needs
+	a tidy way of detecting the payment gateway)
+i - 'others also bought' heading is now configurable
+i - Added "total" heading to the cart form
+i - Product Not Found template added
+i - Tables and images re-enabled after a customer enquiry.  If I had the time I
+	might put some editor options into the yml config...
+u - Error handling on checkout page improved
+b - Category is a required field for Featured Products.
+b - Featured Products had their URL's displaying without Category part (which
+	was breaking things)
+b - Fix for an edge case that came up when a product image was deleted
+b - Category pages' weight outputs should respect options to hide weight
+	options
+b - Exceptions are now handled in the product_images_controller.rb
+b - rakelogs.sh script made cron'able
+b - Payment Gateway's should be added by default
+b - Category ordering fixed (finally - this is an old chestnut). Unit tests for
+	Categories have been extended significantly.
+b - Phone number shouldn't be a required field in trunk
+b - IE6 didn't work with currency conversion
+b - Testing for a variable using if() in Javascript is a Bad Idea - undefined
+	variables still throw an error :(.
+b - Fixed the calendar icon in the orders report
+b - Fixed multichoice options in the settings screen
+b - Bugfix in search results
+b - Removed automatic maxlength setting of floating-point values in the
+	settings view, because it doesn't account for non-integer values.
+b - DPS module now calculates the order total from the LineItems (the 'total'
+	field was dropped from Orders with db migration #14)
+b - Fixed address-checking when separate delivery address is used.
+b - Emails updated (line of invalid syntax noticed from apache logs)
+b - Fixed crash when loading admin settings (Rails 1.1->1.2?)
+b - Product names not always appearing in URL's
+b - Orders were picking up items from old unfinished orders from same customer
+b - Emails were sending twice after an order was placed
+b - Emails had $0 amounts displayed for non-totals
+d - Table cells were outside their row element
+d - Correct height is given to images on the products_overview page.
+d - Fixed an IE issue: LI squares are no longer shown in a weird place.
+d - Shifted a tooltip out of a <select> element in the product form
+d - Login area labels fixed, ID's added for easier skinning
+d - Template fix for Safari
+
+
+##################
+RocketCart v1.3.0
+2007-05-31 SVN:744
+
+Major changes from v1.2.2:
+- Online help system added to administration area
+- WYSIWYG editors added to administration area
+- Featured products added (work within category structure)
+- Cross-selling added
+- Better product-page URL's for SEO
+- Administration area usability massively improved
+
+Significant minor changes:
+- Authentication system extended
+- Search results paths fixed
+- Thumbnails generated correctly (could have appeared ugly at times before)
+
+...and many minor fixes, usability tweaks and refactors. This release runs on
+Rails 1.2!
+
+f - Icon skinning (and choosing) added for admin area for new icons, used
+	throughout the admin area.
+f - New "deleted products" screen
+f - Tooltips system added to Admin area
+f - Date fields in product & order reports are now calendar widgets
+f - Implemented the Featured Products feature on the front-end.
+f - Payment gateway responses are stored in the database, and visible when
+	looking at an order.
+f - h1's are SEO-able
+f - We now have rich-text editing courtesy of TinyMCE!
+f - Added "customers who purchased this product also bought..." feature.
+f - product names put in URL's
+i - Featured products now have an expiry date (if left blank they never expire)
+i - Various minor HTML fixes for validity
+i - Product option values can now be renamed.
+i - Improvements to email formats to lower spam scores
+i - Customer Report now has an "Items" column as per section 5.3.6 of the
+	generic proposal (the one we send out to customers!).  Yes, it breaks the
+	design because the table is too wide now.
+u - Text options given more useful UI's
+u - Confirmation dialogue on removing an option from a product
+u - Featured product editor now shows the original product's base price next to
+	the Base Price checkbox.
+	fields now pre-select correctly.
+u - Products can now be featured directly from the products listing. The
+	featured products editor will pre-load all of the product info for easy
+	editing.
+u - Product Option comments are now shown in the "Add Option" drop list in the
+	product-editor.
+u - shipping zones hidden and given expand/shrink buttons
+u - Shifted all the "actions" on list screens to the top.
+u - Category path is a bit clearer in the Edit Category screen.
+u - The user now gets some feedback when an option has been saved. Also added
+	to the shipping zone editor.
+u - Simplified the featured-product weighting so it doesn't need explanation.
+u - Admin area menu re-built
+u - The shipping zone editor now uses Javascript instead of Ajax requests, so
+	double-clicking the include/exclude buttons won't cause duplicate entries
+	(I was still able to break it after adding server-side checking). As a
+	bonus it's much more responsive.
+u - The admin products listing is now sorted by the product name.
+b - LineItem prices calculated correctly (was doing discounts on
+	ProductOption's incorrectly) Note: Javascript may round prices to a cent
+	different from Ruby.
+b - Multiple-select options are pre-set correctly on the view_cart and checkout
+	pages.
+b - Product Option default values should now work.
+b - Product Options that are multiple-select now save all their values
+b - Checkout now shows option-value names
+b - Products page prices fixed (javascript fix)
+b - Products page prices update when non-dropdown elements are changed
+b - Currency fixed to NZD in checkout
+b - Currency selector doesn't show in checkout
+b - Shipping formulaic descriptions only show if they exist
+b - Products report says 'all categories' when none are selected
+b - Shipping Options don't have their headings disappear upon saving
+b - Option editor crash fixed
+b - Product and Featured Product "discount is a percentage / dollar value"
+b - Product option values with blank or whitespace-only names can no longer be
+	created or saved.
+b - Downloaded reports now show all results instead of just the first page.
+b - was crashing when trying to save a zone with no included countries.
+b - fixed crash in admin/products view due to nil option comment.
+b - Category list no longer has name-wrapping problems when the path becomes
+	long.
+b - Caching issue with thumbnails fixed (was causing thumbnails to appear
+	pixelated)
+b - Search paths to products not always correct (naive relative paths)
+b - Products Report, Order Report and Featured Products Listing screens now
+	show the correct result count for page numbering
+b - Fixed crashes that occur when creating a new product.
+b - Product category menu cache is now expired when categories are edited/
+	deleted
+b - bugfix on deleting a product image
+b - Added some extra validation to the Product model.
+b - Fixed a crash when creating categories
+s - Non-admin users no longer see the "logged in as..." and the admin menu when
+	they try to log into the administration area.
+d - Reduced the size of buttons: as a side-effect, everything with a button now
+	uses the "button" class.
+
+
+##################
+RocketCart v1.2.7
+2007-12-07 SVN:1825
+
+Fix for some weird rare issues when the Shipping Zone wasn't handled correctly
+on the checkout step
+
+b - Shipping Zone is correctly forced when it is changed from the default
+b - Shipping Zone is chosen as the default if it isn't sent from the client
+
+
+
+##################
+RocketCart v1.2.6
+2007-11-28 SVN:1731
+
+Reversion of v1.2.5, proper fix for shipping-not-charged bug in the payment
+gateway.
+
+b - Shipping cost is included in the total sent from the payment gateway.
+
+
+
+##################
+RocketCart v1.2.5
+2007-11-28 SVN:1723
+
+A bugfix release for a nasty shipping-not-charged bug in the payment gateway.
+
+b - Shipping cost is included in the total sent from the payment gateway.
+
+
+
+##################
+RocketCart v1.2.4
+2007-10-25 SVN:1513
+
+A minor bugfix release for Category ordering for SpiceTrader. This is a bugfix
+merge from v1.3.X's branch.
+
+i - Spice Trader change: checkout now borks if not enough billing/shipping info was given.
+i - Email templates updated to contain a full HTML document (to help spam scores of emails)
+b - Category ordering re-worked to fix existing bugs
+b - Fixed loooong-standing bug that caused unit tests to fail if /app/views/products/home.rhtml didn't exist
+b - IE6 didn't work with currency conversion
+b - Fixed a small bug in the address-checking (brought across from 1.3)
+b - Emails updated (line of invalid syntax noticed from apache logs)
+b - Minor bug with rocketcart.yml found via KiwiProducts
+
+
+##################
+RocketCart v1.2.3
+2007-06-19 SVN:804
+
+A minor feature and bugfix release for SpiceTrader and KiwiProducts.
+
+i - Options with no option-values can't be added to a product
+i - Shipping formulaic descriptions only show if they exist
+b - Orders were picking up items from old unfinished orders from same customer
+b - Shipping zone was being incorrectly selected by default
+b - Emails were sending twice after an order was placed
+b - Emails had $0 amounts displayed for non-totals
+b - Multiple-buy-line options correctly show/hide weights
+b - Uploading an image on a new product creation fixed
+b - Meta description/keywords now work on per-product/category pages
+u - Product option comments displayed more obviously in product editing page
+b - Products, Customers reports fixed with merges from RocketCart trunk (v1.3)
+
+
+##################
+RocketCart v1.2.2
+2007-05-21 SVN:696
+
+A minor feature and bugfix release for SpiceTrader and KiwiProducts.
+
+f - Shipping Zones can have formulaic prices
+f - Payment gateway responses are stored in the database, and visible when
+	looking at an order.
+i - Payment gateway code updated
+b - Bugfixes to prices shown on checkout and show cart pages
+b - Bugfixes to column display on checkout and show cart pages when
+	hide_weight_options was set/unset
+b - Other minor bugfixes
+b - Caching issue with thumbnails fixed (was causing thumbnails to appear
+	pixelated)
+b - Search paths to products not always correct (naive relative paths)
+d - Email color coding updated
+
+
+##################
+RocketCart v1.2.1
+2007-04-10 SVN:608
+
+New design! CAPTCHA's and bugfixes...
+
+f - Captcha added to the contact form as per Mark's request.
+i - Breadcrumb improvements
+u - Preview links on admin products page are deactivated when the product is
+	deleted (now consistent with the edit link)
+b - New orders were being saved into the database with 'pending' status instead
+	of 'awaiting_shipping'.
+b - cart preview AJAX-updating fixed
+b - Removed some help-text that didn't belong.
+b - Fixed selected="selected" in the admin settings form.
+d - default skin replaced and updated
+d - Tidyups to contact form
+
+
+##################
+RocketCart v1.2.0
+2007-03-26 SVN:593
+
+Major changes from v1.1.0:
+- Product Options can effect the price/weight of a product
+- Search added to many admin areas
+- Reports viewable online
+- 'MultiLineOption' option type added (shows multiple buy-lines)
+- Admin demo capability
+- Thumbnail view for all products
+- Move from Rails 1.0 -> 1.2
+- Admin area styling changed
+- Default front-end styling changed
+- Improvements to styling/customization of views
+
+...and many minor fixes, usability tweaks and refactors. This release runs on
+Rails 1.2!
+
+f - User Manual linked to in the Admin area
+f - Multiple-Buy-Line Product-Options implemented. Note: will need extensive
+	testing.
+i - 'View Cart' page now has full javascript to handle instant feedback when
+	changing product options etc, and to allow currency conversion.
+i - More currency symbols added
+i - Discounts can be an absolute amount or a percentage
+i - Hardcoded '$' symbols removed (this does make some areas of the site more
+	verbose using current currency symbols)
+i - Product options show their cost/weight changes on the Edit Product page
+i - Product paths are returned with category path included
+i - A 'comment' can be added to Options, to tell them apart in the admin area
+	(in case they have similar/identical names)
+i - Can configure not to show country when people are checking out
+i - Javascripts updated to allow currency selection to effect prices shown,
+	taking product options chosen into account.
+u - Added <label> tags to the product code & name in the cart summary so users
+	can click on them to change the checkbox.
+u - Boolean options in the application settings are now handled with a select-
+	list (checkboxes would have been nice but the input is not sent if the
+	box is not checked, which causes us headaches when receiving the form).
+b - Errors on product->save in admin area don't wipe chosen categories
+b - Discounts weren't being applied to all numbers on the 'view cart' page
+b - AJAX'd Javascript was being executed in the wrong scope!
+b - Adding & removing multiple countries from a shipping zone now works
+b - Cart preview shows correct product-option-inclusive prices
+b - Line item option-value clearing wasn't working
+b - Fixed crashes in product & category views
+b - Checkout and payment process debugged
+b - Bug when adding a non-discounted product to the cart
+b - Emails fixed, calls to Postman simplified
+b - The same_as? method for LineItem's is fixed (was previously returning true
+	for identical Products with different option values).
+b - View Cart and Checkout pages show correct numbers for price/weight on
+	product options
+b - Line Items are now created with OptionValues that take account of a
+	discount on the item
+b - Fixed the bug where logging in could add another of the last-purchased
+	product to the cart (and could potentially show itself in other ways, eg
+	when updating the cart).
+b - Exception handling for addition of product options with no extra-cost or
+	extra-weight
+s - Discounts are frozen in LineItem's
+d - new rocketcart.avatar.co.nz styling integrated
+d - Emails color-coded according to admin area
+d - Prettified the sidebar a bit (well, for the demo cart anyway).  Hopefully
+	this won't break other installations, but I have added a couple of <h3>
+	tags (one converted from a <p> with a class).  ymmv...
+
+
+##################
+RocketCart v1.1.1
+2007-04-17 SVN:641
+
+Payment gateway responses are stored in the database, and visible when looking
+at an order.
+
+NOTE: This 1.1 branch is now NOT COMPATIBLE WITH THE TRUNK (v1.2+)
+
+
+##################
+RocketCart v1.1.0
+2007-02-21 SVN:527
+
+Major changes from v1.0.3:
+- Site-wide default SEO options
+- Per-product SEO options
+- Forgotten password functionality
+- Separate billing and delivery address can be chosen
+
+...and quite a few minor fixes and refactors. This release runs on Rails 1.0.
+
+f - Orders can have (optionally) separate billing and delivery addresses
+f - Added "forgotten password" functionality.
+f - Per Product SEO options added
+f - products_overview.rhtml completed (needed for Spice Trader). This is a
+	catalogue page with every product shown
+f - cart_summary_brief method added to cart controller
+f - Implemented Admin demo
+f - Product Options can affect the price and weight of a Product (note: needs
+	front-end code for users looking at their cart, as well as admins editing
+	product options)
+f - Old In-Progress orders are deleted after (default) 14 days by a cron script
+i - A design.yml has been added which handles design decisions such as how
+	large thumbnails are, what colors are used etc. Templates are starting to
+	be skinnable - by using configuration options for output.
+i - Added thousands-separators to prices.  This has the side-effect that more
+	monetary figures include the currency symbol.  I've disabled the currency
+	symbol in most of the "view cart"/"checkout" forms and the entire admin
+	area to save unnecessary clutter.
+i - Products pages now show breadcrumbs
+i - Currencies can now be edited.
+i - Static Pages can now be accessed if a '/' or a '.html'/similar are
+	accidentally appended to the URL
+i - Search added to orders in admin area
+i - pagination added to reports
+i - Searching and pagination for products and featured products completed
+i - Reports show in-line on the website, as well as giving the download option.
+u - Many usability tweaks for the administration area
+u - "New Product" now redirects to "edit product#options" upon saving.
+u - Category listings now show original price with line-through if the price is
+	discounted (this is similar behaviour to the product detail pages).
+u - In-Progress orders don't show up in the admin views (by default)
+b - Index handled for /cart/
+b - Removed some weirdness from the admin menu in the Pending Orders entry.
+b - Price displayed in "view cart" screen is now the unit_price rather than the
+	base_price.
+b - Minor bug in date parsing
+b - Reporting fixes
+b - Admin users are directed to the "pending orders" page by default, so they
+	will never end up getting a login box again after they've successfully
+	logged in.
+b - Some error handling added to Images (may not be enough)
+b - Products with options set no longer crash the order details page in the
+	admin area.
+b - searches now filter out products that are unavailable.
+b - Fixed a crash when checking-out
+b - Adding an item to a cart that already contains that item now adds the
+	requested quantity instead of just incrementing by one.
+b - Changes to Postman templates to work around a render:partial bug, and the
+	inability to access Configurator settings from within the template.
+s - line_item_option_values now have extra_cost and extra_weight (frozen from
+	option_values)
+
+
+##################
+RocketCart v1.0.3
+2006-12-11 SVN:286
+
+SEO defaults added, bugs fixed.
+
+f - SEO (keywords, description) site-wide defaults enabled
+i - Update to make header images category-aware on products pages
+i - Order sent email to admin now has shipping details in it
+b - Static page links with a / on the end have the / removed (to stop a routing
+	error)
+b - Payment gateway path bug fixed.
+b - Home page doesn't error when there are no products/categories yet added
+b - Back-button issue half-solved
+b - A few pages in the admin area have their menu entry set
+b - Some models moved into their own files to stop errors
+b - Customer email sent in payment gateway, not 'matt@avatar'
+b - User passwords can't be blank anymore, and a couple of odd edge cases for
+	when to save a users' password are now covered
+b - Fix for 'blank search crashes app'
+b - Fix for payment gateway to take environment configuration from main Ruby
+	app config file.
+
+
+##################
+RocketCart v1.0.2b
+2006-08-29 SVN:48
+
+A minor bugfix release.
+
+b - Emails fixed to take account of v1.0.1 and v1.0.2 changes.
+
+
+##################
+RocketCart v1.0.2
+2006-08-29 SVN:46
+
+A minor bugfix release.
+
+i - Home page now has editable meta's and title etc
+u - Added wishlist feature 'Admin area link'
+b - Bugs with OptionValues on ordered Products fixed.
+s - Added wishlist feature 'Login via POST'
+
+
+##################
+RocketCart v1.0.1
+2006-08-23 SVN:36
+
+A refactor of the code to make product options sane, and a few other minor
+bugfixes.
+
+i - Version number made less intrusive
+u - SEO Optimisation fields in static page admin section made more obvious
+u - Product editing page updated (and simplified)
+d - Version numbers visible on admin area pages
+b - Product options completely revamped to work properly
+b - Admins can now view all orders
+d - Error messages made less glaring
+
+
+##################
+RocketCart v1.0
+2006-07-20 SVN:5
+
+Shopping cart system pulled from existing code-bases (two on S:, as well as
+KiwiProducts and Merino-Lace) - with KiwiProducts being the most heavily used -
+and pushed into Subversion after merge to get things into a mostly-working
+state.

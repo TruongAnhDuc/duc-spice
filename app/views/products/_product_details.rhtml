@@ -1,0 +1,71 @@
+<div class="product-details-form" id="product-details-form-<%= @product[:id] -%>-<%= counter -%>">
+	<% form_remote_tag :update => 'cart-summary', :url => { :controller => :cart, :action => :add, :id => @product }, :complete => "new Effect.Highlight('cart-contents', {startcolor:'##{@design_config[:colors][:cart_add_flash_start]}', endcolor:'##{@design_config[:colors][:cart_add_flash_end]}'});" do -%>
+<% if bits -%>
+					<p><%= bits['string'] -%></p>
+<%
+	bits['option_values'].each_pair do |option_id, cur_option_value|
+		if cur_option_value
+-%>
+					<input type="hidden" class="option_value" name="option[<%= option_id -%>]" value="<%= cur_option_value[:id] -%>" />
+<%
+		end
+	end
+end
+-%>
+	<p class="price_weight">
+	<% if !@product.discount.zero? -%>
+	<span class="price" id="price-<%= @product.id -%>-<%= counter -%>" title="Normally <%= @currency.format(@product.base_price) -%>">(Normally <%= @currency.format(@product.base_price) -%>)</span>
+	<% else -%>
+	<span class="price" id="price-<%= @product.id -%>-<%= counter -%>" title="<%= @currency.format(@product.price) -%>"><%= @currency.format(@product.price) -%></span>
+	<% end -%>
+	<% if @design_config[:options][:display_product_weights] == 'yes' -%>
+	<br />
+	<span class="weight" id="weight-<%= @product.id -%>-<%= counter -%>" title="<%= @product.weight %>">(<%= @product.weight %>kg)</span>
+	<% end -%>
+	<% if !@product.discount.zero? -%>
+	<br /><span class="discount" id="discount-<%= @product.id -%>-<%= counter -%>" style="color:#ff0000;" title="<%= @currency.format(@product.price) %>"><%= @currency.format(@product.price) %></span>
+	<% end -%>
+	</p>
+
+	    <table>
+<%
+	if @option_values
+		@option_values.each_with_index do |cur_option_values, option_i|
+			if cur_option_values && !cur_option_values.empty?
+
+				chosen_option = nil
+				@options.each do |cur_option|
+					if cur_option[:id] == option_i
+						chosen_option = cur_option
+						break
+					end
+				end
+				if chosen_option && chosen_option.class.to_s != 'MultiLineOption'
+-%>
+			<tr>
+    				<td>
+    					<%= chosen_option.label ? chosen_option.label : '' -%>
+    				</td>
+    				<td align='right'>
+					<%= render(:partial => 'option_render', :locals => { :option_values => cur_option_values, :option => chosen_option }) -%>
+    				</td>
+			</tr>
+<%
+				end
+			end
+		end
+	end
+-%>
+		<tr>
+		  <td>
+		  Quantity:
+		  </td>
+		  <td align='right'>
+		  <%= select_tag 'quantity', options_for_select((1..10).collect { |i| i.to_s }) %>
+		  </td>
+		</tr>
+		</table>
+		<%= submit_tag 'Add to Cart', :name => 'add', :class => 'button' %>
+
+	<% end -%>
+</div>

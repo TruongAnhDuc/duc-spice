@@ -1,0 +1,37 @@
+livestock_optioner:
+  id: 1
+  product_id: 5
+  weighting: 5
+  all_levels: 1
+  in_layout: 1
+  description: Different description
+pigs_chicken:
+  id: 2
+  product_id: 1
+  weighting: 1
+  all_levels: 0
+  in_layout: 0
+root_and_dogs_cow2:
+  id: 3
+  product_id: 3
+  weighting: 1
+  all_levels: 0
+  in_layout: 0
+dogs_cow3:
+  id: 4
+  product_id: 4
+  weighting: 2
+  all_levels: 0
+  in_layout: 1
+root_persian:
+  id: 5
+  product_id: 6
+  weighting: 2
+  all_levels: 0
+  in_layout: 0
+root_moggy_bad:
+  id: 6
+  product_id: 8
+  weighting: 2
+  all_levels: 0
+  in_layout: 1

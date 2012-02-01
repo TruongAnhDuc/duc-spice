@@ -1,0 +1,219 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" >
+	<head>
+		<title></title>
+		<meta name="author" content="Avatar Web Promotions Ltd" />
+		<meta name="description" content="" />
+		<meta name="keywords" content="" />
+		<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+		<link rel="stylesheet" type="text/css" href="avatar.css" />
+
+		<style type="text/css">
+		/*<![CDATA[*/
+			body {
+				background: white;
+				color: black;
+				font: 11px/1.5 "Lucida Sans", sans-serif;
+			}
+
+			a.footnote {
+				vertical-align: super;
+				text-decoration: none;
+			}
+
+			h1 {
+				font-size: 200%;
+				border-bottom: 1px solid black;
+				margin: 0px 0px 1ex;
+			}
+
+			h2 {
+				font-size: 150%;
+				border-bottom: 1px solid black;
+				margin: 0px 0px 1ex;
+			}
+
+			ol li {
+				margin-bottom: 2ex;
+			}
+
+			pre, code {
+				font: 11px/1.5 "Lucida Console", monospace;
+			}
+
+			pre {
+				background: #cfc;
+				padding: 1em;
+			}
+
+			pre.root {
+				background: #fcc;
+			}
+
+			hr {
+				height: 0px;
+				border: none;
+				border-bottom: 1px solid black;
+			}
+
+			@media print {
+				pre strong {
+					text-decoration: underline;
+				}
+
+				body {
+					margin: 1cm;
+				}
+			}
+		/*]]>*/
+		</style>
+</head>
+	<body>
+		<h1>Rocket Cart account setup instructions</h1>
+
+		<p>The following instructions should be followed precisely in order to avoid configuration errors. <span style="background: #fcc;">Red boxes</span> indicate you should be logged in as <code>root</code>; <span style="background: #cfc;">green boxes</span> mean you should be logged in as the account user.</p>
+
+		<ol>
+			<li>
+				Log on to new account and run <code>rails</code> to generate the site structure
+				<pre>login as: avexampleconz
+avexampleconz@avatar.digiweb.net.nz's password:
+avexampleconz@avatar avexampleconz]$ rails www
+      exists
+      create  app/controllers
+      create  app/helpers
+      create  app/models
+      create  app/views/layouts
+      .
+      .
+      .
+      create  log/test.log
+[avexampleconz@avatar avexampleconz]$</pre>
+			</li>
+			<li>
+				As <code>root</code>, edit the directory entry in <code>httpd.conf</code> (<strong>back up first!</strong><a href="#note1" class="footnote">1</a>):
+				<pre class="root">&lt;virtualhost 203.97.91.89:80&gt;
+ServerAdmin webmaster@<strong>example.co.nz</strong>
+ServerName <strong>www.example.co.nz</strong>
+ServerAlias <strong>example.co.nz</strong>
+ServerAlias <strong>avexampleconz</strong>.avatar.net.nz
+DocumentRoot /www/htdocs/<strong>avexampleconz</strong>/public
+TransferLog logs/<strong>avexampleconz</strong>-access-log
+ErrorLog /home/<strong>avexampleconz</strong>/errorlogs/log.txt
+&lt;Directory /www/htdocs/<strong>avexampleconz</strong>/public&gt;
+  Options ExecCGI FollowSymLinks
+  AllowOverride all
+&lt;/Directory&gt;
+&lt;/virtualhost&gt;</pre>
+			</li>
+			<li>Test and restart Apache<a href="#note2" class="footnote">2</a>:
+				<pre class="root">[root@avatar conf]# httpd -t
+Syntax OK
+[root@avatar conf]# httpd.restart
+Stopping httpd:                                            [  OK  ]
+Starting httpd:                                            [  OK  ]
+[root@avatar conf]#
+</pre>
+			</li>
+			<li>View the results in your browser by going to (for example) <strong>http://www.example.co.nz/</strong>. You should see a "welcome aboard" message.</li>
+			<li>Delete the default index page:
+				<pre>[avexampleconz@avatar avexampleconz]$ rm www/public/index.html</pre>
+			</li>
+			<li>Copy the code across from the default site:
+				<pre>[avexampleconz@avatar avexampleconz]$ cd www
+[avexampleconz@avatar www]$ cp -r ~rocketcartavatarconz/www/app ./
+[avexampleconz@avatar www]$ cp -r ~rocketcartavatarconz/www/config ./
+[avexampleconz@avatar www]$ cp -r ~rocketcartavatarconz/www/lib ./
+[avexampleconz@avatar www]$ cp -r ~rocketcartavatarconz/www/public ./</pre>
+			</li>
+			<li>Get rid of this file (important!)
+				<pre>[avexampleconz@avatar www]$ rm public/new.html</pre>
+			</li>
+			<li>
+				Create the MySQL database<a href="#note3" class="footnote">3</a>:
+				<pre>[rocketcartavatarconz@avatar www]$ mysql -u root -p
+Enter password:
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 2347897 to server version: 4.0.20-standard-log
+
+Type 'help;' or '\h' for help. Type '\c' to clear the buffer.
+
+mysql&gt; CREATE DATABASE examplecart;
+Query OK, 1 row affected (0.01 sec)
+mysql&gt; USE examplecart
+Database changed
+mysql&gt; GRANT ALL ON rocketcart TO '<strong>examplecartuser</strong>'@'localhost' IDENTIFIED BY '<strong>testing123</strong>';
+Query OK, 0 rows affected (0.00 sec)
+mysql&gt; GRANT ALL ON rocketcart.* TO '<strong>examplecartuser</strong>'@'localhost' IDENTIFIED BY '<strong>testing123</strong>';
+Query OK, 0 rows affected (0.00 sec)
+mysql&gt; GRANT ALL ON rocketcart TO '<strong>examplecartuser</strong>'@'%' IDENTIFIED BY '<strong>testing123</strong>';
+Query OK, 0 rows affected (0.00 sec)
+mysql&gt; GRANT ALL ON rocketcart.* TO '<strong>examplecartuser</strong>'@'%' IDENTIFIED BY '<strong>testing123</strong>';
+Query OK, 0 rows affected (0.00 sec)
+mysql&gt; SOURCE ~rocketcartavatarconz/rocketcart.sql
+Query OK, 0 rows affected (0.00 sec)
+.
+.
+.
+mysql&gt; quit;
+Bye</pre>
+			</li>
+			<li>Edit <code>config/database.yml</code>:
+				<pre>development:
+  adapter: mysql
+  database: <strong>examplecart</strong>
+  socket: /var/lib/mysql/mysql.sock
+  host: localhost
+  username: <strong>examplecartuser</strong>
+  password: <strong>testing123</strong>
+
+# Warning: The database defined as 'test' will be erased and
+# re-generated from your development database when you run 'rake'.
+# Do not set this db to the same as development or production.
+test:
+  adapter: mysql
+  database: <strong>examplecart_test</strong>
+  socket: /var/lib/mysql/mysql.sock
+  host: localhost
+  username: <strong>examplecartuser</strong>
+  password: <strong>testing123</strong>
+
+production:
+  adapter: mysql
+  database: <strong>examplecart</strong>
+  socket: /var/lib/mysql/mysql.sock
+  host: localhost
+  username: <strong>examplecartuser</strong>
+  password: <strong>testing123</strong>
+</pre>
+			</li>
+			<li>Test the public interface at <strong>http://www.example.co.nz/</strong>.</li>
+			<li>
+				Add an administrative user<a href="#note4" class="footnote">4</a>:
+				<pre>[avmerino-laceconz@avatar www]$ script/console
+Loading development environment.
+&gt;&gt; u = User.new({ :user_level =&gt; 2, :first_name =&gt; 'Matt', :last_name =&gt; 'Powell', :email =&gt; 'matt@avatar.co.nz', :password =&gt; 'testing123' })
+=&gt; #&lt;User:0xb6eda830 @attributes={"hashed_password"=&gt;nil, "user_level"=&gt;2, "first_name"=&gt;"Matt", "last_name"=&gt;"Powell", "email"=&gt;"matt@avatar.co.nz"}, @password="testing123", @new_record=true&gt;
+&gt;&gt; u.save
+=&gt; true
+</pre>
+			</li>
+			<li>Test the admin interface by logging in at <strong>http://www.example.co.nz/admin/</strong>.</li>
+			<li>
+				Set up the rails log-truncation cron job by editing <code>www/cron/crontab.txt</code>, then add it to that user's crontab:
+				<pre>crontab crontab.txt</pre>
+				This ensures that the ever-growing log files don't cause the hosting account to exceed its quota, which can cause Rails to break.<br />
+				It is a good idea to check the <code>RAKE_PATH</code> variable in <code>www/cron/rakelogs.sh</code>, then do a test-run on the command-line, from within the user's home directory.
+			</li>
+		</ol>
+		<h2>Notes</h2>
+		<ol>
+			<li id="note1"><code>cp httpd.conf httpd.conf.<em>yyyy-mm-dd</em></code></li>
+			<li id="note2">Be very, <em>very</em> careful here. Any errors in the configuration, including missing directories, will cause the entire web server to stop functioning until the problem is fixed! Remember to run <code>rails</code> (see Step 1) before restarting Apache, or you'll run into problems.</li>
+			<li id="note3">This step relies on a file called <code>rocketcart.sql</code>, located in the home directory of the <code>rocketcartavatarconz</code> user. This file <em>must</em> be updated after <em>any</em> changes to the source database.</li>
+			<li>I've made all the passwords the same for simplicity, but you could just as easily have different passwords for the hosting account, the database and the admin area if you really wanted.</li>
+		</ol>
+		<hr />
+		<p>Last updated by <a href="mailto:matt@avatar.co.nz">Matt Powell</a>, 30/1/2006.</p>
+	</body>
+</html>

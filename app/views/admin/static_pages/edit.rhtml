@@ -1,0 +1,9 @@
+<% @page_title = "Rocket Cart Admin Area : Edit Static Page ##{@page.id}" -%>
+
+<h1>Edit Static Page</h1>
+
+<% form_tag do %>
+<%= render :partial => 'static_page_form' -%>
+<% end %>
+
+<%= render :partial => 'admin/rich_editor', :locals => { :element_id => 'page_body' } -%>

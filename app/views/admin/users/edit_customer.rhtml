@@ -1,0 +1,129 @@
+<% @page_title = "Rocket Cart Admin Area : Edit Customer" -%>
+
+<h1>Edit Customer</h1>
+
+<%= error_messages_for "customer" %>
+
+<p>(Required fields are marked with a *)</p>
+
+<% form_tag do %>
+	<div class="fieldset">
+		<div class="legend">Customer Details</div>
+
+		<table class="form">
+			<tbody>
+				<tr>
+					<td class="label">
+						* <%= content_tag("label", "First Name", :for => "customer_first_name") %>
+					</td>
+					<td class="field">
+						<%= text_field 'customer', 'first_name', :class => 'text' %><%= show_tooltip(:user, :first_name) %>
+					</td>
+				</tr>
+				<tr>
+					<td class="label">
+						<%= content_tag("label", "Last Name", :for => "customer_last_name") %>
+					</td>
+					<td class="field">
+						<%= text_field 'customer', 'last_name', :class => 'text' %><%= show_tooltip(:user, :last_name) %>
+					</td>
+				</tr>
+				<tr>
+					<td class="label">
+						* <%= content_tag("label", "Email", :for => "customer_email") %>
+					</td>
+					<td class="field">
+						<%= text_field 'customer', 'email', :class => 'text' %><%= show_tooltip(:user, :email) %>
+					</td>
+				</tr>
+				<tr>
+					<td class="label">
+						* <%= content_tag("label", "Wholesaler?", :for => "customer_sees_wholesale") %>
+					</td>
+					<td class="field">
+						<select name="customer[sees_wholesale]" id="customer_sees_wholesale">
+							<option value="1"<%= if @customer[:sees_wholesale] then " selected=\"selected\"" end -%>>Yes</option>
+							<option value="0"<%= unless @customer[:sees_wholesale] then " selected=\"selected\"" end -%>>No</option>
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<td class="label">
+						* <%= content_tag("label", "Active?", :for => "customer_active") %>
+					</td>
+					<td class="field">
+						<select name="customer[active]" id="customer_active">
+							<option value="1"<%= if @customer[:active] then " selected=\"selected\"" end -%>>Yes</option>
+							<option value="0"<%= unless @customer[:active] then " selected=\"selected\"" end -%>>No</option>
+						</select>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+
+	<%= submit_tag "Save Changes", :name => "save", :class => "button" %>
+
+	<p><%=
+	into_text = ""
+
+	show_approve = false
+	show_deny = false
+
+	unless @customer[:wholesale_application] == "-"
+		into_text += "This customer has applied to become a wholesaler"
+		show_approve = true
+		show_deny = true
+
+		if @customer[:wholesale_application] == "y"
+			into_text += ", and has been approved"
+			show_approve = false
+		elsif @customer[:wholesale_application] == "n"
+			into_text += ", and has been denied"
+			show_deny = false
+		else
+			into_text += ". Approving their application will inform them via email"
+		end
+
+		into_text += "."
+	end
+
+-%></p>
+
+<% if show_approve -%>
+	<%= submit_tag "Approve application", :name => "approve", :class => "button" %>
+<% end -%>
+
+<% if show_deny -%>
+	<%= submit_tag "Deny application", :name => "deny", :class => "button" %>
+<% end -%>
+
+	<p>Leave the password fields blank to have Rocket Cart generate a password for you.</p>
+
+	<div class="fieldset">
+		<div class="legend">Password</div>
+
+		<table class="form">
+			<tbody>
+				<tr>
+					<td class="label">
+						<%= content_tag("label", "Password", :for => "customer_password") %>
+					</td>
+					<td class="field">
+						<%= password_field 'customer', 'password', :class => 'text' %><%= show_tooltip(:user, :password) %>
+					</td>
+				</tr>
+				<tr>
+					<td class="label">
+						<%= content_tag("label", "Password (confirm)", :for => "customer_password_confirmation") %>
+					</td>
+					<td class="field">
+						<%= password_field 'customer', 'password_confirmation', :class => 'text' %><%= show_tooltip(:user, :password_confirm) %>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+
+	<%= submit_tag "Change Password", :name => "password", :class => "button" %>
+<% end %>

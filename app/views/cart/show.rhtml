@@ -1,0 +1,14 @@
+<h1>Your Cart</h1>
+<% if !@cart or @cart.is_empty? -%>
+	<p>There are currently no items in your cart.</p>
+<% else -%>
+	<% form_tag :action => :update do %>
+		<%= render :partial => 'cart_form' %>
+
+		<p>
+			<%= submit_tag 'Delete Selected', :name => 'delete' %>
+			<%= submit_tag 'Save Changes', :name => 'save' %>
+			<%= submit_tag 'Checkout', :name => 'checkout' %>
+		</p>
+	<% end %>
+<% end -%>

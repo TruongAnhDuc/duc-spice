@@ -1,0 +1,169 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" >
+	<head>
+		<title><%= @page_title || "Rocket Cart Admin Area" %></title>
+		<meta name="author" content="Avatar Web Promotions Ltd" />
+		<meta name="description" content="" />
+		<meta name="keywords" content="" />
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<%= stylesheet_link_tag 'admin' %>
+<% # The order of javascript includes is apparently quite important, otherwise TinyMCE will break. -%>
+		<%= javascript_include_tag 'prototype' %>
+<% # Dont use javascript_include_tag for tiny_mce as the resulting timestamp on the end of the URL breaks it. -%>
+<% # Is there a parameter to javascript_include_tag that disables the timestamp?  I need to find a decent Rails reference. -%>
+		<script src="<%= @ROCKETCARTDIR -%>/javascripts/tiny_mce/tiny_mce.js" type="text/javascript"></script>
+		<%= javascript_include_tag 'effects' %>
+		<%= javascript_include_tag 'local' %>
+		<%= javascript_include_tag 'overlib_mini' %>
+		<%= javascript_include_tag 'overlib_shadow_mini' %>
+	</head>
+	<body>
+		<div id="overDiv" style="position:absolute; visibility:hidden; z-index:1000;"></div>
+		<div id="container">
+			<div id="header">
+<p id="rocket_cart_version" style="float:right;font-size:6pt;"><%= rocket_cart_version -%></p>
+			</div>
+
+			<div id="columns">
+				<div id="body">
+					<div id="login-info">
+						<% if @current_user # && @current_user.permissions >= :staff -%>
+							Logged in as <%= "#{@current_user} (#{@current_user.permissions})" %> [<a href="?logout=yes">log out</a>]
+						<% else -%>
+							&nbsp;
+						<% end -%>
+					</div>
+
+					<div id="body-inner">
+						<%= yield %>
+					</div>
+				</div>
+
+				<div id="sidebar">
+					<% if @current_user && @current_user.permissions >= :staff -%>
+						<ul id="menu">
+							<li id="menu-products">
+								<span class="top_level">Products</span>
+								<ul id="sub-products">
+<% css_class = (@current_area == "products") ? "current" : nil -%>
+									<li><%=  link_to("Products", { :controller => "/admin", :action => :products }, :class => css_class) %></li>
+<% css_class = (@current_area == "deleted_products") ? "current" : nil -%>
+									<li><%=  link_to("Deleted Products", { :controller => "/admin", :action => :deleted_products }, :class => css_class) %></li>
+<% css_class = (@current_area == "categories") ? "current" : nil -%>
+									<li><%=  link_to("Categories", { :controller => "/admin/categories", :action => :list }, :class => css_class) %></li>
+<%
+#SNIP=featured_products
+# DO NOT REMOVE THE ABOVE COMMENT. It is used to remove the above feature
+-%>
+<% css_class = (@current_area == "features") ? "current" : nil -%>
+									<li><%=  link_to("Featured Products", { :controller => "/admin/features", :action => :list }, :class => css_class) %></li>
+<%
+# DO NOT REMOVE THE BELOW COMMENT. It is used to remove the above feature
+#/SNIP=featured_products
+-%>
+<% css_class = (@current_area == "options") ? "current" : nil -%>
+									<li><%=  link_to("Product Options", { :controller => "/admin/options", :action => :list }, :class => css_class) %></li>
+<% css_class = (@current_area == "product_types") ? "current" : nil -%>
+									<li><%=  link_to("Product Types", { :controller => "/admin/product_types", :action => :list }, :class => css_class) %></li>
+								</ul>
+							</li>
+							<li id="menu-orders">
+								<span class="top_level">Orders</span>
+								<ul id="sub-orders">
+<% css_class = (@current_area == "pending_orders") ? "current" : nil -%>
+									<li><%=  link_to("Orders Awaiting Shipping", { :controller => "/admin/orders", :action => :pending }, :class => css_class) %></li>
+<% css_class = (@current_area == "orders") ? "current" : nil -%>
+									<li><%=  link_to("Order History", { :controller => "/admin/orders", :action => :list }, :class => css_class) %></li>
+								</ul>
+							</li>
+							<li id="menu-users">
+								<span class="top_level">Users</span>
+								<ul id="sub-users">
+<% css_class = (@current_area == "customers") ? "current" : nil -%>
+									<li><%=  link_to("Customers", { :controller => "/admin/users", :action => :customers }, :class => css_class) %></li>
+<% if @current_user.permissions >= :staff -%>
+<% css_class = (@current_area == "admins") ? "current" : nil -%>
+									<li><%=  link_to("Admins", { :controller => "/admin/users", :action => :admins }, :class => css_class) %></li>
+<% end -%>
+								</ul>
+							</li>
+							<li id="menu-reports">
+								<span class="top_level">Reports</span>
+								<ul id="sub-reports">
+<%
+#SNIP=orders_report
+# DO NOT REMOVE THE ABOVE COMMENT. It is used to remove the above feature
+-%>
+<% css_class = (@current_area == "orders_report") ? "current" : nil -%>
+									<li><%=  link_to("Orders", { :controller => "/admin/reports", :action => :orders }, :class => css_class) %></li>
+<%
+# DO NOT REMOVE THE BELOW COMMENT. It is used to remove the above feature
+#/SNIP=orders_report
+
+#SNIP=products_report
+# DO NOT REMOVE THE ABOVE COMMENT. It is used to remove the above feature
+-%>
+<% css_class = (@current_area == "products_report") ? "current" : nil -%>
+									<li><%=  link_to("Products", { :controller => "/admin/reports", :action => :products }, :class => css_class) %></li>
+<% css_class = (@current_area == "products_by_type_report") ? "current" : nil -%>
+									<li><%=  link_to("Products by Type", { :controller => "/admin/reports", :action => :products_by_type }, :class => css_class) %></li>
+<%
+# DO NOT REMOVE THE BELOW COMMENT. It is used to remove the above feature
+#/SNIP=products_report
+
+#SNIP=customers_report
+# DO NOT REMOVE THE ABOVE COMMENT. It is used to remove the above feature
+-%>
+<% css_class = (@current_area == "customers_report") ? "current" : nil -%>
+									<li><%=  link_to("Customers", { :controller => "/admin/reports", :action => :customers }, :class => css_class) %></li>
+<%
+# DO NOT REMOVE THE BELOW COMMENT. It is used to remove the above feature
+#/SNIP=customers_report
+-%>
+								</ul>
+							</li>
+							<li id="menu-content">
+								<span class="top_level">Content</span>
+								<ul id="sub-content">
+<% css_class = (@current_area == "static_pages") ? "current" : nil -%>
+									<li><%=  link_to("Static Pages", { :controller => "/admin/static_pages", :action => :list }, :class => css_class) %></li>
+<% css_class = (@current_area == "newsletter_signups") ? "current" : nil -%>
+									<li><%=  link_to("Newsletter Signups", { :controller => "/admin/newsletter_signups", :action => :list }, :class => css_class) %></li>
+<% css_class = (@current_area == "reviews") ? "current" : nil -%>
+									<li><%=  link_to("Reviews", { :controller => "/admin/reviews", :action => :list }, :class => css_class) %></li>
+<% css_class = (@current_area == "barcodes") ? "current" : nil -%>
+									<li><%=  link_to("Barcodes", { :controller => "/admin/barcodes", :action => :list }, :class => css_class) %></li>
+<% css_class = (@current_area == "credit_account") ? "current" : nil -%>
+									<li><%=  link_to("Credit Account Application", { :controller => "/admin/credit_account", :action => :list }, :class => css_class) %></li>
+								</ul>
+							</li>
+<% if @current_user.permissions >= :client -%>
+							<li id="menu-settings">
+								<span class="top_level">Settings</span>
+								<ul id="sub-settings">
+<% css_class = (@current_area == "zones") ? "current" : nil -%>
+									<li><%=  link_to("Shipping Options", { :controller => "/admin/shipping_zones", :action => :list }, :class => css_class) %></li>
+<% css_class = (@current_area == "settings") ? "current" : nil -%>
+									<li><%=  link_to("Application Settings", { :controller => "/admin/settings", :action => :edit }, :class => css_class) %></li>
+<% if !@demo_admin -%>
+<% css_class = (@current_area == "gateways") ? "current" : nil -%>
+									<li><%=  link_to("Payment Gateways", { :controller => "/admin/payment_gateways", :action => :list }, :class => css_class) %></li>
+<% end -%>
+<% css_class = (@current_area == "currencies") ? "current" : nil -%>
+									<li><%=  link_to("Currencies", { :controller => "/admin/currencies", :action => :list }, :class => css_class) %></li>
+								</ul>
+							</li>
+<% end -%>
+						</ul>
+
+						<p id="help">
+							<%= link_to("#{image_tag("#{icon_path('pdf')}", :alt => "PDF Format", :title => "PDF Format", :style => "border: 0px;")} User Manual", "#{@ROCKETCARTDIR}/docs/RocketCartInstructionsManualV1.4.pdf") %>
+						</p>
+					<% end -%>
+				</div>
+
+				<div id="cleaner"></div>
+			</div>
+		</div>
+	</body>
+</html>

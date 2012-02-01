@@ -1,0 +1,29 @@
+<div id="body-container">
+				<div id="body">
+<% unless @no_cart_preview -%>
+					<div id="cart-summary">
+						<%= render_component(:controller => 'cart', :action => @configurator[:modules][:cart_summary_template][:value]) %>
+					</div>
+<% end -%>
+					<div id="wholesale-links">
+<% if @current_user && @current_user[:sees_wholesale] -%>
+						<a href="/wholesale/retail-order-form" class="noline"><img src="/images/retail-order-form-icon.gif" alt="Retail Spices Order Form" /></a>
+						<a href="/wholesale/retail-order-form">Retail Spices Order Form</a>
+
+						<a href="/wholesale/wholesale-order-form" class="noline"><img src="/images/wholesale-order-form-icon.gif" alt="Bulk Spices Order Form" /></a>
+						<a href="/wholesale/wholesale-order-form">Bulk Spices Order Form</a>
+
+						<a href="/wholesale/drafts" class="noline"><img src="/images/draft-orders-icon.gif" alt="Draft Orders" />
+						</a><a href="/wholesale/drafts">Draft Orders</a>
+<% end -%>
+					</div>
+					<div class="clear-floats"></div>
+
+					<div id="body-inner">
+						<%= if @body_title then "<h1 class=\"body-title\">#{@body_title}</h1>" end %>
+
+						<%= @content_for_layout %>
+					</div>
+					<div class="clear-floats"></div>
+				</div>
+			</div>

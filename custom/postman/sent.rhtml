@@ -1,0 +1,129 @@
+<html>
+<head>
+<title>An order has been placed</title>
+</head>
+<body>
+<%= render :partial => '../postman/styles' -%>
+
+<p>The following order has been placed at your store:</p>
+
+<table class="order">
+<thead>
+	<tr>
+		<th>Code</th>
+		<th colspan="2">Product</th>
+		<th>Price</th>
+		<th>Qty</th>
+		<th>Total</th>
+	</tr>
+</thead>
+<tbody>
+<%
+	@order.items.each_with_index do |item, i|
+		option_values = item.option_values || {}
+		product = item.product
+
+		@option_values = Array.new
+		option_values.each do |cur_option_value|
+			if !@option_values[cur_option_value[:option_id]]
+				@option_values[cur_option_value[:option_id]] = Array.new
+			end
+			@option_values[cur_option_value[:option_id]][cur_option_value.id] = cur_option_value
+		end
+
+		@options = Option.find(:all)
+
+		options_count = 0
+		@option_values.each do |cur_option|
+			if cur_option
+				options_count += 1
+			end
+		end
+
+		rowspan = options_count + 1
+-%>
+
+		<tr>
+			<td rowspan="<%= rowspan %>"><%= product.product_code %></td>
+			<td colspan="2"><%= product.name %></td>
+			<td class="price" rowspan="<%= rowspan %>"><%= format('$%.2f', item.total_unit_price) %></td>
+			<td class="qty" rowspan="<%= rowspan %>"><%= item.quantity %></td>
+			<td class="price" rowspan="<%= rowspan %>"><%= format('$%.2f', item.total_unit_price * item.quantity) %></td>
+		</tr>
+<%
+		@option_values.each_with_index do |cur_option_values, option_i|
+			if cur_option_values && !cur_option_values.empty?
+
+				chosen_option = nil
+				@options.each do |cur_option|
+					if cur_option[:id] == option_i
+						chosen_option = cur_option
+					end
+				end
+				if chosen_option
+					values_text = ''
+					cur_option_values.each do |cur_chosen_value|
+						if cur_chosen_value
+							if values_text = ''
+								values_text = cur_chosen_value.value
+							else
+								values_text += ', ' + cur_chosen_value.value
+							end
+						end
+					end
+-%>
+			<tr class="<%= i % 2 == 0 ? 'even' : 'odd' %>">
+				<td><%= chosen_option.label %></td>
+				<td><%= values_text -%></td>
+			</tr>
+<%
+				end
+			end
+		end
+	end
+-%>
+</tbody>
+<tfoot>
+	<tr>
+		<td colspan="4"><strong>Subtotal:</strong></td>
+		<td class="total qty"><%= @items.inject(0) { |sum, i| sum + i.quantity } %></td>
+		<td class="total price"><%= format('$%.2f', @order.subtotal) %></td>
+	</tr>
+	<tr>
+		<% @order.shipping_zone ||= ShippingZone.default_zone -%>
+		<td><strong>Shipping:</strong></td>
+		<td colspan="3"><%= if @order.shipping_zone then "#{@order.shipping_zone.name}" + ((@order.shipping_zone.describe_price and !@order.shipping_zone.describe_price.empty?) ? "(#{@order.shipping_zone.describe_price})" : '') else 'Free shipping' end -%></td>
+		<td></td>
+		<td class="total price"><%= format('$%.2f', @order.shipping_cost) %></td>
+	</tr>
+	<tr>
+		<td colspan="4"><strong>Total:</strong></td>
+		<td></td>
+		<td class="total price"><%= format('$%.2f', @order.total) %></td>
+	</tr>
+</tfoot>
+</table>
+
+<p>Shipping details:</p>
+
+<% if @order.delivery_address -%>
+<p><strong>Name:</strong> <%= @order.delivery_address[:name] -%></p>
+<p><strong>Email:</strong> <%= @order[:shipping_email] -%></p>
+<p><strong>Address:</strong> <%= @delivery_address[:address] -%></p>
+<p><strong>City:</strong> <%= @delivery_address[:city] -%></p>
+<p><strong>Postcode:</strong> <%= @delivery_address[:postcode] -%></p>
+<% if @config[:modules][:show_country] && @config[:modules][:show_country][:value] -%>
+<p><strong>Country:</strong> <%= @delivery_address[:country] -%></p>
+<% end -%>
+<% else -%>
+<p><strong>Name:</strong> <%= @order.billing_address[:name] -%></p>
+<p><strong>Email:</strong> <%= @order[:shipping_email] -%></p>
+<p><strong>Address:</strong> <%= @billing_address[:address] -%></p>
+<p><strong>City:</strong> <%= @billing_address[:city] -%></p>
+<p><strong>Postcode:</strong> <%= @billing_address[:postcode] -%></p>
+<% if @config[:modules][:show_country] && @config[:modules][:show_country][:value] -%>
+<p><strong>Country:</strong> <%= @billing_address[:country] -%></p>
+<% end -%>
+<% end -%>
+</body>
+</html>

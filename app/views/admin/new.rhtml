@@ -1,0 +1,13 @@
+<% @page_title = "Rocket Cart Admin Area : New Product" -%>
+
+<h1>New Product</h1>
+<p>(Required fields are marked with a *)</p>
+<%= custom_error_messages_for(:product) -%>
+
+<% form_tag({ :action => :new }, :multipart => true) do %>
+	<div class="fieldset">
+		<div class="legend">Create New Product</div>
+		<%= render :partial => 'product_form' %>
+	</div>
+	<p><%= submit_tag 'Save and continue', :name => 'save', :class => 'button' %> to set up product options</p>
+<% end %>

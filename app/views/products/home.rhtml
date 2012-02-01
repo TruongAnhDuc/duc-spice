@@ -1,0 +1,5 @@
+<% @page_title = @static_page.title || @configurator[:application][:name][:value] -%>
+<% @meta_keywords = @static_page.meta_keywords -%>
+<% @meta_description = @static_page.meta_description -%>
+
+<%= RedCloth.new(@static_page.body || "").to_html %>

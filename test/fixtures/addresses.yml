@@ -1,0 +1,13 @@
+forkeds_house:
+  id: 1
+  address: "16 CPU Row"
+  city: Abit
+  country: "IBM Compatible"
+  name: forked
+spooneds_house:
+  id: 2
+  address: "17 CPU Row"
+  city: Asus
+  country: "IBM Compatible"
+  name: spooned
+  

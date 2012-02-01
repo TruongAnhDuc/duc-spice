@@ -1,0 +1,32 @@
+<div id="header">
+<% if request.request_uri == '/' then -%>
+				<div id="logo"><img src="/images/main-logo.jpg" alt="The Spice Trader" width="327" height="190" /></div>
+<% else -%>
+				<div id="sect-logo"><a href="/"><img src="/images/logo.jpg" alt="The Spice Trader" width="327" height="160" border="0" /></a></div>
+<% end -%>
+<% if request.request_uri == '/' then -%>
+				<div id="flash">
+					<object classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000" codebase="http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=7,0,19,0" width="471" height="190" title="The Spice Trader Flash Animation">
+						<param name="movie" value="/images/spice-trader.swf" />
+						<param name="quality" value="high" />
+						<embed src="/images/spice-trader.swf" quality="high" pluginspage="http://www.macromedia.com/go/getflashplayer" type="application/x-shockwave-flash" width="471" height="190"></embed>
+					</object>
+				</div>
+<% elsif request.request_uri == '/spice-history' || request.request_uri == '/spice-history/' then -%>
+				<div id="sect-h-img"><img src="/images/sect-h-history.jpg" alt="Fine Quality Fresh Spices" width="471" height="160" /></div>
+<% else -%>
+				<div id="sect-h-img"><img src="/images/sect-h-img.jpg" alt="Fine Quality Fresh Spices" width="471" height="160" /></div>
+<% end -%>
+				<div id="nav-container">
+					<ul id="nav">
+						<li id="link-home"><a href="/"><span>Home</span></a></li>
+						<li id="link-what-are-spices"><a href="/spices"><span>What are Spices?</span></a></li>
+						<li id="link-spice-history"><a href="/history-of-spice"><span>Spice History</span></a></li>
+						<li id="link-our-spice-products"><a href="/products-overview"><span>Our Spice Products</span></a></li>
+						<li id="link-buy-spices"><a href="/products"><span>Buy Spices</span></a></li>
+						<li id="link-recipes-and-tips"><a href="/recipes-and-tips"><span>Recipes &amp; Tips</span></a></li>
+						<li id="link-enquiries"><a href="/contact-us"><span>Enquiries</span></a></li>
+						<li id="link-shopping-info"><a href="/retail-spices"><span>Shopping Info</span></a></li>
+					</ul>
+				</div>
+			</div>

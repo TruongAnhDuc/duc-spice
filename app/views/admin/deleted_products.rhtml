@@ -1,0 +1,67 @@
+<% @page_title = "Rocket Cart Admin Area : Deleted Products" -%>
+
+<h1>Deleted Products</h1>
+
+<% form_tag do %>
+<fieldset>
+	<legend title="Search"><img src="<%= @ROCKETCARTDIR + icon_path('search') -%>" alt="Search" width="<%= @design_config[:sizes][:admin_icons_width] -%>" height="<%= @design_config[:sizes][:admin_icons_height] -%>" class="icon" /> Search</legend>
+
+	<table cellpadding="0">
+		<tr>
+			<td>
+				<strong>Product Code, Name, Description or ID:</strong>
+			</td>
+			<td>
+				<input class="text" type="text" name="query" value="<%= @query || '' %>" /><%= show_tooltip(:products, :query) -%>
+			</td>
+		</tr>
+		<tr>
+			<td>&nbsp;</td>
+			<td style="text-align: right;">
+				<input class="button" type="submit" name="search" value="Search" />
+			</td>
+		</tr>
+	</table>
+</fieldset>
+<% end %>
+
+<% if @product_count.zero? -%>
+	<p>No deleted products found.</p>
+<% else -%>
+
+<%= render :partial => 'paginator' %>
+
+<% form_tag do %>
+<table class="list">
+	<thead>
+	<tr class="actions">
+		<td colspan="3">
+			Selected products:<br />
+			<%= submit_tag 'Restore', :name => 'undelete', :class => 'button' %>
+		</td>
+	</tr>
+	<tr class="list-header">
+		<th>Select</th>
+		<th>Code <%= render :partial => 'sorting_arrows', :locals => { :column => 'code' } %></th>
+		<th>Name <%= render :partial => 'sorting_arrows', :locals => { :column => 'name' } %></th>
+	</tr>
+	</thead>
+	<tbody>
+		<% @products.each_with_index do |p, i| -%>
+			<tr class="<%= (i % 2 == 0) ? 'odd' : 'even' %>">
+				<td><input class="checkbox" type="checkbox" name="select[<%= p.id %>]" value="1" /></td>
+				<td><%= p.product_code %></td>
+				<td>
+					<%= h(p.name) %><br />
+					<span><%= p.categories.collect { |c| c.name }.join(', ') %></span>
+				</td>
+			</tr>
+		<% end -%>
+	</tbody>
+</table>
+<% end %>
+
+<%= render :partial => 'paginator' %>
+
+<% end -%>
+

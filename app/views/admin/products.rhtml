@@ -1,0 +1,90 @@
+<% @page_title = "Rocket Cart Admin Area : Products" -%>
+
+<h1>Products</h1>
+
+<% form_tag do %>
+<fieldset>
+	<legend title="Search"><img src="<%= @ROCKETCARTDIR + icon_path('search') -%>" alt="Search" width="<%= @design_config[:sizes][:admin_icons_width] -%>" height="<%= @design_config[:sizes][:admin_icons_height] -%>" class="icon" /> Search</legend>
+
+	<table cellpadding="0">
+		<tr>
+			<td>
+				<strong>Product Code, Name, Description or ID:</strong>
+			</td>
+			<td>
+				<input class="text" type="text" name="query" value="<%= @query || '' %>" /><%= show_tooltip(:products, :query) -%>
+			</td>
+		</tr>
+		<tr>
+			<td>&nbsp;</td>
+			<td style="text-align: right;">
+				<input class="button" type="submit" name="search" value="Search" />
+			</td>
+		</tr>
+	</table>
+</fieldset>
+<% end %>
+
+<p><%= link_to 'Create a new product', { :action => :new } %></p>
+
+<% if @product_count.zero? -%>
+	<p>No products found.</p>
+<% else -%>
+
+<%= render :partial => 'paginator' %>
+
+<% form_tag do %>
+<table class="list">
+	<thead>
+	<tr class="actions">
+		<td colspan="4">
+			Selected products:<br />
+			<%= submit_tag 'Delete', :name => 'delete', :class => 'button', :onclick => 'return confirm(\'Really delete the selected products?\')' %>
+			or add to category
+			<select name="category_id" style="width: 15em;">
+				<%= options_for_select(Category.all.collect { |x| [x.path, x.id] })%>
+			</select>
+			<%= submit_tag 'Add', :name => 'add_to', :class => 'button' %>
+		</td>
+	</tr>
+	<tr class="list-header">
+		<th>Select</th>
+		<th>Code <%= render :partial => "sorting_arrows", :locals => { :column => "code" } %></th>
+		<th>Name <%= render :partial => "sorting_arrows", :locals => { :column => "name" } %></th>
+		<th></th>
+	</tr>
+	</thead>
+	<tbody>
+		<% @products.each_with_index do |p, i| -%>
+			<tr class="<%= (i % 2 == 0) ? 'odd' : 'even' %>">
+				<td><input class="checkbox" type="checkbox" name="select[<%= p.id %>]" value="1" /></td>
+				<td><%= p.product_code %></td>
+				<td>
+					<%= link_to p.name, { :action => :product, :id => p } %><br />
+					<span><%= p.categories.collect { |c| c.name }.join(', ') %></span>
+				</td>
+				<td nowrap="nowrap" class="icons">
+					<%= action_icon("View", "view", "#{@ROCKETCARTDIR + p.path}") -%>
+					&nbsp;
+<%
+#SNIP=featured_products
+# DO NOT REMOVE THE ABOVE COMMENT. It is used to remove the above feature
+-%>
+					<%= action_icon("Feature", "star", { :controller => "/admin/features", :action => :new, :id => p }) -%>
+					&nbsp;
+<%
+# DO NOT REMOVE THE BELOW COMMENT. It is used to remove the above feature
+#/SNIP=featured_products
+-%>
+					<%= action_icon("Edit", "edit", { :action => :product, :id => p }) -%>
+				</td>
+			</tr>
+		<% end -%>
+	</tbody>
+</table>
+<% end %>
+
+<%= render :partial => 'paginator' %>
+
+<% end -%>
+

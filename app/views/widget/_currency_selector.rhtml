@@ -1,0 +1,9 @@
+<%
+# IF CHECKOUT
+unless (request.request_uri =~ /^\/cart\/checkout.*/).nil?
+-%>
+Currency conversion unavailable.
+<% else -%>
+<%= select_tag 'currency', options_from_collection_for_select(@currencies, 'abbreviation', 'name', @currency ? @currency.abbreviation : nil), :onchange => "currency_conversion($F('currency'));" %>
+<p><strong>Please note:</strong> All transactions are conducted in New Zealand Dollars. All other prices are approximate and are provided for comparison only.</p>
+<% end -%>

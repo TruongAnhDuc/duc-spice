@@ -1,0 +1,24 @@
+<% @page_title = "Rocket Cart Admin Area : Credit Account Application Form" -%>
+
+<h1>Credit Account Application Form</h1>
+
+<% if flash[:notice] -%>
+	<div class="notice"><%= flash[:notice] %></div>
+<% end -%>
+<% if flash[:error] -%>
+	<div class="errorExplanation"><%= flash[:error] %></div>
+<% end -%>
+
+<% if @application_form_exists -%>
+<p>The current application form is <%= number_to_human_size(@file_stats.size) -%> in size, and was last uploaded on <%= @file_stats.mtime.strftime("%a %b %d %H:%M:%S") -%>.</p>
+<p><a href="/credit_account/<%= @filename -%>">Download the current application form</a></p>
+<p>You can upload a new application form to replace it here.<p>
+<% else -%>
+<p>You can upload an application form here.<p>
+<% end -%>
+
+<% form_tag({}, :multipart => true) do -%>
+	<%= file_field("spreadsheet", "spreadsheet", :class => "button") %>
+
+	<%= submit_tag "Upload", :name => "upload", :class => "button" %>
+<% end -%>

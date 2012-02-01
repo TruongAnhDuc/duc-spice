@@ -1,0 +1,6 @@
+--- 
+:payment_express: 
+  :access_key: e49b2b1575fc0e691455e7a333e5bf0a34b94663d139aa66
+  :mac_key: 96b5d9f87380d263
+  :access_url: https://www.paymentexpress.com/pxpay/pxpay.aspx
+  :user_id: SpiceTrader

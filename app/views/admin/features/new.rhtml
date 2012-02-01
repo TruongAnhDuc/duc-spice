@@ -1,0 +1,23 @@
+<% @page_title = "Rocket Cart Admin Area : New Featured Product" -%>
+
+<%= javascript_include_tag '/calendar/calendar' %>
+<%= javascript_include_tag '/calendar/lang/calendar-en' %>
+<%= javascript_include_tag '/calendar/calendar-setup' %>
+<%= stylesheet_link_tag '/calendar/calendar-win2k-1' %>
+<h1>Featured Product</h1>
+
+<%= error_messages_for(:feature) %>
+
+<% form_tag :action => :new do %>
+<%= render :partial => 'feature_form' -%>
+<% end %>
+<%= render :partial => 'admin/rich_editor', :locals => { :element_id => 'feature_description' } -%>
+<script type="text/javascript">
+	Calendar.setup(
+		{
+			inputField : 'featured_until',
+			ifFormat : '%d/%m/%Y',
+			button : 'trigger_featured_until'
+		}
+	);
+</script>

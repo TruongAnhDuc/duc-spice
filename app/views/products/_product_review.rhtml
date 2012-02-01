@@ -1,0 +1,6 @@
+<div class="customer_review">
+	<%= render :partial => "review_stars", :locals => { :stars => review[:rating] } -%>
+
+	<blockquote>"<%= review[:comments] -%>"<br />
+	<strong><em><%= review.user -%></em></strong></blockquote>
+</div>

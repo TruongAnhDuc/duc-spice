@@ -1,0 +1,165 @@
+<%
+# This takes two objects - an Option and an array of OptionValue''s. The GUI is identical regardless
+# of the type of the Object - later this should be changed so a SingleSelectOption gets a
+# simplified (only 1 option_value allowed) GUI, and the TextOption gets a different GUI (probably
+# no sub-option configuration at all - it just outputs a text input box, after all).
+-%>
+
+<% if option.class.to_s == 'TextOption' -%>
+	<table class="option-gui">
+		<tr>
+			<td>
+				Initial Value: <input type="text" name="value-<%= option_values.first.id -%>" size="30" value="<%= option_values.first.value -%>">
+			</td>
+		</tr>
+	</table>
+<%
+# CheckBox options dont need any further configuration.
+%>
+<% elsif option.class.to_s != 'CheckBox' -%>
+	<table class="option-gui">
+		<tr>
+			<td valign="bottom">
+				<b>Option values:</b><br />
+				<table border="0" cellspacing="0" class="layout">
+					<tr>
+						<th>Name</th>
+						<th>Extra Cost</th>
+						<th>Wholesale</th>
+						<th>Wholesale Only?</th>
+						<th>Extra Weight</th>
+						<th colspan="4">Actions</th>
+					</tr>
+					<% odd_row = 1 %>
+					<% option_values.each do |cur_value| -%>
+					<tr<%= odd_row == 1 ? ' class="option-odd-row"' : '' -%>>
+						<% odd_row = (odd_row + 1) % 2 %>
+						<td nowrap="nowrap"><input size="15" type="text" name="value-<%= cur_value.id -%>" value="<%= cur_value.value -%>" /></td>
+						<td nowrap="nowrap">+$<input size="4" type="text" name="extra-cost-<%= cur_value.id -%>" value="<%=sprintf('%.2f', cur_value.extra_cost) -%>" /></td>
+						<td nowrap="nowrap">+$<input size="4" type="text" name="wholesale-extra-cost-<%= cur_value.id -%>" value="<%=sprintf('%.2f', cur_value.wholesale_extra_cost) -%>" /></td>
+						<td nowrap="nowrap"><input type="checkbox" name="wholesale-only-<%= cur_value.id -%>" value="1"<%= if cur_value.wholesale_only then " checked=\"checked\"" end -%> /></td>
+						<td nowrap="nowrap">+<input size="4" type="text" name="extra-weight-<%= cur_value.id -%>" value="<%=cur_value.extra_weight -%>" /> kg</td>
+<% if(cur_value.id == option_values.first.id) %>
+						<td><img src="<%= @ROCKETCARTDIR + icon_path('up-grey') -%>" alt="Up" title="Cannot move up" width="16" height="16" /></td>
+<% else %>
+						<td><a href="#" onClick="return option_action(<%= option.id -%>, <%= cur_value.id -%>, 'up');"><img src="<%= @ROCKETCARTDIR + icon_path('up') -%>" alt="Up" title="Move this option value up" width="16" height="16" /></a></td>
+<% end %>
+<% if(cur_value.id == option_values.last.id) %>
+						<td><img src="<%= @ROCKETCARTDIR + icon_path('down-grey') -%>" alt="Down" title="Move this option value down" width="16" height="16" /></td>
+<% else %>
+						<td><a href="#" onClick="return option_action(<%= option.id -%>, <%= cur_value.id -%>, 'down');"><img src="<%= @ROCKETCARTDIR + icon_path('down') -%>" alt="Down" title="Move this option value down" width="16" height="16" /></a></td>
+<% end %>
+						<td><a href="#" onClick="return option_action(<%= option.id -%>, <%= cur_value.id -%>, 'delete_value');"><img src="<%= @ROCKETCARTDIR + icon_path('delete') -%>" alt="X" title="Delete this option value" width="16" height="16" /></a></td>
+<% if(cur_value.id == option.default_value.to_i) %>
+						<td><span style="color: #666666" title="This is the current default value">Default</span></td>
+<% else %>
+						<td><a href="#" onClick="return option_action(<%= option.id -%>, <%= cur_value.id -%>, 'set_default');" title="Set this as the default value">Default</a></td>
+<% end %>
+					</tr>
+					<% end -%>
+					<tr>
+						<td colspan="8"><br /><b>Add a new option value:</b></td>
+					</tr>
+					<tr>
+						<th>Name</th>
+						<th>
+<%
+#SNIP=weight_cost_options
+# DO NOT REMOVE THE ABOVE COMMENT. It is used to remove the above feature
+-%>
+						Extra Cost
+<%
+# DO NOT REMOVE THE BELOW COMMENT. It is used to remove the above feature
+#/SNIP=weight_cost_options
+-%>
+						</th>
+						<th>
+<%
+#SNIP=weight_cost_options
+# DO NOT REMOVE THE ABOVE COMMENT. It is used to remove the above feature
+-%>
+						Wholesale
+<%
+# DO NOT REMOVE THE BELOW COMMENT. It is used to remove the above feature
+#/SNIP=weight_cost_options
+-%>
+						</th>
+						<th>
+<%
+#SNIP=weight_cost_options
+# DO NOT REMOVE THE ABOVE COMMENT. It is used to remove the above feature
+-%>
+						Wholesale Only?
+<%
+# DO NOT REMOVE THE BELOW COMMENT. It is used to remove the above feature
+#/SNIP=weight_cost_options
+-%>
+						</th>
+						<th>
+<%
+#SNIP=weight_cost_options
+# DO NOT REMOVE THE ABOVE COMMENT. It is used to remove the above feature
+-%>
+						Extra Weight
+<%
+# DO NOT REMOVE THE BELOW COMMENT. It is used to remove the above feature
+#/SNIP=weight_cost_options
+-%>
+						</th>
+						<th colspan="4"></th>
+					</tr>
+					<tr>
+						<td><input class="text" type="text" name="new_value" /></td>
+						<td>
+<%
+#SNIP=weight_cost_options
+# DO NOT REMOVE THE ABOVE COMMENT. It is used to remove the above feature
+-%>
+						+$<input size="4" type="text" name="new_extra_cost" />
+<%
+# DO NOT REMOVE THE BELOW COMMENT. It is used to remove the above feature
+#/SNIP=weight_cost_options
+-%>
+						</td>
+						<td>
+<%
+#SNIP=weight_cost_options
+# DO NOT REMOVE THE ABOVE COMMENT. It is used to remove the above feature
+-%>
+						+$<input size="4" type="text" name="new_wholesale_extra_cost" />
+<%
+# DO NOT REMOVE THE BELOW COMMENT. It is used to remove the above feature
+#/SNIP=weight_cost_options
+-%>
+						</td>
+						<td>
+<%
+#SNIP=weight_cost_options
+# DO NOT REMOVE THE ABOVE COMMENT. It is used to remove the above feature
+-%>
+						<input type="checkbox" name="new_wholesale_only" value="1" />
+<%
+# DO NOT REMOVE THE BELOW COMMENT. It is used to remove the above feature
+#/SNIP=weight_cost_options
+-%>
+						</td>
+						<td>
+<%
+#SNIP=weight_cost_options
+# DO NOT REMOVE THE ABOVE COMMENT. It is used to remove the above feature
+-%>
+						+<input size="4" type="text" name="new_extra_weight" /> kg
+<%
+# DO NOT REMOVE THE BELOW COMMENT. It is used to remove the above feature
+#/SNIP=weight_cost_options
+-%>
+						</td>
+						<td colspan="4">&nbsp; &nbsp; <input class="button" type="submit" name="add" value="Add" onclick="$('do-<%= option.id -%>').value='add'" /><%= show_tooltip(:option, :create_new) -%></td>
+					</tr>
+				</table>
+				<input type="hidden" name="values[]" id="option-<%= option.id -%>-value" value="" />
+			</td>
+		</tr>
+	</table>
+
+<% end -%>

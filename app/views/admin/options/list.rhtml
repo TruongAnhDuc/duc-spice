@@ -1,0 +1,33 @@
+<% @page_title = "Rocket Cart Admin Area : Product Options" -%>
+
+<h1>Product Options</h1>
+
+<% form_tag :action => :new do %>
+<div class="fieldset">
+	<div class="legend">Create a new option</div>
+	<input class="text" type="text" name="option[name]" /> as
+	<select name="option[type]">
+		<%= options_for_select(Object.subclasses_of(Option).collect { |x| [x.option_type, x.to_s] }.sort)%>
+	</select>
+	<%= show_tooltip(:options, :create_new) -%>
+	<%= submit_tag 'Create', :name => 'create', :class => 'button' %>
+</div>
+<% end %>
+
+<div class="fieldset">
+	<div class="legend">Existing Options</div>
+
+	<% if @options.empty? -%>
+		<p>There are no options available.</p>
+	<% else -%>
+		<% @options.each do |o| -%>
+			<div class="fieldset" id="option-editor-<%= o.id %>">
+				<% if @option && @option == o -%>
+					<%= render :partial => 'editor', :locals => { :show_saved_text => false } %>
+				<% else -%>
+					<div class="legend"><%= link_to_remote '+', { :update => "option-editor-#{o.id}", :url => { :action => :editor, :id => o.id } }, :class => 'expand-button' %> <%= o.name + ' (' + o.class.option_type -%><%= if (o.comment.nil? or o.comment.empty?) then ')' else '<em> - ' + o.comment + '</em>)' end -%> [<%= link_to('delete', { :action => 'delete', :id => o.id }, :confirm => 'Really delete this option?') %>]</div>
+				<% end -%>
+			</div>
+		<% end -%>
+	<% end -%>
+</div>

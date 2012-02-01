@@ -1,0 +1,44 @@
+<h1>Icon Sets</h1>
+
+<% @icon_sets.each_pair do |set_name, cur_set| -%>
+	<% if @design_config and @design_config[:options] and @design_config[:options][:icons_path] and @design_config[:options][:icons_path] == set_name -%>
+<div class="current_icon_set" id="icon_set_<%= set_name -%>" style="float:left; padding: 5px; margin: 5px; border: 1px solid black;">
+		<%= render :partial => 'icon_set', :locals => { :set_name => set_name, :cur_set => cur_set, :icons => @icons } -%>
+</div>
+	<% end -%>
+<% end -%>
+
+<% new_sets = Hash.new -%>
+<div id="new_icon_sets" style="float:left">
+<% @icon_sets.each_pair do |set_name, cur_set| -%>
+	<% unless @design_config and @design_config[:options] and @design_config[:options][:icons_path] and @design_config[:options][:icons_path] == set_name -%>
+		<% new_sets[set_name] = cur_set['_info'][:name] -%>
+<div class="icon_set" id="icon_set_<%= set_name -%>" style="float:left; padding: 5px; margin: 5px;">
+		<%= render :partial => 'icon_set', :locals => { :set_name => set_name, :cur_set => cur_set, :icons => @icons } -%>
+		<% form_tag do %>
+			<p></p>
+			<input type="hidden" name="set_name" value="<%= set_name -%>" />
+			<input class="button" type="submit" name="use" value="Use" />
+		<% end -%>
+</div>
+	<% end -%>
+<% end -%>
+</div>
+
+<p>Compare current set with:<p>
+
+<select name="new_set" id="new_set" onchange="hide_show_icon_sets(); return false;">
+<% new_sets.each_pair do |set_id, set_name| -%>
+	<option value="<%= set_id -%>"><%= set_name -%></option>
+<% end -%>
+</select>
+
+<script type="text/javascript">
+<% first = false -%>
+<% new_sets.each_pair do |set_id, set_name| -%>
+	<% if first -%>
+	Element.hide('icon_set_<%= set_id -%>');
+	<% end -%>
+	<% first = true -%>
+<% end -%>
+</script>

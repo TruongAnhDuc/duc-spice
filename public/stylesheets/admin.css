@@ -1,0 +1,459 @@
+body {
+	margin: 0px;
+	padding: 0px 0px 32px;
+	background: white;
+	color: black;
+	font: 11px "Lucida Sans", Verdana, sans-serif;
+}
+
+a {
+	color: #CC0000;
+}
+
+button, input.button {
+	font-size: 8pt;
+}
+
+#container {
+	width: 768px;
+	background: url(/images/admin/columns-background.png) repeat-y 0px 0px;
+}
+
+#header {
+	height: 144px;
+	background: url(/images/admin/header-background.png) no-repeat 0px 0px;
+}
+
+#columns {
+	background: url(/images/admin/columns-bottom.png) no-repeat left bottom;
+}
+
+#body {
+	float: right;
+	width: 100%;
+	margin-left: -256px;
+}
+
+#body-inner {
+	margin-left: 264px;
+	margin-right: 8px;
+	padding: 0px;
+}
+
+input.text, textarea, select {
+	font: 11px "Lucida Sans", Verdana, sans-serif;
+}
+
+h1 {
+	font: 300% "Arial Narrow", sans-serif;
+	font-weight: normal;
+	margin: 0px 0px 8px;
+	color: #CC0000;
+}
+
+.fieldset {
+	background: #D3D3D3;
+	padding: 8px;
+	margin: 0px 0px 2ex;
+	-moz-border-radius-topright: 8px;
+	-moz-border-radius-topleft: 8px;
+	-moz-border-radius-bottomright: 8px;
+	-moz-border-radius-bottomleft: 8px;
+}
+
+.fieldset .fieldset,
+.fieldset .fieldset .fieldset .fieldset {
+	background: #CCCCCC;
+	padding: 0px;
+}
+
+.fieldset .fieldset .fieldset {
+	background: #CCCCCC;
+}
+
+.fieldset .legend {
+	background: #CC0000;
+	color: white;
+	padding: 4px 8px;
+	font-weight: bold;
+	margin: -8px -8px 8px;
+	-moz-border-radius-topright: 8px;
+	-moz-border-radius-topleft: 8px;
+}
+
+.fieldset .fieldset .legend {
+	margin: 0px;
+}
+
+.fieldset .legend a {
+	color: white;
+	font-weight: normal;
+}
+
+.fieldset .legend a.expand-button {
+	text-decoration: none;
+	border: 1px solid white;
+	padding: 0px 3px;
+}
+
+.fieldset .legend a.expand-button:hover {
+	background-color: #CC0000;
+	border-right-color: #CC0000;
+	border-bottom-color: #CC0000;
+}
+
+.option-gui, .product-type-gui {
+	width: 100%;
+	margin: 0px;
+	padding: 0px;
+	border: none;
+	border-collapse: collapse;
+	border-spacing: 0px;	
+}
+
+.option-gui th, .product-type-gui th {
+	background-color: #C0C0C0;
+}
+
+.option-gui td, .product-type-gui td {
+	padding: 8px 4px 8px 8px;
+	border-collapse: collapse;
+}
+
+.option-gui img, .product-type-gui img {
+	border: none;
+}
+
+.option-gui .layout, .product-type-gui .layout {
+	border: 1px solid #CC6666;
+	padding: 5px;
+}
+
+.option-gui .option-odd-row, .product-type-gui .product-type-odd-row {
+	background-color: #D7D7D7;
+}
+
+.option-gui .preview {
+	border-bottom: 1px solid #CC0000;
+}
+
+.option-gui .add, .product-type-gui .add {
+	border-top: 1px solid #CC0000;
+}
+
+.option-gui .buttons, ..product-type-gui .buttons {
+/*	border-left: 2px solid #CC0000;*/
+}
+
+table.form {
+	width: 100%;
+	padding: 0px;
+	border: none;
+	border-spacing: 0px;
+	border-collapse: collapse;
+}
+
+table.form table.form {
+	width: auto;
+}
+
+table.form td {
+	padding: 4px 8px;
+	margin: 0px;
+	border: none;
+	border-spacing: 0px;
+	border-collapse: collapse;
+	vertical-align: top;
+}
+
+table.form td.label {
+	font-weight: bold;
+	width: 25%;
+}
+
+table.form td.field {
+	width: 75%;
+}
+
+/* Required for tinyMCE rich-text editor */
+table.form td.field select {
+	width: auto;
+}
+
+table.form input.text,
+table.form select,
+table.form textarea {
+	width: 320px;
+}
+
+table.form td.date select {
+	width: auto;
+}
+
+table.form input.nostretch {
+	width: 6em !important;
+}
+
+table.list {
+	margin: 0px 0px 2ex;
+	padding: 0px;
+	border-spacing: 0px;
+	border: none;
+	border-collapse: collapse;
+	width: 100%;
+}
+
+table.list td,
+table.list th {
+	margin: 0px;
+	padding: 2px 8px;
+	vertical-align: top;
+	text-align: left;
+	border-spacing: 0px;
+	border: none;
+	border-collapse: collapse;
+}
+
+table.list th {
+	font-weight: bold;
+	color: white;
+	background: #CC0000;
+}
+
+table.list tr.odd td { background: #EEEEEE; }
+table.list tr.even td { background: #D7D7D7; }
+table.list tfoot td, table.list tr.actions { padding: 4px; background: #CC0000; color: white; }
+table.list tr.actions td { padding: 5px 8px 5px 8px; }
+table.list tfoot td a, table.list tr.actions a { color: white; }
+table.list tr.list-header { border-top: 1px solid #CCCCCC; }
+
+.completed {
+	color: #090;
+}
+
+.failed {
+	color: #c30;
+}
+
+.awaiting-shipping {
+	color: #33c;
+}
+
+.in-progress {
+	color: #CC0000;
+}
+
+table.order {
+	width: 100%;
+	margin: 0px 0px 2ex;
+	padding: 0px;
+	border-collapse: collapse;
+	border-spacing: 0px;		
+}
+
+table.order td,
+table.order th {
+	margin: 0px;
+	padding: 2px 4px;
+	border-collapse: collapse;
+	border-spacing: 0px;
+	border-bottom: 1px solid #CC0000;
+	text-align: left;
+	vertical-align: top;
+}
+
+table.order td.price {
+	text-align: right;
+}
+
+table.order th {
+	background: #666666;
+	color: white;
+	border-bottom: 2px solid #CC0000;
+}
+
+table.order tfoot {
+	border-top: 2px solid #CC0000;
+}
+
+table.order tfoot td {
+	background: #666666;
+	border: none;
+}
+
+table.order td.label {
+	font-weight: bold;
+}
+
+ul.tips {
+	margin: 0px 0px 2ex;
+	padding: 8px 40px 8px 8px;
+	background: #CC0000 url(/images/admin/tips.png) no-repeat 100% 8px;
+	color: white;
+	min-height: 72px;
+	-moz-border-radius-topleft: 8px;
+	-moz-border-radius-topright: 8px;
+	-moz-border-radius-bottomright: 8px;
+	-moz-border-radius-bottomleft: 8px;
+}
+
+* html ul.tips {
+	height: 72px;
+}
+
+ul.tips li {
+	padding: 0px 0px 0px 24px;
+	margin: 0px 0px 1ex;
+	background: url(/images/admin/tip.png) no-repeat 0px 0px;
+	display: block;
+	list-style: none;
+}
+
+ul.tips a {
+	color: white;
+}
+
+#login-info {
+	margin-left: 256px;
+	padding: 0px 8px 24px;
+	background: #CC0000 url(/images/admin/login-bottom.png) no-repeat left bottom;
+	color: white;
+}
+
+#login-info a {
+	color: white;
+}
+
+#sidebar {
+	float: left;
+	width: 248px;
+	padding: 16px 0px;
+}
+
+#sidebar #help {
+	text-align: center;
+}
+
+#sidebar #help a {
+	font-size: 120%;
+	font-weight: bold;
+	color: #333333;
+	text-decoration: none;
+}
+
+#menu {
+	margin: 0px 8px;
+	padding: 0px;
+	border-top: 1px solid #CC0000;
+}
+
+#menu li {
+	margin: 0px;
+	padding: 0px;
+	list-style: none;
+	display: inline;
+	width: 99.99%;
+}
+
+#menu li a, #menu li .top_level {
+	display: block;
+	border-bottom: 1px solid #CC0000;
+	padding: 2px 8px;
+	font-weight: bold;
+	color: #333333;
+	text-decoration: none;
+}
+
+#menu li a:hover {
+	background: #D3D3D3;
+	color: #CC0000;
+}
+
+#menu li a.current {
+	font-weight: bold;
+	background: #CC0000;
+	color: white;
+}
+
+#menu ul {
+	margin: 0px;
+	padding: 0px;
+	border-bottom: 1px solid #CC0000;
+	background: #EEEEEE;
+}
+
+#menu ul li a {
+	padding-left: 2em;
+	border-bottom: none;
+	font-weight: normal;
+}
+
+#cleaner {
+	clear: both;
+	height: 8px;
+	overflow: hidden;
+}
+
+.fieldWithErrors {
+	border: 2px solid #CC0000;
+}
+
+.errorExplanation {
+	border: 2px solid #CC0000;
+	padding: 8px;
+	margin-bottom: 2ex;
+}
+
+.errorExplanation h2 {
+	margin: 0px;
+}
+
+div.notice {
+	border: 2px solid #00CC00;
+	padding: 8px;
+	margin-bottom: 2ex;
+}
+
+table.layout {
+	width: 100%;
+	padding: 0px;
+}
+
+table.layout td {
+	padding: 0px 5px 0px 5px;
+}
+
+table.layout td p {
+	padding-right: 4px;
+}
+
+#product_description input {
+	width: auto;
+}
+
+.option-save-text-cc {
+	font-weight: bold;
+	font-size: 120%;
+	color: #CCCCCC;
+	padding: 5px 1em 5px 1em;
+}
+
+.option-save-text-d3 {
+	font-weight: bold;
+	font-size: 120%;
+	color: #D3D3D3;
+	padding: 5px 1em 5px 1em;
+}
+
+img.icon {
+	border: none;
+	vertical-align: middle;
+}
+
+table.list td.icons {
+	vertical-align: middle;
+}
+
+.error_background {
+	background-color: #FFE2E2;
+}

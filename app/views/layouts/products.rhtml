@@ -1,0 +1,26 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" >
+	<head>
+		<title><%= if @page_title && !@page_title.empty? then @page_title else @configurator[:application][:name][:value] end -%></title>
+		<meta name="author" content="Avatar Web Promotions" />
+		<meta name="description" content="<%= if @meta_description && !@meta_description.empty? then @meta_description else @configurator[:search_engine_optimisation][:default_meta_description][:value] end %>" />
+		<meta name="keywords" content="<%= if @meta_keywords && !@meta_keywords.empty? then @meta_keywords else @configurator[:search_engine_optimisation][:default_meta_keywords][:value] end %>" />
+		<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+		<%= stylesheet_link_tag "cart" %>
+		<%= stylesheet_link_tag "local" %>
+		<%= stylesheet_link_tag "section" %>
+		<%= javascript_include_tag "prototype" %>
+		<%= javascript_include_tag "effects" %>
+		<%= javascript_include_tag "local" %>
+		<%= javascript_include_tag 'overlib_mini' %>
+		<%= javascript_include_tag 'overlib_shadow_mini' %>
+	</head>
+	<body<%= " class=\"#{@body_class}\"" unless @body_class.nil? %>>
+		<div id="overDiv" style="position:absolute; visibility:hidden; z-index:1000;"></div>
+		<div id="container">
+			<%= render :partial => '../../custom/templates/section_header' %>
+			<%= render :partial => '../../custom/templates/columns' %>
+		</div>
+		<%= render :partial => '../../custom/templates/section_footer' %>
+	</body>
+</html>

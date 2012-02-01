@@ -1,0 +1,49 @@
+gun1:
+  id: 1
+  option_id: 1
+  value: rifle
+  position: 1
+  extra_cost: 1000
+  extra_weight: 5
+gun2:
+  id: 2
+  option_id: 1
+  value: shotgun
+  position: 2
+  extra_cost: 1000
+  extra_weight: 5
+melee1:
+  id: 3
+  option_id: 2
+  value: axe
+  position: 3
+  extra_cost: 100
+  extra_weight: 5
+melee2:
+  id: 4
+  option_id: 2
+  value: hammer
+  position: 4
+  extra_cost: 100
+  extra_weight: 5
+diff0:
+  id: 5
+  option_id: 3
+  value: none
+  position: 5
+  extra_cost: 0
+  extra_weight: 0
+diff1:
+  id: 6
+  option_id: 3
+  value: redder
+  position: 6
+  extra_cost: 100
+  extra_weight: 10
+diff2:
+  id: 7
+  option_id: 3
+  value: greener
+  position: 7
+  extra_cost: 200
+  extra_weight: 20

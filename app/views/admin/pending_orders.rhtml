@@ -1,0 +1,99 @@
+<style type="text/css">@import url(/calendar/calendar-win2k-1.css);</style>
+<script type="text/javascript" src="/calendar/calendar.js"></script>
+<script type="text/javascript" src="/calendar/lang/calendar-en.js"></script>
+<script type="text/javascript" src="/calendar/calendar-setup.js"></script>
+
+<h1>Orders Awaiting Shipping</h1>
+
+<% form_tag do %>
+<fieldset>
+	<legend title="Search"><img src="<%= icon_path('search') -%>" alt="Search" width="<%= @design_config[:sizes][:admin_icons_width] -%>" height="<%= @design_config[:sizes][:admin_icons_height] -%>" class="icon" /> Search</legend>
+
+	<table cellpadding="0">
+		<tr>
+			<td>
+				<strong>ID:</strong>
+			</td>
+			<td>
+				<input class="text" type="text" name="query" value="<%= @query || '' %>" />
+				<%= show_tooltip(:orders, :query_id) -%>
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<strong>Date:</strong>
+			</td>
+			<td>
+				<input class="text" type="text" id="history_date" name="history_date" value="<%= if @history_date then @history_date.strftime('%d/%m/%Y') end %>" />
+				<button id="trigger_history_date">
+					<img src="<%= icon_path('calendar') -%>" alt="Calendar" title="Calendar" width="<%= @design_config[:sizes][:admin_icons_width] -%>" height="<%= @design_config[:sizes][:admin_icons_height] -%>" class="icon" />
+				</button>
+				<%= show_tooltip(:orders, :query_date) -%>
+			</td>
+		</tr>
+		<tr>
+			<td>&nbsp;</td>
+			<td style="text-align: right;">
+				<input class="button" type="submit" name="search" value="Search" />
+			</td>
+		</tr>
+	</table>
+</fieldset>
+<% end %>
+
+<% if @pending_orders.empty? -%>
+	<p>No pending orders found.</p>
+<% else -%>
+	<%= render :partial => 'paginator' %>
+
+	<% form_tag :action => :pending_orders do %>
+	<table class="list">
+		<thead>
+		<tr class="actions">
+			<td colspan="5">
+				Selected items:
+				<%= submit_tag 'Shipped', :name => 'ship', :class => 'button' %>
+				<%= submit_tag 'Failed', :name => 'fail', :class => 'button' %>
+			</td>
+		</tr>
+		<tr class="list-header">
+			<th>Select</th>
+			<th>No.</th>
+			<th>Date</th>
+			<th>User</th>
+			<th>Total</th>
+		</tr>
+		</thead>
+		<tbody>
+			<% @pending_orders.each_with_index do |order, i| -%>
+				<tr class="<%= (i % 2 == 0) ? 'odd' : 'even' %>">
+					<td><input class="checkbox" type="checkbox" name="select[<%= order.id %>]" value="1" /></td>
+					<td><%= link_to order.id, :action => :order, :id => order%></td>
+					<td><%= order.created_at.strftime('%d/%m/%Y, %I:%M%p') %></td>
+					<td><%= order.user %></td>
+					<td>$<%= @currency.format(order.total, false) %></td>
+				</tr>
+			<% end -%>
+		</tbody>
+		<tfoot>
+		</tfoot>
+	</table>
+	<% end %>
+
+	<%= render :partial => 'paginator' %>
+<% end -%>
+
+<script type="text/javascript">
+Calendar.setup(
+{
+inputField : 'history_date',
+ifFormat : '%d/%m/%Y',
+button : 'trigger_history_date'
+}
+);
+</script>
+
+<ul class="tips">
+	<li>These are the orders awaiting fulfilment. When you have processed these orders, come back to this page and mark off which orders have been shipped or which orders could not be completed (failed). By marking orders as 'shipped' an automatic email is sent to your customer notifying them that their order is on its way, so this page should be your first stop as soon as you get home from the post office.</li>
+	<li>To view details of each order, click on the Order number.</li>
+</ul>

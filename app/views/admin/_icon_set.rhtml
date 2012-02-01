@@ -1,0 +1,64 @@
+	<% if cur_set['_info'][:name] and !cur_set['_info'][:name].empty? -%><h3><%= cur_set['_info'][:name] -%></h3><% end -%>
+
+	<% if cur_set['_info'][:author_link] || cur_set['_info'][:author] -%>
+	<p>By <%= if cur_set['_info'][:author_link] then '<a href="' + cur_set['_info'][:author_link] + '">' end -%><%= if cur_set['_info'][:author] then cur_set['_info'][:author] else 'anon' end -%><%= if cur_set['_info'][:author_link] then '</a>' end -%></p>
+	<% end -%>
+
+	<% if cur_set['_info'][:license] and !cur_set['_info'][:license].empty? -%><p>License: <%= cur_set['_info'][:license] -%></p><% end -%>
+<%
+	formats = ['png', 'gif']
+	num_formats = 0
+	formats.each do |cur_format|
+		if cur_set['_info'][:formats] and cur_set['_info'][:formats][cur_format.to_sym]
+			num_formats += 1;
+-%>
+	<table cellpadding="0" cellspacing="0" class="<%= set_name -%>_formatted_icons" id="<%= cur_format -%>_icons_<%= set_name -%>">
+		<% icons.each_pair do |cur_icon, is_used| -%>
+		<% icon_exists = cur_set[cur_icon] and cur_set[cur_icon][cur_format] -%>
+		<tr<%= if !icon_exists and is_used then ' class="error_background"' end -%>>
+			<td><%= if is_used then '<strong>' end -%><%= cur_icon -%><%= if is_used then '</strong>' end -%></td>
+			<td><%= if icon_exists then image_tag('/images/icons/' + set_name + '/' + cur_icon + '.' + cur_format) else image_tag('/images/blank.gif', :width => @design_config[:sizes][:admin_icons_width], :height => @design_config[:sizes][:admin_icons_height]) end -%></td>
+		</tr>
+		<% end -%>
+	</table>
+<%
+		end
+	end
+-%>
+<!--
+<%
+	if num_formats > 1
+-%>
+<p>View format:</p>
+<ul>
+<%
+		formats.each do |cur_format|
+-%>
+	<li><a href="#" onclick="hide_show_icon_types('<%= set_name -%>', '<%= cur_format -%>'); return false;"><%= cur_format -%></a></li>
+<%
+		end
+-%>
+</ul>
+<%
+	end
+-%>
+-->
+<script type="text/javascript">
+<%
+	if num_formats > 1
+		first_format = true
+		formats.each do |cur_format|
+			if cur_set['_info'][:formats] and cur_set['_info'][:formats][cur_format.to_sym]
+				if first_format
+					first_format = false
+				else
+-%>
+	Element.hide($('<%= cur_format -%>_icons_<%= set_name -%>'))
+<%
+				end
+			end
+		end
+	end
+-%>
+</script>
+

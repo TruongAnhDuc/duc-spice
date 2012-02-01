@@ -1,0 +1,30 @@
+gun1:
+  option_value_id: 1
+  product_id: 3
+  position: 1
+  default_value: 
+gun2:
+  option_value_id: 2
+  product_id: 3
+  position: 2
+  default_value: 
+melee1:
+  option_value_id: 3
+  product_id: 4
+  position: 3
+  default_value: 
+melee2:
+  option_value_id: 4
+  product_id: 4
+  position: 4
+  default_value: 
+diff1:
+  option_value_id: 5
+  product_id: 5
+  position: 5
+  default_value: 
+diff2:
+  option_value_id: 6
+  product_id: 5
+  position: 6
+  default_value: 

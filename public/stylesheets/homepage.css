@@ -1,0 +1,48 @@
+body {
+	background: white url(/images/main-b-stripe.png) repeat-x 0px 80px;
+}
+
+#header {
+	margin-right: -32px;
+	margin-top: 48px;
+	height: 224px;
+	position: relative;
+	background: url(/images/main-montage.jpg) no-repeat 256px 32px;
+}
+
+#header #logo {
+	position: absolute;
+	left: 0px;
+	top: 32px;
+	width: 256px;
+	height: 128px;
+}
+
+#header #logo #img {
+	display: block;
+}
+
+#menu,
+#menu a.selector,
+#menu a.selector span {
+	background-image: url(/images/main-n-nav.png);
+}
+
+#search {
+	background: #DCD8A1 url(/images/main-b-search.jpg) no-repeat 0px 0px;
+	height: 64px;
+	width: 544px;
+	left: 256px;
+	top: 160px;
+	position: absolute;
+	font: 11px Verdana, sans-serif;
+	overflow: hidden;
+	z-index: 0;
+}
+
+#search .secondary-links {
+	position: absolute;
+	top: 36px;
+	left: 8px;
+}
+

@@ -1,0 +1,28 @@
+<% @page_title = "Rocket Cart Admin Area : Newsletter Signups - Copyable" -%>
+
+<h1>Newsletter Signups</h1>
+
+<%
+if @signups and !@signups.empty?
+	the_signups = Array.new
+	@signups.each do |cur_signup|
+		the_signups << cur_signup.to_s
+	end
+
+-%>
+<p>The below list is formatted such that you should be able to copy-paste this into your email client.</p>
+
+<div class="fieldset">
+<%= h the_signups.join(", ") -%>
+</div>
+<%
+else
+-%>
+
+<p>No newsletter signups yet</p>
+
+<%
+end
+-%>
+
+<%= link_to "Back to the list of newsletter signups", :action => :list -%>

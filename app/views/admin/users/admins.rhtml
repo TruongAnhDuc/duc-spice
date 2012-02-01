@@ -1,0 +1,84 @@
+<% @page_title = "Rocket Cart Admin Area : Admins" -%>
+
+<h1>Admins</h1>
+
+<% if flash[:notice] -%>
+	<div class="notice"><%= flash[:notice] %></div>
+<% end -%>
+
+<% form_tag do %>
+<fieldset>
+	<legend title="Search"><img src="<%= @ROCKETCARTDIR + icon_path('search') -%>" alt="Search" width="<%= @design_config[:sizes][:admin_icons_width] -%>" height="<%= @design_config[:sizes][:admin_icons_height] -%>" class="icon" /> Search</legend>
+
+	<table cellpadding="0">
+		<tr>
+			<td>
+				<strong>Admin Name or Email:</strong>
+			</td>
+			<td>
+				<input class="text" type="text" name="query" value="<%= @query || '' %>" /><%= show_tooltip(:admins, :query) -%>
+			</td>
+		</tr>
+		<tr>
+			<td>&nbsp;</td>
+			<td style="text-align: right;">
+				<input class="button" type="submit" name="search" value="Search" />
+			</td>
+		</tr>
+	</table>
+</fieldset>
+<% end %>
+
+<% if (@current_user.permissions.to_i > 1) -%>
+<p><%= link_to 'Create a new admin', { :action => :new_admin } %></p>
+<% end -%>
+
+<% if @admin_count.zero? -%>
+	<p>No admins found.</p>
+<% else -%>
+
+<%= render :partial => "admin/paginator" %>
+
+<% form_tag do %>
+<table class="list">
+	<thead>
+	<tr class="actions">
+		<td colspan="5">
+			Selected admins:<br />
+			<%= submit_tag 'Delete', :name => 'delete', :class => 'button', :onclick => 'return confirm(\'Really delete the selected admins?\')' %>
+		</td>
+	</tr>
+	<tr class="list-header">
+		<th>Select</th>
+		<th>Name <%= render :partial => "admin/sorting_arrows", :locals => { :column => "name" } %></th>
+		<th>Level <%= render :partial => "admin/sorting_arrows", :locals => { :column => "level" } %></th>
+		<th>Active? <%= render :partial => "admin/sorting_arrows", :locals => { :column => "active" } %></th>
+		<th></th>
+	</tr>
+	</thead>
+	<tbody>
+		<% @admins.each_with_index do |cur_admin, i| -%>
+			<tr class="<%= (i % 2 == 0) ? 'odd' : 'even' %>">
+				<td>
+<% if (cur_admin.permissions < @current_user.permissions) || (cur_admin[:id] == @current_user[:id]) -%>
+					<input class="checkbox" type="checkbox" name="select[<%= cur_admin.id %>]" value="1" />
+<% end -%>
+				</td>
+				<td><%= cur_admin %></td>
+				<td><%= cur_admin.permissions -%></td>
+				<td><%= cur_admin[:active] ? "Yes" : "No" %></td>
+				<td nowrap="nowrap" class="icons">
+<% if (cur_admin.permissions < @current_user.permissions) || (cur_admin[:id] == @current_user[:id]) -%>
+					<%= action_icon("Edit", "edit", { :action => :edit_admin, :id => cur_admin }) -%>
+<% end -%>
+				</td>
+			</tr>
+		<% end -%>
+	</tbody>
+</table>
+<% end %>
+
+<%= render :partial => "admin/paginator" %>
+
+<% end -%>
+

@@ -1,0 +1,141 @@
+<% @page_title = "Rocket Cart Admin Area : Product Details" -%>
+
+<h1>Product Details</h1>
+
+<%= error_messages_for 'product' %>
+
+<% if @free_options && @free_options.length > 0 -%>
+<script type="text/javascript">
+	var option_comments = new Array();
+<%
+	@free_options.each do |cur_option|
+		if cur_option
+-%>
+	option_comments[<%= cur_option.id %>] = '<%= cur_option.comment %>';
+<%
+		end
+	end
+-%>
+</script>
+<% end -%>
+
+<% form_tag({ :action => :product }, { :multipart => true, :id => 'product_form' }) do %>
+	<div class="fieldset">
+		<div class="legend">Product</div>
+		<%= render :partial => 'product_form' %>
+	</div>
+<% end %>
+
+<div class="fieldset">
+	<div class="legend"><a name="options"></a>Product Options</div>
+
+	<% if @product.product_option_values.empty? -%>
+		<p>This product has no options.</p>
+	<% else -%>
+		<% @used_options.each do |cur_option| -%>
+			<% form_tag :action => :update_options, :id => @product do %>
+				<div class="fieldset">
+					<div class="legend">
+						<div style="width: 40%; float: right; text-align: right;">
+							<%= submit_tag 'Remove &quot;' + cur_option.name + '&quot; option', :name => 'remove', :class => 'button', :confirm => 'Really delete this option?' %>
+						</div>
+						<div style="width: 50%;">
+							<a class="expand-button" id="expand-button-<%= cur_option.id -%>" href="#" onclick="show_toggle('option-gui-<%= cur_option.id -%>', 'expand-button-<%= cur_option.id -%>');return false;">+</a>
+							<%= cur_option.name %><%= if cur_option.comment && !cur_option.comment.empty? then '<em> - (' + cur_option.comment + ')</em>' end -%>
+						</div>
+						<div style="clear: both; height: 0px;"></div>
+					</div>
+					<table class="option-gui" id="option-gui-<%= cur_option.id -%>">
+					<tr>
+						<td class="preview">
+							<table>
+								<tr>
+									<td valign="top"><strong>Preview:</strong></td>
+									<td valign="top">
+										<%= if !cur_option.label.empty? then cur_option.label + '<br />' end -%>
+										<input type="hidden" name="option_id" value="<%= cur_option.id %>" />
+										<%= render(:partial => 'option_render', :locals => { :option => cur_option, :option_values => @option_values[cur_option[:id]] }) -%>
+										<%= show_tooltip(:option, :preview) -%>
+									</td>
+								</tr>
+							</table>
+						</td>
+					</tr>
+					<tr>
+						<td class="config">
+							<% if cur_option.is_a? TextOption or cur_option.is_a? CheckBox then -%>
+								(no additional configuration)
+							<% else -%>
+								<% available_values = @option_values[cur_option[:id]] -%>
+								<table>
+									<% cur_option.values.each do |cur_option_value| -%>
+										<tr>
+											<% if available_values.include?(cur_option_value) -%>
+												<td><strong><%= cur_option_value[:value] -%></strong> (displayed)</td>
+												<td>
+													<input class="button" type="submit" name="hide_option_value[<%= cur_option_value[:id] -%>]" value="Hide" />
+												</td>
+												<td>
+<%=
+	if cur_option_value[:extra_cost] || cur_option_value[:wholesale_extra_cost] || cur_option_value[:extra_weight] then
+		strings = Array.new
+		if cur_option_value[:extra_cost]
+			currency = Currency.default
+			strings << "+#{currency.format(cur_option_value[:extra_cost], true)}"
+		end
+		if cur_option_value[:wholesale_extra_cost]
+			currency = Currency.default
+			strings << "(+#{currency.format(cur_option_value[:wholesale_extra_cost], true)} wholesale)"
+		end
+		if cur_option_value[:extra_weight]
+			strings << "+#{cur_option_value[:extra_weight].to_s}kg"
+		end
+
+		strings.join(", ")
+	end
+-%>
+												</td>
+											<% else -%>
+												<td><%= cur_option_value[:value] -%> (not displayed)</td>
+												<td>
+													<input class="button" type="submit" name="show_option_value[<%= cur_option_value[:id] -%>]" value="Show" />
+												</td>
+												<td></td>
+											<% end -%>
+										</tr>
+									<% end -%>
+								</table>
+							<% end -%>
+						</td>
+					</tr>
+					</table>
+				</div>
+			<% end %>
+		<% end -%>
+		<script type="text/javascript">
+		<% @used_options.each do |cur_option| -%>
+			show_toggle('option-gui-<%= cur_option.id -%>', 'expand-button-<%= cur_option.id -%>');
+		<% end -%>
+		</script>
+	<% end -%>
+	<div class="fieldset">
+		<% form_tag :action => :add_option, :id => @product.id do %>
+			<div class="legend">Add option</div>
+			<% if @free_options && @free_options.length > 0 -%>
+				<div class="fieldset">
+					<select name="option_id" id="option_id">
+						<% @free_options.each do |cur_option| -%>
+							<option value="<%= cur_option.id %>"><%= cur_option.name + ( (cur_option.comment.nil? or cur_option.comment.empty?) ? '' : ' - (' + cur_option.comment + ')' ) %></option>
+						<% end -%>
+					</select>
+					&nbsp;
+					<%= submit_tag 'Add', :name => 'add_option', :class => 'button' %>
+				</div>
+			<% else -%>
+				(No more options are available to add)
+			<% end -%>
+		<% end -%>
+
+	</div>
+</div>
+<input class="button" type="button" value="Save" onClick="document.getElementById('product_form').submit();" />

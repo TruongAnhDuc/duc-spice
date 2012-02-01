@@ -1,0 +1,23 @@
+<tr class="<%= ((@row_toggle+=1) % 2 == 1) ? 'odd' : 'even' %>">
+	<td><input class="checkbox" type="checkbox" name="select[<%= category_row.id %>]" value="1" /></td>
+	<td>
+		<%= '&rarr;' * category_row.path.count('/') %>
+		<%= link_to category_row.name, { :action => :category, :id => category_row.id } %>
+	</td>
+	<td><%= if category_row.parent.nil? then '(none)' else category_row.parent.name end %></td>
+	<td nowrap="nowrap" class="icons" rowspan="2">
+		<%= if @design_config[:options][:show_extra_admin_icons] and @design_config[:options][:show_extra_admin_icons] == 'yes' then link_to '<img src="' + icon_path('view') + '" alt="View" title="View" width="' + @design_config[:sizes][:admin_icons_width].to_s + '" height="' + @design_config[:sizes][:admin_icons_height].to_s + '" class="icon" />', '/products/' + category_row.path end -%>
+		<a href="/products/<%= category_row.path %>/">View</a>
+		&nbsp;
+		<%= if @design_config[:options][:show_extra_admin_icons] and @design_config[:options][:show_extra_admin_icons] == 'yes' then link_to '<img src="' + icon_path('edit') + '" alt="Edit" title="Edit" width="' + @design_config[:sizes][:admin_icons_width].to_s + '" height="' + @design_config[:sizes][:admin_icons_height].to_s + '" class="icon" />', { :action => :category, :id => category_row.id } end -%>
+		<%= link_to 'Edit', { :action => :category, :id => category_row.id } %>
+	</td>
+</tr>
+<tr class="<%= (@row_toggle % 2 == 1) ? 'odd' : 'even' %>">
+	<td></td>
+	<td colspan="2">
+		<span style="visibility: hidden;"><%= '&rarr;' * category_row.path.count('/') %></span>
+		<%= category_row.path %>
+	</td>
+</tr>
+<%= render(:partial => 'category_row', :collection => category_row.children) -%>
