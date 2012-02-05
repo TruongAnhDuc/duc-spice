@@ -20,7 +20,7 @@
       <div id="header_wsl">Wholesale Price</div>
       <div id="header_qty">Quantity Ordered</div>
       <div style="width: 230px; text-align: right;" id="order-form-buttons-header">
-        <%= submit_tag "Draft order", :name => "draft", :class => "button" %>
+        <%= button_to_function "Delete order", :name => "draft", :class => "button", :onclick => " clearOrder();return false;" %>
         <%= submit_tag "Confirm order", :name => "order", :class => "button" %>
       </div>
     </div>
@@ -60,9 +60,9 @@
             <tr class="<%= i % 2 == 0 ? "even" : "odd" %>"<%= if first_row then " id=\"first-row\"" end -%>>
               <td style="width:130px"><strong id="product_name_<%= cur_product[:id] -%>_<%= cur_ov[:id] -%>"><%= cur_product[:product_name] -%></strong></td>
               <td style="width:45px"><label for="qty_<%= cur_product[:id] -%>_<%= cur_ov[:id] -%>"><%= cur_ov[:value].gsub("grams", "g") -%></label></td>
-              <td style="width:75px"><label for="qty_<%= cur_product[:id] -%>_<%= cur_ov[:id] -%>"><%= @currency.format(cur_ov[:extra_cost]).gsub("NZ ", "") -%></label></td>
-              <td style="width: 60px;"><label for="qty_<%= cur_product[:id] -%>_<%= cur_ov[:id] -%>" id="each_<%= cur_product[:id] -%>_<%= cur_ov[:id] -%>"><%= @currency.format(cur_ov[:wholesale_extra_cost]).gsub("NZ ", "") -%></label></td>
-              <td style="width: 92px;">
+              <td style="width:72px"><label for="qty_<%= cur_product[:id] -%>_<%= cur_ov[:id] -%>"><%= @currency.format(cur_ov[:extra_cost]).gsub("NZ ", "") -%></label></td>
+              <td style="width:58px;"><label for="qty_<%= cur_product[:id] -%>_<%= cur_ov[:id] -%>" id="each_<%= cur_product[:id] -%>_<%= cur_ov[:id] -%>"><%= @currency.format(cur_ov[:wholesale_extra_cost]).gsub("NZ ", "") -%></label></td>
+              <td style="width:95px;">
                 <input class="text qty" type="text" name="qty[<%= cur_product[:id] -%>_<%= cur_ov[:id] -%>]" id="qty_<%= cur_product[:id] -%>_<%= cur_ov[:id] -%>" value="" onChange="order_form_update_quantities(this);" size="4" maxlength="12" />
                 <input class="button" name="addtocart_<%= cur_product[:id] -%>_<%= cur_ov[:id] -%>" type="submit" value="Add" onclick="$('each_<%= cur_product[:id] -%>_<%= cur_ov[:id] -%>').focus(); return false;" />
               </td>
@@ -102,7 +102,7 @@
   options_hash.each_pair do |o_v_id, price|
     -%>
       prices_array[<%= product_id -%>][<%= o_v_id -%>] = <%= price -%>;<%
-    end
+  end
 end
 -%>
 
@@ -127,44 +127,44 @@ end
   {
     var num_rows = $('order-form-table').rows.length;
 
-    if ($('non-priced').checked)
-    {
-      for (var i = 0; i < num_rows; i++)
-      {
-        if ($('order-form-table').rows[i].cells[2].firstChild)
-        {
-          $('order-form-table').rows[i].cells[2].className = 'hideme';
-        }
-      }
+    //if ($('non-priced').checked)
+    //{
+    //  for (var i = 0; i < num_rows; i++)
+    //  {
+    //    if ($('order-form-table').rows[i].cells[2].firstChild)
+    //    {
+    //      $('order-form-table').rows[i].cells[2].className = 'hideme';
+    //    }
+    //  }
 
-      if ($('header_rrp').textContent)
+    //  if ($('header_rrp').textContent)
+    //  {
+    //    $('header_rrp').textContent = '';
+    //  }
+    //  else
+    //  {
+    //    $('header_rrp').innerHTML = '';
+    //  }
+    //}
+    //else
+    //{
+    for (var i = 0; i < num_rows; i++)
+    {
+      if ($('order-form-table').rows[i].cells[2].firstChild)
       {
-        $('header_rrp').textContent = '';
+        $('order-form-table').rows[i].cells[2].className = '';
       }
-      else
-      {
-        $('header_rrp').innerHTML = '';
-      }
+    }
+
+    if ($('header_rrp').textContent)
+    {
+      $('header_rrp').textContent = 'Retail Price';
     }
     else
     {
-      for (var i = 0; i < num_rows; i++)
-      {
-        if ($('order-form-table').rows[i].cells[2].firstChild)
-        {
-          $('order-form-table').rows[i].cells[2].className = '';
-        }
-      }
-
-      if ($('header_rrp').textContent)
-      {
-        $('header_rrp').textContent = 'Retail Price';
-      }
-      else
-      {
-        $('header_rrp').innerHTML = 'Retail Price';
-      }
+      $('header_rrp').innerHTML = 'Retail Price';
     }
+    //}
   }
 
   function order_form_update_quantities(changed_qty)
@@ -293,10 +293,10 @@ end
   {
     var multiplier = 1.0;
 
-    if ($('non-priced').checked)
-    {
-      multiplier = 1.1;
-    }
+    //if ($('non-priced').checked)
+    //{
+    //  multiplier = 1.1;
+    //}
 
     var new_cost = next_quantity * prices_array[product_id][o_v_id] * multiplier;
 
@@ -424,4 +424,7 @@ end
   // I tested, and better than 35ms doesn't do very much visually.
   window.setInterval("oChaser.main()", oChaser.callRate);
   //]]>
+
 </script>
+
+<%= javascript_include_tag "product_form" %>

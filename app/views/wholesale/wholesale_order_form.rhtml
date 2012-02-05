@@ -16,7 +16,7 @@
       <div id="header_wsl">Wholesale Price / kg</div>
       <div id="header_qty">Quantity Ordered</div>
       <div style="width: 230px; text-align: right;" id="order-form-buttons-header">
-        <%= submit_tag "Draft order", :name => "draft", :class => "button" %>
+        <%= button_to_function "Delete order", :name => "draft", :class => "button", :onclick => "clearOrder(); return false;" %>
         <%= submit_tag "Confirm order", :name => "order", :class => "button" %>
       </div>
     </div>
@@ -59,7 +59,7 @@
               <td style="width: 60px;"><label for="qty_<%= cur_product[:id] -%>_<%= cur_ov[:id] -%>" id="each_<%= cur_product[:id] -%>_<%= cur_ov[:id] -%>"><%= @currency.format(cur_ov[:wholesale_extra_cost]).gsub("NZ ", "") -%></label></td>
               <td>
                 <input class="text qty" type="text" name="qty[<%= cur_product[:id] -%>_<%= cur_ov[:id] -%>]" id="qty_<%= cur_product[:id] -%>_<%= cur_ov[:id] -%>" value="" onChange="order_form_update_quantities(this);" size="4" maxlength="12" />
-                <input class="button" name="addtocart_<%= cur_product[:id] -%>_<%= cur_ov[:id] -%>" type="submit" value="Add" onclick="$('each_<%= cur_product[:id] -%>_<%= cur_ov[:id] -%>').focus(); return false;" />
+                <input class="button add_item_btn" name="addtocart_<%= cur_product[:id] -%>_<%= cur_ov[:id] -%>" type="submit" value="Add" onclick="$('each_<%= cur_product[:id] -%>_<%= cur_ov[:id] -%>').focus(); return false;" />
               </td>
               <td class="sidebar" id="sidebar_<%= cur_product[:id] -%>_<%= cur_ov[:id] -%>" style="width: 230px;"></td>
             </tr>
@@ -360,3 +360,5 @@ end
   window.setInterval("oChaser.main()", oChaser.callRate);
   //]]>
 </script>
+
+<%= javascript_include_tag "product_form" %>
